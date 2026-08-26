@@ -32,8 +32,29 @@ namespace InciTrack_Pro.Forms
             this.Load += Frm_FirstAids_Load;
             txt_search.TextChanged += txtSearch_TextChanged;
             cb_apReports.CheckedChanged += Cb_apReports_CheckedChanged;
+            dgv_firstAidsList.CellDoubleClick += Dgv_firstAidsList_CellDoubleClick;
         }
 
+        private void Dgv_firstAidsList_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if(e.RowIndex < 0) return;
+            if(e.ColumnIndex == dgv_firstAidsList.Columns["Edit"].Index) { return; }
+
+            Form popup = new Form();
+            popup.Text = "First Aid Incident";
+            popup.Size = new Size(900, 400);
+            popup.ShowIcon = false;
+            popup.StartPosition = FormStartPosition.CenterParent;
+            popup.Shown += Popup_Shown;
+
+            popup.ShowDialog();
+        }
+
+        private void Popup_Shown(object? sender, EventArgs e)
+        {
+            Form popup = (Form)sender;
+
+        }
         private void Cb_apReports_CheckedChanged(object? sender, EventArgs e)
         {
             txt_search.Text = string.Empty;
@@ -47,8 +68,6 @@ namespace InciTrack_Pro.Forms
             cb_apReports.Checked = false;
 
             LoadDgvFirstAidList();
-
-            
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
