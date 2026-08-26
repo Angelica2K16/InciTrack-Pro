@@ -15,12 +15,12 @@ using System.Reflection;
 using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.DirectoryServices.AccountManagement;
-
+using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 namespace InciTrack_Pro
 {
     public partial class Frm_Main : Form
     {
-        public static string shesDB = @"DataSource=G:\Public\Production Software\Released Applications\SHES\SQL DB\SHES_DataBoard.db";
+        
         public Frm_Main()
         {
             InitializeComponent();
@@ -130,7 +130,7 @@ namespace InciTrack_Pro
 
         private (int firstAidCount, int hazardCount, int ltiCount) GetCountData()
         {
-            using (SqliteConnection conn = new SqliteConnection(shesDB))
+            using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
             {
                 conn.Open();
 
@@ -502,7 +502,7 @@ namespace InciTrack_Pro
         {
             int[] counts = new int[12];
 
-            using SqliteConnection conn = new SqliteConnection(shesDB);
+            using SqliteConnection conn = new SqliteConnection(GV.shesDB);
 
             conn.Open();
 
@@ -537,7 +537,7 @@ namespace InciTrack_Pro
             Dictionary<string, int> data = new();
 
             using SqliteConnection conn =
-            new SqliteConnection(shesDB);
+            new SqliteConnection(GV.shesDB);
 
             conn.Open();
 
