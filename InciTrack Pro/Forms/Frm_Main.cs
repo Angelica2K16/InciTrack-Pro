@@ -1,3 +1,6 @@
+using DanMarDev.Identification;
+using FontAwesome.Sharp;
+using FontAwesome.Sharp;
 using Guna.UI2.WinForms;
 using InciTrack_Pro.Forms;
 using LiveChartsCore;
@@ -6,10 +9,12 @@ using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.SkiaSharpView.WinForms;
 using LiveChartsCore.Themes;
 using Microsoft.Data.Sqlite;
+using System.Drawing;
+using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
-
+using System.DirectoryServices.AccountManagement;
 
 namespace InciTrack_Pro
 {
@@ -19,20 +24,96 @@ namespace InciTrack_Pro
         public Frm_Main()
         {
             InitializeComponent();
+            SetStyle(
+                ControlStyles.UserPaint |
+                ControlStyles.AllPaintingInWmPaint |
+                ControlStyles.OptimizedDoubleBuffer,
+                true);
+            UpdateStyles();
+            EnableDoubleBuffer(tableLayoutPanel1);
+            EnableDoubleBuffer(flp_menu);
+            EnableDoubleBuffer(flp_Kpi);
             InitializeEvents();
         }
 
+        public static void EnableDoubleBuffer(Control control)
+        {
+            typeof(Control)
+            .GetProperty(
+            "DoubleBuffered",
+            BindingFlags.NonPublic |
+            BindingFlags.Instance)
+            ?.SetValue(control, true);
+        }
         private void InitializeEvents()
         {
             this.Load += Frm_Main_Load;
+            pb_exit.Click += Pb_exit_Click;
+            pb_minimize.Click += Pb_minimize_Click;
+            
         }
+
+    
+        private void Pb_minimize_Click(object? sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void Pb_exit_Click(object? sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_ERASEBKGND = 0x0014;
+
+            if (m.Msg == WM_ERASEBKGND)
+                return;
+
+            base.WndProc(ref m);
+        }
+
 
         private void Frm_Main_Load(object? sender, EventArgs e)
         {
-            flpKpiControls();
-            LoadButtons();
-            LoadCharts();
+            string currentUser = UserPrincipal.Current.DisplayName;
+            EmployeeSearch.ListResult officeStaff = EmployeeSearch.GetOfficeStaffList();
+            if (!officeStaff.IsSuccess)
+            {
+                Console.WriteLine(officeStaff.ErrorMessage);
+                return;
+            }
 
+            bool isOfficeStaff = officeStaff.FullNames.Contains(currentUser);
+
+            if (!isOfficeStaff)
+            {
+                MessageBox.Show("Error: You are not an authorized user for this application.", "Authorized User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
+
+            flpKpiControls();
+
+            Label lblTitle = new Label
+            {
+                Text = "Menu",
+                Font = new Font("Calibri", 14, FontStyle.Bold),
+                Width = 200,
+                Height = 40,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+
+            flp_menu.Controls.Add(lblTitle);
+
+            LoadButtons();
+
+            tableLayoutPanel1.SuspendLayout();
+            CreateHazardsVsFirstAidsChart();
+            CreateHazardTypeChart();
+            CreateHazardYoYChart();
+            CreateFirstAidYoYChart();
+            tableLayoutPanel1.ResumeLayout();
         }
 
         private void flpKpiControls()
@@ -146,28 +227,33 @@ namespace InciTrack_Pro
 
         private void LoadButtons()
         {
+            AddMenuButton("Summary",
+            (s, e) => new Frm_Hazards().ShowDialog(), IconChar.ClipboardList);
+
             AddMenuButton("Hazards",
-(s, e) => new Frm_Hazards().ShowDialog());
+            (s, e) => new Frm_Hazards().ShowDialog(), IconChar.TriangleExclamation);
 
             AddMenuButton("First Aids",
-            (s, e) => new Frm_FirstAids().ShowDialog());
+            (s, e) => new Frm_FirstAids().ShowDialog(), IconChar.BandAid);
 
-            AddMenuButton("Reports",
-            (s, e) => MessageBox.Show("Reports"));
-
-            AddMenuButton("Admin",
-            (s, e) => MessageBox.Show("Admin"));
+            AddMenuButton("Corrective Actions",
+            (s, e) => MessageBox.Show("Corrective Actions"), IconChar.ListCheck);
         }
 
-        private void AddMenuButton(
-string text,
-EventHandler clickEvent)
+        private void AddMenuButton(string text,EventHandler clickEvent, IconChar icon)
         {
             Guna2Button btn = CreateMenuButton(text);
 
+            btn.Image = IconCharToImage(icon);
+            btn.ImageAlign = HorizontalAlignment.Left;
+
             btn.Click += clickEvent;
+            
+
 
             flp_menu.Controls.Add(btn);
+
+            
         }
         private Guna2Button CreateMenuButton(string text)
         {
@@ -179,116 +265,309 @@ EventHandler clickEvent)
                 BorderRadius = 10,
                 FillColor = Color.Firebrick,
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Margin = new Padding(10, 5, 10, 5),
-                Cursor = Cursors.Hand
+                Font = new Font("Calibri", 12, FontStyle.Bold),
+                Margin = new Padding(5, 5, 0, 5),
+                Cursor = Cursors.Hand,
+                TextAlign = HorizontalAlignment.Left,
+                ImageSize = new Size(20, 20)
             };
         }
 
-        private void LoadCharts()
+        private Image IconCharToImage(IconChar iconChar)
         {
-            string[] monthNames =
+            using IconPictureBox icon = new IconPictureBox();
+
+            icon.IconChar = iconChar;
+            icon.IconColor = Color.White;
+            icon.IconSize = 24;
+
+            return icon.Image!;
+        }
+
+        private void CreateHazardsVsFirstAidsChart()
+        {
+            string[] months =
             {
-                "Jan", "Feb", "Mar", "Apr",
-                "May", "Jun", "Jul", "Aug",
-                "Sep", "Oct", "Nov", "Dec"
+                "Jan","Feb","Mar","Apr",
+                "May","Jun","Jul","Aug",
+                "Sep","Oct","Nov","Dec"
             };
 
-            int[] hazardCounts =
-            GetMonthlyCounts("Hazards");
+            int year = DateTime.Now.Year;
 
-            int[] firstAidCounts =
-            GetMonthlyCounts("First_Aids");
+            int[] hazards =
+            GetMonthlyCounts("Hazards", year);
 
-            CreateChart(
-            $"Hazards by Month ({DateTime.Now.Year})",
-            monthNames,
-            hazardCounts,
-            0,
-            0);
+            int[] firstAids =
+            GetMonthlyCounts("First_Aids", year);
 
-            CreateChart(
-            $"First Aids by Month ({DateTime.Now.Year})",
-            monthNames,
-            firstAidCounts,
-            1,
-            0);
-        }
-
-        private int[] GetMonthlyCounts(string tableName)
-        {
-            int[] counts = new int[12];
-
-            using (SqliteConnection conn = new SqliteConnection(shesDB))
-            {
-                conn.Open();
-
-                string sql = $@"
-                                SELECT
-                                strftime('%m', Date) AS Month,
-                                COUNT(*) AS Total
-                                FROM {tableName}
-                                WHERE strftime('%Y', Date) = @Year
-                                GROUP BY strftime('%m', Date);";
-
-                using SqliteCommand cmd = new SqliteCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                "@Year",
-                DateTime.Now.Year.ToString());
-
-                using SqliteDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
-                {
-                    int monthIndex =
-                    Convert.ToInt32(dr["Month"]) - 1;
-
-                    counts[monthIndex] =
-                    Convert.ToInt32(dr["Total"]);
-                }
-            }
-
-            return counts;
-        }
-
-        private void CreateChart(string title,string[] monthNames,int[] values,int column,int row)
-        {
             CartesianChart chart = new CartesianChart
             {
-                Dock = DockStyle.Fill,
-                Title = new LabelVisual
+                Dock = DockStyle.Fill
+            };
+
+            chart.Title = new LabelVisual
+            {
+                Text = $"Hazards vs First Aids ({year})",
+                TextSize = 20
+            };
+
+            chart.Series = new ISeries[]
+            {
+                    new ColumnSeries<int>
+                    {
+                        Name = "Hazards",
+                        Values = hazards
+                    },
+
+                    new ColumnSeries<int>
+                    {
+                        Name = "First Aids",
+                        Values = firstAids
+                    }
+            };
+
+            chart.XAxes =
+            [
+                new Axis
                 {
-                    Text = title,
-                    TextSize = 20
+                    Labels = months
                 }
+            ];
+
+            tableLayoutPanel1.Controls.Add(chart, 0, 0);
+        }
+
+        private void CreateHazardTypeChart()
+        {
+            
+            var data = GetHazardsByType();
+
+            CartesianChart chart = new CartesianChart
+            {
+                Dock = DockStyle.Fill
+            };
+
+            //chart.TooltipPosition = LiveChartsCore.Measure.TooltipPosition.Hidden;
+            //string[] labels = data.Keys.ToArray();
+            string[] labels = data.Keys
+                .Select(x =>
+                x.Replace("Hazard Share (", "")
+                .Replace(")", "")
+                .Replace(" ", "\n"))
+                .ToArray();
+            int[] values = data.Values.ToArray();
+
+            chart.Title = new LabelVisual
+            {
+                Text = "Hazards By Type" + $" ({DateTime.Now.Year.ToString()})",
+                TextSize = 20
             };
 
             chart.Series = new ISeries[]
             {
                 new ColumnSeries<int>
                 {
+                    Name = "Hazards",
                     Values = values
                 }
             };
 
-            chart.XAxes = new Axis[]
-            {
+            chart.XAxes =
+            [
                 new Axis
                 {
-                    Labels = monthNames
+                   Labels = labels,
+                   TextSize = 11
+                   
+                }
+            ];
+
+            tableLayoutPanel1.Controls.Add(chart, 1, 0);
+        }
+
+        private void CreateHazardYoYChart()
+        {
+            string[] months =
+            {
+                "Jan","Feb","Mar","Apr",
+                "May","Jun","Jul","Aug",
+                "Sep","Oct","Nov","Dec"
+            };
+
+            int year = DateTime.Now.Year;
+
+            int[] currentYear =
+            GetMonthlyCounts("Hazards", year);
+
+            int[] previousYear =
+            GetMonthlyCounts("Hazards", year - 1);
+
+            CartesianChart chart = new CartesianChart
+            {
+                Dock = DockStyle.Fill
+            };
+
+            chart.Title = new LabelVisual
+            {
+                Text = $"Hazards ({year - 1} vs {year})",
+                TextSize = 20
+            };
+
+            chart.Series = new ISeries[]
+            {
+                new LineSeries<int>
+                {
+                    Name = (year - 1).ToString(),
+                    Values = previousYear,
+                    GeometrySize = 10
+                },
+
+                new LineSeries<int>
+                {
+                    Name = year.ToString(),
+                    Values = currentYear,
+                    GeometrySize = 10
                 }
             };
 
-            tableLayoutPanel1.Controls.Add(chart, column, row);
+            chart.XAxes =
+            [
+                new Axis
+                {
+                 Labels = months
+                }
+            ];
+
+            tableLayoutPanel1.Controls.Add(chart, 0, 1);
         }
 
+        private void CreateFirstAidYoYChart()
+        {
+            string[] months =
+            {
+                "Jan","Feb","Mar","Apr",
+                "May","Jun","Jul","Aug",
+                "Sep","Oct","Nov","Dec"
+            };
+
+            int year = DateTime.Now.Year;
+
+            int[] currentYear =
+            GetMonthlyCounts("First_Aids", year);
+
+            int[] previousYear =
+            GetMonthlyCounts("First_Aids", year - 1);
+
+            CartesianChart chart = new CartesianChart
+            {
+                Dock = DockStyle.Fill
+            };
+
+            chart.Title = new LabelVisual
+            {
+                Text = $"First Aids ({year - 1} vs {year})",
+                TextSize = 20
+            };
+
+            chart.Series = new ISeries[]
+            {
+                new LineSeries<int>
+                {
+                    Name = (year - 1).ToString(),
+                    Values = previousYear,
+                    GeometrySize = 10
+                },
+
+                new LineSeries<int>
+                {
+                    Name = year.ToString(),
+                    Values = currentYear,
+                    GeometrySize = 10
+                }
+            };
+
+            chart.XAxes =
+            [
+                new Axis
+                {
+                    Labels = months
+                }
+            ];
+
+            tableLayoutPanel1.Controls.Add(chart, 1, 1);
+        }
+
+        private int[] GetMonthlyCounts(string tableName, int year)
+        {
+            int[] counts = new int[12];
+
+            using SqliteConnection conn = new SqliteConnection(shesDB);
+
+            conn.Open();
+
+            string sql = $@"
+                            SELECT
+                            strftime('%m', [Date]) AS Month,
+                            COUNT(*) AS Total
+                            FROM {tableName}
+                            WHERE strftime('%Y', [Date]) = @Year
+                            GROUP BY strftime('%m', [Date]);";
+
+            using SqliteCommand cmd = new SqliteCommand(sql, conn);
+
+            cmd.Parameters.AddWithValue("@Year", year.ToString());
+
+            using SqliteDataReader dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                int monthIndex =
+                Convert.ToInt32(dr["Month"]) - 1;
+
+                counts[monthIndex] =
+                Convert.ToInt32(dr["Total"]);
+            }
+
+            return counts;
+        }
+
+        private Dictionary<string, int> GetHazardsByType()
+        {
+            Dictionary<string, int> data = new();
+
+            using SqliteConnection conn =
+            new SqliteConnection(shesDB);
+
+            conn.Open();
+
+            string sql = @"
+                            SELECT
+                            Incident_type,
+                            COUNT(*) AS Total
+                            FROM Hazards
+                            Where strftime('%Y', [Date]) = @Year
+                            GROUP BY Incident_type
+                            ORDER BY Total DESC";
+
+            using SqliteCommand cmd =
+            new SqliteCommand(sql, conn);
+
+            cmd.Parameters.AddWithValue("@Year", DateTime.Now.Year.ToString());
+           
+
+            using SqliteDataReader dr =
+            cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                data.Add(
+                dr["Incident_type"].ToString()!,
+                Convert.ToInt32(dr["Total"]));
+            }
+
+            return data;
+        }
     }
 }
 
-/*
-IconButton btnHazards = new IconButton();
-btnHazards.IconChar = IconChar.TriangleExclamation;
-btnHazards.Text = "Hazards";
-btnHazards.IconColor = Color.White;
- */
