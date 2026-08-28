@@ -93,6 +93,19 @@ namespace InciTrack_Pro
                 Environment.Exit(1);
             }
 
+            //Look for any new incidents reported
+            if(currentUser == "Angel Lively" || currentUser == "Vincent Jackson")
+            {
+                string updateIncidents = "";
+                updateIncidents = Helper_Classes.HazardRetrieval.GetHazards();
+                updateIncidents += "\n\n" + Helper_Classes.FirstAidRetrieval.GetFirstAids();
+                MessageBox.Show(updateIncidents, "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("New incident records may be available that are not currently displayed. SHES Manager/Lead should run the application to check for and retrieve the latest submissions.", "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
             flpKpiControls();
 
             Label lblTitle = new Label

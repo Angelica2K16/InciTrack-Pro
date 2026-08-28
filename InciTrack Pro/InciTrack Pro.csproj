@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="DanMarDev.Identification" Version="2.0.0" />
     <PackageReference Include="DanMarDev.WakeDrives" Version="1.0.0" />
+    <PackageReference Include="EPPlus" Version="8.7.0" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="Guna.UI2.WinForms" Version="2.0.4.8" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WinForms" Version="2.0.5" />
