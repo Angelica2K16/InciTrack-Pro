@@ -1,6 +1,7 @@
 using DanMarDev.Identification;
 using FontAwesome.Sharp;
-using Guna.UI2.WinForms;
+//using Guna.UI2.WinForms;
+using Sunny.UI;
 using InciTrack_Pro.Forms;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
@@ -17,6 +18,7 @@ using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using WD = DanMarDev.WakeDrives;
+using DanMarDev.DuplicateInstanceCheck;
 
 namespace InciTrack_Pro
 {
@@ -80,13 +82,12 @@ namespace InciTrack_Pro
         private void Frm_Main_Load(object? sender, EventArgs e)
         {
             //Making sure only one instance of an applicaton is running 
-            if (AppInstanceIsDuplicate(out string thisAppName))
+            if(DuplicateInstanceCheck.IsDuplicateAppInstance(Process.GetCurrentProcess().ProcessName))
             {
-                MessageBox.Show($"There is already a running instance of {thisAppName}. You cannot run more than 1 instance at a time.", "Duplicate App Instances", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                Environment.Exit(1);
+                MessageBox.Show($"There is already a running instance of this application. You cannot run more than 1 instance at a time.", "Duplicate App Instances", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    Environment.Exit(1);
             }
-
-
+           
             //Wake Drives
             WD.WakeDrives wakeG = new WD.WakeDrives();
             List<string> drive = new List<string> { @"G:\" };
@@ -97,6 +98,7 @@ namespace InciTrack_Pro
                 Environment.Exit(1);
             }
 
+            //Getting Current User => is is Authroized?
             string currentUser = UserPrincipal.Current.DisplayName;
             EmployeeSearch.ListResult officeStaff = EmployeeSearch.GetOfficeStaffList();
             if (!officeStaff.IsSuccess)
@@ -149,15 +151,6 @@ namespace InciTrack_Pro
             tableLayoutPanel1.ResumeLayout();
         }
 
-        private bool AppInstanceIsDuplicate(out string thisAppName)
-        {
-            //Get the full path of the current execcuting assembly
-            string thisAppPath = Assembly.GetEntryAssembly()?.Location ?? "";
-            thisAppName = Path.GetFileNameWithoutExtension(thisAppPath);
-            int thisAppInstanceCount = Process.GetProcessesByName(thisAppName).Length;
-
-            return thisAppInstanceCount > 1;
-        }
 
         private void flpKpiControls()
         {
@@ -271,61 +264,92 @@ namespace InciTrack_Pro
         private void LoadButtons()
         {
             AddMenuButton("Summary",
-            (s, e) => new Frm_Hazards().ShowDialog(), IconChar.ClipboardList);
+            (s, e) => new Frm_Hazards().ShowDialog());
 
             AddMenuButton("Hazards",
-            (s, e) => new Frm_Hazards().ShowDialog(), IconChar.TriangleExclamation);
+            (s, e) => new Frm_Hazards().ShowDialog());
 
             AddMenuButton("First Aids",
-            (s, e) => new Frm_FirstAids().ShowDialog(), IconChar.BandAid);
+            (s, e) => new Frm_FirstAids().ShowDialog());
 
             AddMenuButton("Corrective Actions",
-            (s, e) => MessageBox.Show("Corrective Actions"), IconChar.ListCheck);
+            (s, e) => MessageBox.Show("Corrective Actions"));
         }
 
-        private void AddMenuButton(string text,EventHandler clickEvent, IconChar icon)
-        {
-            Guna2Button btn = CreateMenuButton(text);
+        //private void AddMenuButton(string text,EventHandler clickEvent, IconChar icon)
+        //{
 
-            btn.Image = IconCharToImage(icon);
-            btn.ImageAlign = HorizontalAlignment.Left;
+            
+        //    IconButton btnCustom = CreateMenuButton(text);
+
+
+        //    btnCustom.Image = IconCharToImage(icon);
+        //    btnCustom.ImageAlign = ContentAlignment.MiddleLeft;
+
+        //    btnCustom.Click += clickEvent;
+
+        //    flp_menu.Controls.Add(btnCustom);
+
+           
+        //}
+
+        private void AddMenuButton(string text, EventHandler clickEvent)
+        {
+            UIButton btn = CreateMenuButton(text);
 
             btn.Click += clickEvent;
-            
-
 
             flp_menu.Controls.Add(btn);
-
-            
         }
-        private Guna2Button CreateMenuButton(string text)
+
+        //private IconButton CreateMenuButton(string text)
+        //{
+        //    return new IconButton
+        //    {
+        //        Text = text,
+        //        Width = 190,
+        //        Height = 45,
+        //        ForeColor = Color.White,
+        //        Font = new Font("Calibri", 12, FontStyle.Bold),
+        //        Margin = new Padding(5, 5, 0, 5),
+        //        Cursor = Cursors.Hand
+        //    };
+        //}
+
+        private UIButton CreateMenuButton(string text)
         {
-            return new Guna2Button
+            return new UIButton
             {
                 Text = text,
                 Width = 190,
                 Height = 45,
-                BorderRadius = 10,
+
                 FillColor = Color.Firebrick,
+                FillHoverColor = Color.IndianRed,
+                FillPressColor = Color.DarkRed,
+
                 ForeColor = Color.White,
                 Font = new Font("Calibri", 12, FontStyle.Bold),
-                Margin = new Padding(5, 5, 0, 5),
+
+                Radius = 8,
                 Cursor = Cursors.Hand,
-                TextAlign = HorizontalAlignment.Left,
-                ImageSize = new Size(20, 20)
+
+                Margin = new Padding(5),
+                TextAlign = ContentAlignment.MiddleLeft
             };
         }
 
-        private Image IconCharToImage(IconChar iconChar)
-        {
-            using IconPictureBox icon = new IconPictureBox();
 
-            icon.IconChar = iconChar;
-            icon.IconColor = Color.White;
-            icon.IconSize = 24;
+        //private Image IconCharToImage(IconChar iconChar)
+        //{
+        //    using IconPictureBox icon = new IconPictureBox();
 
-            return icon.Image!;
-        }
+        //    icon.IconChar = iconChar;
+        //    icon.IconColor = Color.White;
+        //    icon.IconSize = 24;
+
+        //    return icon.Image!;
+        //}
 
         private void CreateHazardsVsFirstAidsChart()
         {
