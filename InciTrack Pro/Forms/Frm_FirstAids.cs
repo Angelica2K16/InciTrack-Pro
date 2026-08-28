@@ -30,9 +30,20 @@ namespace InciTrack_Pro.Forms
         private void InitializeEvents()
         {
             this.Load += Frm_FirstAids_Load;
+            pb_exit.Click += Pb_exit_Click;
+            pb_minimize.Click += Pb_minimize_Click;
             txt_search.TextChanged += txtSearch_TextChanged;
             cb_apReports.CheckedChanged += Cb_apReports_CheckedChanged;
             dgv_firstAidsList.CellDoubleClick += Dgv_firstAidsList_CellDoubleClick;
+        }
+
+        private void Pb_exit_Click(object? sender, EventArgs e)
+        {
+            //go back to main dashboard form
+        }
+        private void Pb_minimize_Click(object? sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
         }
 
         private void Dgv_firstAidsList_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
@@ -40,21 +51,102 @@ namespace InciTrack_Pro.Forms
             if(e.RowIndex < 0) return;
             if(e.ColumnIndex == dgv_firstAidsList.Columns["Edit"].Index) { return; }
 
+            int firstAidIdx = Convert.ToInt32(dgv_firstAidsList.Rows[e.RowIndex].Cells["Idx"].Value);
+
+
+            GetFADetails(firstAidIdx);
+        }
+
+        private void GetFADetails(int firstAidIdx)
+        {
+            using SqliteConnection conn = new SqliteConnection(GV.shesDB);
+
+            conn.Open();
+
+            string sql = @"
+                        SELECT Title, Date, Time, Employee_Name AS 'Employee', Area, Incident_Description AS 'Description', Cause, Details, Investigation AS 'Investigation Required', AP_Report AS 'Reported to AP', Notes
+                        FROM FIRST_AIDS
+                        WHERE Idx = @Idx";
+
+            using SqliteCommand cmd =new SqliteCommand(sql, conn);
+
+            cmd.Parameters.AddWithValue("@Idx", firstAidIdx);
+
+            using SqliteDataReader dr = cmd.ExecuteReader();
+
+            if (!dr.Read())
+                return;
+
+            //create Popup form
             Form popup = new Form();
+            popup.BackColor = Color.FromArgb(45,45,48);
             popup.Text = "First Aid Incident";
             popup.Size = new Size(900, 400);
             popup.ShowIcon = false;
             popup.StartPosition = FormStartPosition.CenterParent;
-            popup.Shown += Popup_Shown;
+
+           
+            TableLayoutPanel tbl = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor = Color.Transparent,
+                ColumnCount = 2
+            };
+
+            tbl.ColumnStyles.Add(
+            new ColumnStyle(SizeType.Absolute, 180));
+
+            tbl.ColumnStyles.Add(
+            new ColumnStyle(SizeType.Percent, 100));
+
+            popup.Controls.Add(tbl);
+
+            for (int i = 0; i < dr.FieldCount; i++)
+            {
+                string columnName = dr.GetName(i);
+                string value = dr[i]?.ToString() ?? "";
+
+                AddDetailRow(tbl, columnName, value);
+            }
 
             popup.ShowDialog();
+
         }
 
-        private void Popup_Shown(object? sender, EventArgs e)
+        private void AddDetailRow(TableLayoutPanel tbl,string label,string value)
         {
-            Form popup = (Form)sender;
+            int row = tbl.RowCount;
 
+            tbl.RowCount++;
+
+            tbl.RowStyles.Add(
+            new RowStyle(SizeType.AutoSize));
+
+            Label lblField = new Label
+            {
+                Text = label + ":",
+                ForeColor = Color.White,
+                AutoSize = true,
+                Font = new Font("Calibri",12,FontStyle.Bold)
+            };
+
+            TextBox txtValue = new TextBox
+            {
+                Text = value,
+                ReadOnly = true,
+                BorderStyle = BorderStyle.None,
+                BackColor= Color.FromArgb(45, 45, 48),
+                ForeColor = Color.White,
+                Multiline = value.Length > 75,
+                Dock = DockStyle.Fill
+            };
+
+            tbl.Controls.Add(lblField, 0, row);
+            tbl.Controls.Add(txtValue, 1, row);
         }
+
+
         private void Cb_apReports_CheckedChanged(object? sender, EventArgs e)
         {
             txt_search.Text = string.Empty;
@@ -215,20 +307,20 @@ namespace InciTrack_Pro.Forms
 
             chart.Series = new ISeries[]
             {
-new ColumnSeries<int>
-{
-Values = values,
-Name = "First Aids"
-}
+                new ColumnSeries<int>
+                {
+                    Values = values,
+                    Name = "First Aids"
+                }
             };
 
             chart.XAxes = new Axis[]
             {
-new Axis
-{
-Labels = labels,
-TextSize = 12
-}
+                new Axis
+                {
+                    Labels = labels,
+                    TextSize = 12
+                }
             };
 
             chart.Title = new LabelVisual
@@ -260,11 +352,9 @@ TextSize = 12
                             ORDER BY Total DESC
                             LIMIT 3;";
 
-            using SqliteCommand cmd =
-            new SqliteCommand(sql, conn);
+            using SqliteCommand cmd = new SqliteCommand(sql, conn);
 
-            using SqliteDataReader dr =
-            cmd.ExecuteReader();
+            using SqliteDataReader dr = cmd.ExecuteReader();
 
             while (dr.Read())
             {

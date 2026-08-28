@@ -1,6 +1,5 @@
 using DanMarDev.Identification;
 using FontAwesome.Sharp;
-using FontAwesome.Sharp;
 using Guna.UI2.WinForms;
 using InciTrack_Pro.Forms;
 using LiveChartsCore;
@@ -9,13 +8,16 @@ using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.SkiaSharpView.WinForms;
 using LiveChartsCore.Themes;
 using Microsoft.Data.Sqlite;
+using System.Diagnostics;
+using System.DirectoryServices.AccountManagement;
 using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.DirectoryServices.AccountManagement;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
+using WD = DanMarDev.WakeDrives;
+
 namespace InciTrack_Pro
 {
     public partial class Frm_Main : Form
@@ -77,6 +79,24 @@ namespace InciTrack_Pro
 
         private void Frm_Main_Load(object? sender, EventArgs e)
         {
+            //Making sure only one instance of an applicaton is running 
+            if (AppInstanceIsDuplicate(out string thisAppName))
+            {
+                MessageBox.Show($"There is already a running instance of {thisAppName}. You cannot run more than 1 instance at a time.", "Duplicate App Instances", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                Environment.Exit(1);
+            }
+
+
+            //Wake Drives
+            WD.WakeDrives wakeG = new WD.WakeDrives();
+            List<string> drive = new List<string> { @"G:\" };
+            var result = wakeG.Wake_Drives(drive).FirstOrDefault();
+            if (result.DriveAwake == false)
+            {
+                MessageBox.Show("G Drive is inaccessible, contact administrator if problem persists.", "Drive Failure", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                Environment.Exit(1);
+            }
+
             string currentUser = UserPrincipal.Current.DisplayName;
             EmployeeSearch.ListResult officeStaff = EmployeeSearch.GetOfficeStaffList();
             if (!officeStaff.IsSuccess)
@@ -99,7 +119,7 @@ namespace InciTrack_Pro
                 string updateIncidents = "";
                 updateIncidents = Helper_Classes.HazardRetrieval.GetHazards();
                 updateIncidents += "\n\n" + Helper_Classes.FirstAidRetrieval.GetFirstAids();
-                MessageBox.Show(updateIncidents, "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show(updateIncidents, "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -127,6 +147,16 @@ namespace InciTrack_Pro
             CreateHazardYoYChart();
             CreateFirstAidYoYChart();
             tableLayoutPanel1.ResumeLayout();
+        }
+
+        private bool AppInstanceIsDuplicate(out string thisAppName)
+        {
+            //Get the full path of the current execcuting assembly
+            string thisAppPath = Assembly.GetEntryAssembly()?.Location ?? "";
+            thisAppName = Path.GetFileNameWithoutExtension(thisAppPath);
+            int thisAppInstanceCount = Process.GetProcessesByName(thisAppName).Length;
+
+            return thisAppInstanceCount > 1;
         }
 
         private void flpKpiControls()
