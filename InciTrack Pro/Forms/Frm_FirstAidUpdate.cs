@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows.Forms;
+using static OfficeOpenXml.ExcelErrorValue;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
 
@@ -77,7 +78,73 @@ namespace InciTrack_Pro.Forms
 
         private void Btn_createHazard_Click(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            //create Popup form
+            Form popup = new Form();
+            popup.BackColor = Color.FromArgb(45, 45, 48);
+            popup.Text = "Create a Hazard";
+            popup.Size = new Size(900, 400);
+            popup.ShowIcon = false;
+            popup.StartPosition = FormStartPosition.CenterParent;
+
+
+            TableLayoutPanel tbl = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor = Color.Transparent,
+                ColumnCount = 2
+            };
+
+            tbl.ColumnStyles.Add(
+            new ColumnStyle(SizeType.Absolute, 180));
+
+            tbl.ColumnStyles.Add(
+            new ColumnStyle(SizeType.Percent, 100));
+
+            popup.Controls.Add(tbl);
+
+            for (int i = 0; i <= 15; i++)
+            {
+                //string columnName = dr.GetName(i);
+                //string value = dr[i]?.ToString() ?? "";
+
+                //AddDetailRow(tbl, columnName, value);
+                AddDetailRow(tbl, null, null);
+            }
+
+            popup.ShowDialog();
+        }
+
+        private void AddDetailRow(TableLayoutPanel tbl, string label, string value)
+        {
+            int row = tbl.RowCount;
+
+            tbl.RowCount++;
+
+            tbl.RowStyles.Add(
+            new RowStyle(SizeType.AutoSize));
+
+            Label lblField = new Label
+            {
+                Text = label + ":",
+                ForeColor = Color.White,
+                AutoSize = true,
+                Font = new Font("Calibri", 12, FontStyle.Bold)
+            };
+
+            TextBox txtValue = new TextBox
+            {
+                Text = "Test",
+                ReadOnly = true,
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.FromArgb(45, 45, 48),
+                ForeColor = Color.White,
+                //Multiline = value.Length > 75,
+                Dock = DockStyle.Fill
+            };
+
+            tbl.Controls.Add(lblField, 0, row);
+            tbl.Controls.Add(txtValue, 1, row);
         }
 
         //private Image IconCharToImage(IconChar iconChar)
