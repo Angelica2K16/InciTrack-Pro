@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
+using MD = InciTrack_Pro.Base_Classes.ModelData;
 
 namespace InciTrack_Pro.Forms
 {
@@ -35,6 +36,7 @@ namespace InciTrack_Pro.Forms
             txt_search.TextChanged += txtSearch_TextChanged;
             cb_apReports.CheckedChanged += Cb_apReports_CheckedChanged;
             dgv_firstAidsList.CellDoubleClick += Dgv_firstAidsList_CellDoubleClick;
+            dgv_firstAidsList.CellClick += dgvFirstAids_CellClick;
         }
 
         private void Pb_exit_Click(object? sender, EventArgs e)
@@ -195,7 +197,7 @@ namespace InciTrack_Pro.Forms
             flp_Kpi.Controls.Add(CreateKpiCard(DateTime.Now.Year + " First Aids", FAYtdCount, Color.Firebrick));
             flp_Kpi.Controls.Add(CreateKpiCard($"{monthName} First Aids", FAMonthCount, Color.Firebrick));
             flp_Kpi.Controls.Add(CreateKpiCard("Days Since Last First Aid", lastFACount, Color.Firebrick));
-            CreateTop5AreasChart();
+            CreateTop3AreasChart();
 
         }
 
@@ -293,12 +295,27 @@ namespace InciTrack_Pro.Forms
 
         }
 
-        private void CreateTop5AreasChart()
+        private void CreateTop3AreasChart()
         {
             var data = GetTop5Areas();
 
             string[] labels = data.Keys.ToArray();
             int[] values = data.Values.ToArray();
+
+            Panel pnlChart = new Panel
+            {
+                Dock = DockStyle.Fill
+            };
+
+            Label lblTitle = new Label
+            {
+                Text = "Top 3 Areas",
+                Dock = DockStyle.Top,
+                Height = 35,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Calibri", 14, FontStyle.Bold),
+                ForeColor = Color.White
+            };
 
             CartesianChart chart = new CartesianChart
             {
@@ -323,13 +340,15 @@ namespace InciTrack_Pro.Forms
                 }
             };
 
-            chart.Title = new LabelVisual
-            {
-                Text = "Top 3 Areas",
-                TextSize = 14
-            };
+            //chart.Title = new LabelVisual
+            //{
+            //    Text = "Top 3 Areas",
+            //    TextSize = 14
+            //};
 
-            tableLayoutPanel1.Controls.Add(chart, 1, 0);
+            pnlChart.Controls.Add(chart);
+            pnlChart.Controls.Add(lblTitle);
+            tableLayoutPanel1.Controls.Add(pnlChart, 1, 0);
         }
 
         private Dictionary<string, int> GetTop5Areas()
@@ -483,15 +502,13 @@ namespace InciTrack_Pro.Forms
             if (e.ColumnIndex ==
             dgv_firstAidsList.Columns["Edit"].Index)
             {
-                int firstAidId =
-                Convert.ToInt32(
+                MD.Instance.firstAidIdx = Convert.ToInt32(
                 dgv_firstAidsList.Rows[e.RowIndex]
-                .Cells["FirstAidID"].Value);
+                .Cells["Idx"].Value);
 
-                //Frm_FirstAidEdit frm =
-                //new Frm_FirstAidEdit(firstAidId);
+                Frm_FirstAidUpdate frm = new Frm_FirstAidUpdate();
 
-                //frm.ShowDialog();
+                frm.ShowDialog();
 
                 //LoadGrid();
             }

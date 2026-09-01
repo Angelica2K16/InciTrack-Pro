@@ -28,6 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            LiveChartsCore.SkiaSharpView.SKCharts.SKDefaultLegend skDefaultLegend1 = new LiveChartsCore.SkiaSharpView.SKCharts.SKDefaultLegend();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Main));
+            LiveChartsCore.Drawing.Padding padding1 = new LiveChartsCore.Drawing.Padding();
+            LiveChartsCore.SkiaSharpView.SKCharts.SKDefaultTooltip skDefaultTooltip1 = new LiveChartsCore.SkiaSharpView.SKCharts.SKDefaultTooltip();
+            LiveChartsCore.Drawing.Padding padding2 = new LiveChartsCore.Drawing.Padding();
             pnl_controlBox = new Panel();
             label1 = new Label();
             pb_dmLogo = new PictureBox();
@@ -36,10 +41,12 @@
             flp_menu = new FlowLayoutPanel();
             flp_Kpi = new FlowLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
+            //cartesianChart1 = new LiveChartsCore.SkiaSharpView.WinForms.CartesianChart();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_exit).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // pnl_controlBox
@@ -122,6 +129,7 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            //tableLayoutPanel1.Controls.Add(cartesianChart1, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(200, 159);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -130,6 +138,48 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Size = new Size(1080, 591);
             tableLayoutPanel1.TabIndex = 3;
+            // 
+            // cartesianChart1
+            // 
+            //cartesianChart1.AutoUpdateEnabled = true;
+            //cartesianChart1.ChartTheme = null;
+            //skDefaultLegend1.AnimationsSpeed = TimeSpan.Parse("00:00:00.1500000");
+            //skDefaultLegend1.Content = null;
+            //skDefaultLegend1.IsValid = true;
+            //skDefaultLegend1.Opacity = 1F;
+            //padding1.Bottom = 0F;
+            //padding1.Left = 0F;
+            //padding1.Right = 0F;
+            //padding1.Top = 0F;
+            //skDefaultLegend1.Padding = padding1;
+            //skDefaultLegend1.RemoveOnCompleted = false;
+            //skDefaultLegend1.RotateTransform = 0F;
+            //skDefaultLegend1.X = 0F;
+            //skDefaultLegend1.Y = 0F;
+            //cartesianChart1.Legend = skDefaultLegend1;
+            //cartesianChart1.Location = new Point(3, 4);
+            //cartesianChart1.Margin = new Padding(3, 4, 3, 4);
+            //cartesianChart1.MatchAxesScreenDataRatio = false;
+            //cartesianChart1.Name = "cartesianChart1";
+            //cartesianChart1.Size = new Size(171, 190);
+            //cartesianChart1.TabIndex = 0;
+            //skDefaultTooltip1.AnimationsSpeed = TimeSpan.Parse("00:00:00.1500000");
+            //skDefaultTooltip1.Content = null;
+            //skDefaultTooltip1.IsValid = true;
+            //skDefaultTooltip1.Opacity = 1F;
+            //padding2.Bottom = 0F;
+            //padding2.Left = 0F;
+            //padding2.Right = 0F;
+            //padding2.Top = 0F;
+            //skDefaultTooltip1.Padding = padding2;
+            //skDefaultTooltip1.RemoveOnCompleted = false;
+            //skDefaultTooltip1.RotateTransform = 0F;
+            //skDefaultTooltip1.Wedge = 10;
+            //skDefaultTooltip1.X = 0F;
+            //skDefaultTooltip1.Y = 0F;
+            //cartesianChart1.Tooltip = skDefaultTooltip1;
+            //cartesianChart1.TooltipFindingStrategy = LiveChartsCore.Measure.TooltipFindingStrategy.Automatic;
+            //cartesianChart1.UpdaterThrottler = TimeSpan.Parse("00:00:00.0500000");
             // 
             // Frm_Main
             // 
@@ -156,6 +206,7 @@
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).EndInit();
             ((System.ComponentModel.ISupportInitialize)pb_exit).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -169,6 +220,7 @@
         private FlowLayoutPanel flp_menu;
         private FlowLayoutPanel flp_Kpi;
         private TableLayoutPanel tableLayoutPanel1;
+        //private LiveChartsCore.SkiaSharpView.WinForms.CartesianChart cartesianChart1;
         //private LiveChartsCore.SkiaSharpView.WinForms.CartesianChart cartesianChart1;
     }
 }

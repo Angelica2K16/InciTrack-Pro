@@ -36,33 +36,36 @@
             pnl_header = new Panel();
             lbl_header = new Label();
             tbl_main = new TableLayoutPanel();
-            richTextBox3 = new RichTextBox();
-            richTextBox2 = new RichTextBox();
-            comboBox2 = new ComboBox();
-            label7 = new Label();
-            label6 = new Label();
-            label5 = new Label();
-            label4 = new Label();
-            lbl_Date = new Label();
+            rtxt_notes = new RichTextBox();
+            rtxt_cause = new RichTextBox();
+            combo_apReport = new ComboBox();
+            lbl_area = new Label();
+            lbl_empName = new Label();
+            lbl_time = new Label();
+            lbl_date = new Label();
+            lbl_datelbl = new Label();
             label2 = new Label();
             lbl_title = new Label();
-            lbl_area = new Label();
-            lbl_employee = new Label();
-            lbl_time = new Label();
+            lbl_areaLbl = new Label();
+            lbl_employeeLbl = new Label();
+            lbl_timeLbl = new Label();
             label3 = new Label();
-            textBox1 = new TextBox();
+            txt_Title = new TextBox();
             lbl_description = new Label();
             label8 = new Label();
             label9 = new Label();
-            comboBox1 = new ComboBox();
-            richTextBox1 = new RichTextBox();
+            combo_investigation = new ComboBox();
+            rtxt_descr = new RichTextBox();
             panel1 = new Panel();
+            btn_save = new Sunny.UI.UIButton();
+            btn_cancel = new Sunny.UI.UIButton();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_exit).BeginInit();
             pnl_header.SuspendLayout();
             tbl_main.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // pnl_controlBox
@@ -83,7 +86,7 @@
             label1.Font = new Font("Cooper Black", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.Location = new Point(44, 9);
             label1.Name = "label1";
-            label1.Size = new Size(319, 49);
+            label1.Size = new Size(158, 24);
             label1.TabIndex = 6;
             label1.Text = "InciTrack Pro";
             // 
@@ -137,7 +140,7 @@
             lbl_header.ForeColor = Color.White;
             lbl_header.Location = new Point(12, 12);
             lbl_header.Name = "lbl_header";
-            lbl_header.Size = new Size(98, 39);
+            lbl_header.Size = new Size(50, 19);
             lbl_header.TabIndex = 0;
             lbl_header.Text = "label2";
             // 
@@ -147,26 +150,26 @@
             tbl_main.ColumnCount = 2;
             tbl_main.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 168F));
             tbl_main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tbl_main.Controls.Add(richTextBox3, 1, 9);
-            tbl_main.Controls.Add(richTextBox2, 1, 8);
-            tbl_main.Controls.Add(comboBox2, 1, 6);
-            tbl_main.Controls.Add(label7, 1, 3);
-            tbl_main.Controls.Add(label6, 1, 2);
-            tbl_main.Controls.Add(label5, 1, 1);
-            tbl_main.Controls.Add(label4, 1, 0);
-            tbl_main.Controls.Add(lbl_Date, 0, 0);
+            tbl_main.Controls.Add(rtxt_notes, 1, 9);
+            tbl_main.Controls.Add(rtxt_cause, 1, 8);
+            tbl_main.Controls.Add(combo_apReport, 1, 6);
+            tbl_main.Controls.Add(lbl_area, 1, 3);
+            tbl_main.Controls.Add(lbl_empName, 1, 2);
+            tbl_main.Controls.Add(lbl_time, 1, 1);
+            tbl_main.Controls.Add(lbl_date, 1, 0);
+            tbl_main.Controls.Add(lbl_datelbl, 0, 0);
             tbl_main.Controls.Add(label2, 0, 5);
             tbl_main.Controls.Add(lbl_title, 0, 4);
-            tbl_main.Controls.Add(lbl_area, 0, 3);
-            tbl_main.Controls.Add(lbl_employee, 0, 2);
-            tbl_main.Controls.Add(lbl_time, 0, 1);
+            tbl_main.Controls.Add(lbl_areaLbl, 0, 3);
+            tbl_main.Controls.Add(lbl_employeeLbl, 0, 2);
+            tbl_main.Controls.Add(lbl_timeLbl, 0, 1);
             tbl_main.Controls.Add(label3, 0, 6);
-            tbl_main.Controls.Add(textBox1, 1, 4);
+            tbl_main.Controls.Add(txt_Title, 1, 4);
             tbl_main.Controls.Add(lbl_description, 0, 7);
             tbl_main.Controls.Add(label8, 0, 8);
             tbl_main.Controls.Add(label9, 0, 9);
-            tbl_main.Controls.Add(comboBox1, 1, 5);
-            tbl_main.Controls.Add(richTextBox1, 1, 7);
+            tbl_main.Controls.Add(combo_investigation, 1, 5);
+            tbl_main.Controls.Add(rtxt_descr, 1, 7);
             tbl_main.Dock = DockStyle.Fill;
             tbl_main.Location = new Point(0, 77);
             tbl_main.Name = "tbl_main";
@@ -184,79 +187,82 @@
             tbl_main.Size = new Size(914, 493);
             tbl_main.TabIndex = 2;
             // 
-            // richTextBox3
+            // rtxt_notes
             // 
-            richTextBox3.Location = new Point(171, 368);
-            richTextBox3.Name = "richTextBox3";
-            richTextBox3.Size = new Size(731, 65);
-            richTextBox3.TabIndex = 19;
-            richTextBox3.Text = "";
+            rtxt_notes.Location = new Point(171, 368);
+            rtxt_notes.Name = "rtxt_notes";
+            rtxt_notes.Size = new Size(731, 65);
+            rtxt_notes.TabIndex = 19;
+            rtxt_notes.Text = "";
             // 
-            // richTextBox2
+            // rtxt_cause
             // 
-            richTextBox2.Location = new Point(171, 308);
-            richTextBox2.Name = "richTextBox2";
-            richTextBox2.Size = new Size(731, 54);
-            richTextBox2.TabIndex = 18;
-            richTextBox2.Text = "";
+            rtxt_cause.Location = new Point(171, 308);
+            rtxt_cause.Name = "rtxt_cause";
+            rtxt_cause.Size = new Size(731, 54);
+            rtxt_cause.TabIndex = 18;
+            rtxt_cause.Text = "";
             // 
-            // comboBox2
+            // combo_apReport
             // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(171, 213);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(121, 47);
-            comboBox2.TabIndex = 16;
+            combo_apReport.FormattingEnabled = true;
+            combo_apReport.Items.AddRange(new object[] { "Yes", "No" });
+            combo_apReport.Location = new Point(171, 213);
+            combo_apReport.Name = "combo_apReport";
+            combo_apReport.Size = new Size(121, 27);
+            combo_apReport.TabIndex = 16;
             // 
-            // label7
+            // lbl_area
             // 
-            label7.AutoSize = true;
-            label7.ForeColor = Color.White;
-            label7.Location = new Point(171, 105);
-            label7.Name = "label7";
-            label7.Size = new Size(87, 35);
-            label7.TabIndex = 10;
-            label7.Text = "Area:";
+            lbl_area.AutoSize = true;
+            lbl_area.ForeColor = Color.White;
+            lbl_area.Location = new Point(171, 105);
+            lbl_area.Name = "lbl_area";
+            lbl_area.Size = new Size(43, 19);
+            lbl_area.TabIndex = 10;
+            lbl_area.Text = "Area:";
             // 
-            // label6
+            // lbl_empName
             // 
-            label6.AutoSize = true;
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(171, 70);
-            label6.Name = "label6";
-            label6.Size = new Size(155, 35);
-            label6.TabIndex = 9;
-            label6.Text = "Employee:";
+            lbl_empName.AutoSize = true;
+            lbl_empName.ForeColor = Color.White;
+            lbl_empName.Location = new Point(171, 70);
+            lbl_empName.Name = "lbl_empName";
+            lbl_empName.Size = new Size(76, 19);
+            lbl_empName.TabIndex = 9;
+            lbl_empName.Text = "Employee:";
             // 
-            // label5
+            // lbl_time
             // 
-            label5.AutoSize = true;
-            label5.ForeColor = Color.White;
-            label5.Location = new Point(171, 35);
-            label5.Name = "label5";
-            label5.Size = new Size(91, 35);
-            label5.TabIndex = 8;
-            label5.Text = "Time:";
+            lbl_time.AutoSize = true;
+            lbl_time.ForeColor = Color.White;
+            lbl_time.Location = new Point(171, 35);
+            lbl_time.Name = "lbl_time";
+            lbl_time.Size = new Size(45, 19);
+            lbl_time.TabIndex = 8;
+            lbl_time.Text = "Time:";
             // 
-            // label4
+            // lbl_date
             // 
-            label4.AutoSize = true;
-            label4.ForeColor = Color.White;
-            label4.Location = new Point(171, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(88, 35);
-            label4.TabIndex = 7;
-            label4.Text = "Date:";
+            lbl_date.AutoSize = true;
+            lbl_date.ForeColor = Color.White;
+            lbl_date.Location = new Point(171, 0);
+            lbl_date.Name = "lbl_date";
+            lbl_date.Padding = new Padding(0, 5, 0, 0);
+            lbl_date.Size = new Size(44, 24);
+            lbl_date.TabIndex = 7;
+            lbl_date.Text = "Date:";
             // 
-            // lbl_Date
+            // lbl_datelbl
             // 
-            lbl_Date.AutoSize = true;
-            lbl_Date.ForeColor = Color.White;
-            lbl_Date.Location = new Point(3, 0);
-            lbl_Date.Name = "lbl_Date";
-            lbl_Date.Size = new Size(88, 35);
-            lbl_Date.TabIndex = 0;
-            lbl_Date.Text = "Date:";
+            lbl_datelbl.AutoSize = true;
+            lbl_datelbl.ForeColor = Color.White;
+            lbl_datelbl.Location = new Point(3, 0);
+            lbl_datelbl.Name = "lbl_datelbl";
+            lbl_datelbl.Padding = new Padding(0, 5, 0, 0);
+            lbl_datelbl.Size = new Size(44, 24);
+            lbl_datelbl.TabIndex = 0;
+            lbl_datelbl.Text = "Date:";
             // 
             // label2
             // 
@@ -264,7 +270,7 @@
             label2.ForeColor = Color.White;
             label2.Location = new Point(3, 175);
             label2.Name = "label2";
-            label2.Size = new Size(149, 35);
+            label2.Size = new Size(159, 19);
             label2.TabIndex = 4;
             label2.Text = "Investigation Required:";
             // 
@@ -274,39 +280,39 @@
             lbl_title.ForeColor = Color.White;
             lbl_title.Location = new Point(3, 140);
             lbl_title.Name = "lbl_title";
-            lbl_title.Size = new Size(83, 35);
+            lbl_title.Size = new Size(42, 19);
             lbl_title.TabIndex = 3;
             lbl_title.Text = "Title:";
             // 
-            // lbl_area
+            // lbl_areaLbl
             // 
-            lbl_area.AutoSize = true;
-            lbl_area.ForeColor = Color.White;
-            lbl_area.Location = new Point(3, 105);
-            lbl_area.Name = "lbl_area";
-            lbl_area.Size = new Size(87, 35);
-            lbl_area.TabIndex = 2;
-            lbl_area.Text = "Area:";
+            lbl_areaLbl.AutoSize = true;
+            lbl_areaLbl.ForeColor = Color.White;
+            lbl_areaLbl.Location = new Point(3, 105);
+            lbl_areaLbl.Name = "lbl_areaLbl";
+            lbl_areaLbl.Size = new Size(43, 19);
+            lbl_areaLbl.TabIndex = 2;
+            lbl_areaLbl.Text = "Area:";
             // 
-            // lbl_employee
+            // lbl_employeeLbl
             // 
-            lbl_employee.AutoSize = true;
-            lbl_employee.ForeColor = Color.White;
-            lbl_employee.Location = new Point(3, 70);
-            lbl_employee.Name = "lbl_employee";
-            lbl_employee.Size = new Size(155, 35);
-            lbl_employee.TabIndex = 1;
-            lbl_employee.Text = "Employee:";
+            lbl_employeeLbl.AutoSize = true;
+            lbl_employeeLbl.ForeColor = Color.White;
+            lbl_employeeLbl.Location = new Point(3, 70);
+            lbl_employeeLbl.Name = "lbl_employeeLbl";
+            lbl_employeeLbl.Size = new Size(76, 19);
+            lbl_employeeLbl.TabIndex = 1;
+            lbl_employeeLbl.Text = "Employee:";
             // 
-            // lbl_time
+            // lbl_timeLbl
             // 
-            lbl_time.AutoSize = true;
-            lbl_time.ForeColor = Color.White;
-            lbl_time.Location = new Point(3, 35);
-            lbl_time.Name = "lbl_time";
-            lbl_time.Size = new Size(91, 35);
-            lbl_time.TabIndex = 5;
-            lbl_time.Text = "Time:";
+            lbl_timeLbl.AutoSize = true;
+            lbl_timeLbl.ForeColor = Color.White;
+            lbl_timeLbl.Location = new Point(3, 35);
+            lbl_timeLbl.Name = "lbl_timeLbl";
+            lbl_timeLbl.Size = new Size(45, 19);
+            lbl_timeLbl.TabIndex = 5;
+            lbl_timeLbl.Text = "Time:";
             // 
             // label3
             // 
@@ -314,16 +320,16 @@
             label3.ForeColor = Color.White;
             label3.Location = new Point(3, 210);
             label3.Name = "label3";
-            label3.Size = new Size(145, 35);
+            label3.Size = new Size(110, 19);
             label3.TabIndex = 6;
             label3.Text = "Reported to AP:";
             // 
-            // textBox1
+            // txt_Title
             // 
-            textBox1.Location = new Point(171, 143);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(387, 47);
-            textBox1.TabIndex = 11;
+            txt_Title.Location = new Point(171, 143);
+            txt_Title.Name = "txt_Title";
+            txt_Title.Size = new Size(387, 27);
+            txt_Title.TabIndex = 11;
             // 
             // lbl_description
             // 
@@ -331,7 +337,7 @@
             lbl_description.ForeColor = Color.White;
             lbl_description.Location = new Point(3, 245);
             lbl_description.Name = "lbl_description";
-            lbl_description.Size = new Size(150, 60);
+            lbl_description.Size = new Size(87, 19);
             lbl_description.TabIndex = 12;
             lbl_description.Text = "Description:";
             // 
@@ -341,7 +347,7 @@
             label8.ForeColor = Color.White;
             label8.Location = new Point(3, 305);
             label8.Name = "label8";
-            label8.Size = new Size(104, 39);
+            label8.Size = new Size(53, 19);
             label8.TabIndex = 13;
             label8.Text = "Cause:";
             // 
@@ -351,38 +357,85 @@
             label9.ForeColor = Color.White;
             label9.Location = new Point(3, 365);
             label9.Name = "label9";
-            label9.Size = new Size(104, 39);
+            label9.Size = new Size(51, 19);
             label9.TabIndex = 14;
             label9.Text = "Notes:";
             // 
-            // comboBox1
+            // combo_investigation
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(171, 178);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 47);
-            comboBox1.TabIndex = 15;
+            combo_investigation.FormattingEnabled = true;
+            combo_investigation.Items.AddRange(new object[] { "Yes", "No" });
+            combo_investigation.Location = new Point(171, 178);
+            combo_investigation.Name = "combo_investigation";
+            combo_investigation.Size = new Size(121, 27);
+            combo_investigation.TabIndex = 15;
             // 
-            // richTextBox1
+            // rtxt_descr
             // 
-            richTextBox1.Location = new Point(171, 248);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(731, 54);
-            richTextBox1.TabIndex = 17;
-            richTextBox1.Text = "";
+            rtxt_descr.Location = new Point(171, 248);
+            rtxt_descr.Name = "rtxt_descr";
+            rtxt_descr.Size = new Size(731, 54);
+            rtxt_descr.TabIndex = 17;
+            rtxt_descr.Text = "";
             // 
             // panel1
             // 
             panel1.BackColor = Color.Transparent;
+            panel1.Controls.Add(btn_save);
+            panel1.Controls.Add(btn_cancel);
             panel1.Dock = DockStyle.Bottom;
             panel1.Location = new Point(0, 516);
             panel1.Name = "panel1";
             panel1.Size = new Size(914, 54);
             panel1.TabIndex = 3;
             // 
+            // btn_save
+            // 
+            btn_save.BackColor = Color.Transparent;
+            btn_save.FillColor = Color.IndianRed;
+            btn_save.FillColor2 = Color.IndianRed;
+            btn_save.FillHoverColor = Color.FromArgb(255, 192, 192);
+            btn_save.FillPressColor = Color.FromArgb(255, 192, 192);
+            btn_save.FillSelectedColor = Color.FromArgb(255, 192, 192);
+            btn_save.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_save.Location = new Point(696, 7);
+            btn_save.MinimumSize = new Size(1, 1);
+            btn_save.Name = "btn_save";
+            btn_save.Radius = 15;
+            btn_save.RectColor = Color.Black;
+            btn_save.RectHoverColor = Color.Black;
+            btn_save.RectPressColor = Color.Black;
+            btn_save.RectSelectedColor = Color.Black;
+            btn_save.Size = new Size(100, 35);
+            btn_save.TabIndex = 1;
+            btn_save.Text = "Save";
+            btn_save.TipsFont = new Font("Microsoft Sans Serif", 9F);
+            // 
+            // btn_cancel
+            // 
+            btn_cancel.BackColor = Color.Transparent;
+            btn_cancel.FillColor = Color.IndianRed;
+            btn_cancel.FillColor2 = Color.IndianRed;
+            btn_cancel.FillHoverColor = Color.FromArgb(255, 192, 192);
+            btn_cancel.FillPressColor = Color.FromArgb(255, 192, 192);
+            btn_cancel.FillSelectedColor = Color.FromArgb(255, 192, 192);
+            btn_cancel.Font = new Font("Calibri", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_cancel.Location = new Point(802, 7);
+            btn_cancel.MinimumSize = new Size(1, 1);
+            btn_cancel.Name = "btn_cancel";
+            btn_cancel.Radius = 15;
+            btn_cancel.RectColor = Color.Black;
+            btn_cancel.RectHoverColor = Color.Black;
+            btn_cancel.RectPressColor = Color.Black;
+            btn_cancel.RectSelectedColor = Color.Black;
+            btn_cancel.Size = new Size(100, 35);
+            btn_cancel.TabIndex = 0;
+            btn_cancel.Text = "Cancel";
+            btn_cancel.TipsFont = new Font("Microsoft Sans Serif", 9F);
+            // 
             // Frm_FirstAidUpdate
             // 
-            AutoScaleDimensions = new SizeF(16F, 39F);
+            AutoScaleDimensions = new SizeF(8F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.Black_Background_1920x1045_;
             BackgroundImageLayout = ImageLayout.Stretch;
@@ -406,6 +459,7 @@
             pnl_header.PerformLayout();
             tbl_main.ResumeLayout(false);
             tbl_main.PerformLayout();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -419,27 +473,29 @@
         private Panel pnl_header;
         private Label lbl_header;
         private TableLayoutPanel tbl_main;
-        private Label lbl_Date;
-        private Label lbl_employee;
-        private Label lbl_area;
+        private Label lbl_datelbl;
+        private Label lbl_employeeLbl;
+        private Label lbl_areaLbl;
         private Label lbl_title;
         private Label label2;
-        private Label label7;
-        private Label label6;
-        private Label label5;
-        private Label label4;
+        private Label lbl_area;
+        private Label lbl_empName;
         private Label lbl_time;
+        private Label lbl_date;
+        private Label lbl_timeLbl;
         private Label label3;
-        private TextBox textBox1;
+        private TextBox txt_Title;
         private Label lbl_description;
-        private RichTextBox richTextBox3;
-        private RichTextBox richTextBox2;
-        private ComboBox comboBox2;
+        private RichTextBox rtxt_notes;
+        private RichTextBox rtxt_cause;
+        private ComboBox combo_apReport;
         private Label label8;
         private Label label9;
-        private ComboBox comboBox1;
-        private RichTextBox richTextBox1;
+        private ComboBox combo_investigation;
+        private RichTextBox rtxt_descr;
         private Panel panel1;
+        private Sunny.UI.UIButton btn_cancel;
+        private Sunny.UI.UIButton btn_save;
         //private Guna.UI2.WinForms.Guna2Button btn_createHazard;
         //private Guna.UI2.WinForms.Guna2Button guna2Button2;
         //private Guna.UI2.WinForms.Guna2Button guna2Button1;

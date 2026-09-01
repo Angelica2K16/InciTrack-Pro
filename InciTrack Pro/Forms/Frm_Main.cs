@@ -19,6 +19,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using WD = DanMarDev.WakeDrives;
 using DanMarDev.DuplicateInstanceCheck;
+using LiveChartsCore.VisualElements;
+using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 
 namespace InciTrack_Pro
 {
@@ -368,16 +370,35 @@ namespace InciTrack_Pro
             int[] firstAids =
             GetMonthlyCounts("First_Aids", year);
 
-            CartesianChart chart = new CartesianChart
-            {
-                Dock = DockStyle.Fill
-            };
+            //CartesianChart chart = new CartesianChart
+            //{
+            //    Dock = DockStyle.Fill
+            //};
 
-            chart.Title = new LabelVisual
-            {
-                Text = $"Hazards vs First Aids ({year})",
-                TextSize = 20
-            };
+            string titleText = $"Hazards vs First Aids ({year})";
+            Panel pnlChart = CreatePanelChart(titleText).Item1;
+            Label lblTitle = CreatePanelChart(titleText).Item2;
+            CartesianChart chart = CreatePanelChart(null).Item3;
+
+            //Panel pnlChart = new Panel
+            //{
+            //    Dock = DockStyle.Fill
+            //};
+
+            //Label lblTitle = new Label
+            //{
+            //    Text = $"Hazards vs First Aids ({year})",
+            //    Dock = DockStyle.Top,
+            //    Height = 35,
+            //    TextAlign = ContentAlignment.MiddleCenter,
+            //    Font = new Font("Calibri", 14, FontStyle.Bold),
+            //    ForeColor = Color.White
+            //};
+
+            //CartesianChart chart = new CartesianChart
+            //{
+            //    Dock = DockStyle.Fill
+            //};
 
             chart.Series = new ISeries[]
             {
@@ -402,7 +423,11 @@ namespace InciTrack_Pro
                 }
             ];
 
-            tableLayoutPanel1.Controls.Add(chart, 0, 0);
+            pnlChart.Controls.Add(chart);
+            pnlChart.Controls.Add(lblTitle);
+
+            tableLayoutPanel1.Controls.Add(pnlChart, 0, 0);
+
         }
 
         private void CreateHazardTypeChart()
@@ -410,10 +435,29 @@ namespace InciTrack_Pro
             
             var data = GetHazardsByType();
 
-            CartesianChart chart = new CartesianChart
-            {
-                Dock = DockStyle.Fill
-            };
+            string titleText = "Hazards By Type" + $"({DateTime.Now.Year.ToString()})";
+            Panel pnlChart = CreatePanelChart(titleText).Item1;
+            Label lblTitle = CreatePanelChart(titleText).Item2;
+            CartesianChart chart = CreatePanelChart(null).Item3;
+            //Panel pnlChart = new Panel
+            //{
+            //    Dock = DockStyle.Fill
+            //};
+
+            //Label lblTitle = new Label
+            //{
+            //    Text = "Hazards By Type" + $"({ DateTime.Now.Year.ToString() })",
+            //    Dock = DockStyle.Top,
+            //    Height = 35,
+            //    TextAlign = ContentAlignment.MiddleCenter,
+            //    Font = new Font("Calibri", 14, FontStyle.Bold),
+            //    ForeColor = Color.White
+            //};
+
+            //CartesianChart chart = new CartesianChart
+            //{
+            //    Dock = DockStyle.Fill
+            //};
 
             //chart.TooltipPosition = LiveChartsCore.Measure.TooltipPosition.Hidden;
             //string[] labels = data.Keys.ToArray();
@@ -425,11 +469,11 @@ namespace InciTrack_Pro
                 .ToArray();
             int[] values = data.Values.ToArray();
 
-            chart.Title = new LabelVisual
-            {
-                Text = "Hazards By Type" + $" ({DateTime.Now.Year.ToString()})",
-                TextSize = 20
-            };
+            //chart.Title = new LabelVisual
+            //{
+            //    Text = "Hazards By Type" + $" ({DateTime.Now.Year.ToString()})",
+            //    TextSize = 20
+            //};
 
             chart.Series = new ISeries[]
             {
@@ -450,7 +494,12 @@ namespace InciTrack_Pro
                 }
             ];
 
-            tableLayoutPanel1.Controls.Add(chart, 1, 0);
+            pnlChart.Controls.Add(chart);
+            pnlChart.Controls.Add(lblTitle);
+
+            //tableLayoutPanel1.Controls.Add(pnlChart, 0, 0);
+
+            tableLayoutPanel1.Controls.Add(pnlChart, 1, 0);
         }
 
         private void CreateHazardYoYChart()
@@ -470,16 +519,35 @@ namespace InciTrack_Pro
             int[] previousYear =
             GetMonthlyCounts("Hazards", year - 1);
 
-            CartesianChart chart = new CartesianChart
-            {
-                Dock = DockStyle.Fill
-            };
+            string titleText = $"Hazards ({year - 1} vs {year})";
+            Panel pnlChart = CreatePanelChart(titleText).Item1;
+            Label lblTitle = CreatePanelChart(titleText).Item2;
+            CartesianChart chart = CreatePanelChart(null).Item3;
+            //Panel pnlChart = new Panel
+            //{
+            //    Dock = DockStyle.Fill
+            //};
 
-            chart.Title = new LabelVisual
-            {
-                Text = $"Hazards ({year - 1} vs {year})",
-                TextSize = 20
-            };
+            //Label lblTitle = new Label
+            //{
+            //    Text = $"Hazards ({year - 1} vs {year})",
+            //    Dock = DockStyle.Top,
+            //    Height = 35,
+            //    TextAlign = ContentAlignment.MiddleCenter,
+            //    Font = new Font("Calibri", 14, FontStyle.Bold),
+            //    ForeColor = Color.White
+            //};
+
+            //CartesianChart chart = new CartesianChart
+            //{
+            //    Dock = DockStyle.Fill
+            //};
+
+            //chart.Title = new LabelVisual
+            //{
+            //    Text = $"Hazards ({year - 1} vs {year})",
+            //    TextSize = 20
+            //};
 
             chart.Series = new ISeries[]
             {
@@ -506,7 +574,9 @@ namespace InciTrack_Pro
                 }
             ];
 
-            tableLayoutPanel1.Controls.Add(chart, 0, 1);
+            pnlChart.Controls.Add(chart);
+            pnlChart.Controls.Add(lblTitle);
+            tableLayoutPanel1.Controls.Add(pnlChart, 0, 1);
         }
 
         private void CreateFirstAidYoYChart()
@@ -526,16 +596,37 @@ namespace InciTrack_Pro
             int[] previousYear =
             GetMonthlyCounts("First_Aids", year - 1);
 
-            CartesianChart chart = new CartesianChart
-            {
-                Dock = DockStyle.Fill
-            };
+            string titleText = $"First Aids ({year - 1} vs {year})";
+            Panel pnlChart = CreatePanelChart(null).Item1;
+            Label lblTitle = CreatePanelChart(titleText).Item2;
+            CartesianChart chart = CreatePanelChart(null).Item3;
 
-            chart.Title = new LabelVisual
-            {
-                Text = $"First Aids ({year - 1} vs {year})",
-                TextSize = 20
-            };
+            //Panel pnlChart = new Panel
+            //{
+            //    Dock = DockStyle.Fill
+            //};
+
+            //Label lblTitle = new Label
+            //{
+            //    Text = $"First Aids ({year - 1} vs {year})",
+            //    Dock = DockStyle.Top,
+            //    Height = 35,
+            //    TextAlign = ContentAlignment.MiddleCenter,
+            //    Font = new Font("Calibri", 14, FontStyle.Bold),
+            //    ForeColor = Color.White
+            //};
+
+
+            //CartesianChart chart = new CartesianChart
+            //{
+            //    Dock = DockStyle.Fill
+            //};
+
+            //chart.Title = new LabelVisual
+            //{
+            //    Text = $"First Aids ({year - 1} vs {year})",
+            //    TextSize = 20
+            //};
 
             chart.Series = new ISeries[]
             {
@@ -562,9 +653,35 @@ namespace InciTrack_Pro
                 }
             ];
 
-            tableLayoutPanel1.Controls.Add(chart, 1, 1);
+            pnlChart.Controls.Add(chart);
+            pnlChart.Controls.Add(lblTitle);
+            tableLayoutPanel1.Controls.Add(pnlChart, 1, 1);
         }
 
+        private (Panel, Label, CartesianChart) CreatePanelChart(string? titleText)
+        {
+            Panel pnlChart = new Panel
+            {
+                Dock = DockStyle.Fill
+            };
+
+            Label lblTitle = new Label
+            {
+                Text = $"First Aids ({DateTime.Now.Year - 1} vs {DateTime.Now.Year})",
+                Dock = DockStyle.Top,
+                Height = 35,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Calibri", 14, FontStyle.Bold),
+                ForeColor = Color.White
+            };
+
+            CartesianChart chart = new CartesianChart
+            {
+                Dock = DockStyle.Fill
+            };
+
+            return (pnlChart, lblTitle, chart);
+        }
         private int[] GetMonthlyCounts(string tableName, int year)
         {
             int[] counts = new int[12];

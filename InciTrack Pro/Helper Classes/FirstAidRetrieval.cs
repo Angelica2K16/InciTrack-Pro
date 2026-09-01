@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using OfficeOpenXml;
-using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,7 +63,7 @@ namespace InciTrack_Pro.Helper_Classes
         private static (int newFAsFound, string excelFileName) EpplusWork(int maxValue)
         {
             int newHazardsFound = 0;
-            string returnMessage = "";
+           // string returnMessage = "";
 
             ExcelPackage.License.SetNonCommercialPersonal("<Dan-Mar Company - Internal Use>");
 
