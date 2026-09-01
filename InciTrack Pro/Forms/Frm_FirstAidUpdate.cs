@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
@@ -27,12 +28,10 @@ namespace InciTrack_Pro.Forms
             this.Load += Frm_FirstAidUpdate_Load;
             btn_save.Click += Btn_save_Click;
             btn_cancel.Click += Btn_cancel_Click;
+            btn_createHazard.Click += Btn_createHazard_Click;
         }
 
-        private void Btn_cancel_Click(object? sender, EventArgs e)
-        {
-            this.Close();
-        }
+       
 
         private void Frm_FirstAidUpdate_Load(object? sender, EventArgs e)
         {
@@ -71,17 +70,26 @@ namespace InciTrack_Pro.Forms
                 
         }
 
-
-        private Image IconCharToImage(IconChar iconChar)
+        private void Btn_cancel_Click(object? sender, EventArgs e)
         {
-            using IconPictureBox icon = new IconPictureBox();
-
-            icon.IconChar = iconChar;
-            icon.IconColor = Color.White;
-            icon.IconSize = 24;
-
-            return icon.Image!;
+            this.Close();
         }
+
+        private void Btn_createHazard_Click(object? sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        //private Image IconCharToImage(IconChar iconChar)
+        //{
+        //    using IconPictureBox icon = new IconPictureBox();
+
+        //    icon.IconChar = iconChar;
+        //    icon.IconColor = Color.White;
+        //    icon.IconSize = 24;
+
+        //    return icon.Image!;
+        //}
 
         private void GetFirstAidIncidentDataFromSQL()
         {
@@ -207,8 +215,11 @@ namespace InciTrack_Pro.Forms
             using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
             {
                 conn.Open();
-
-                string sql = $@"
+                using (SqliteTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        string sql = $@"
                             UPDATE FIRST_AIDS SET
                             
                                 Title = @title,
@@ -221,23 +232,43 @@ namespace InciTrack_Pro.Forms
                             WHERE Idx  = @firstAidIdx
                            ";
 
-                using (SqliteCommand cmd = new SqliteCommand(sql, conn))
-                {
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
+                        {
+                            
+                            cmd.Parameters.AddWithValue("@firstAidIdx", MD.Instance.firstAidIdx);
+                            cmd.Parameters.AddWithValue("@title", MD.Instance.title);
+                            cmd.Parameters.AddWithValue("@investigation", MD.Instance.investigation);
+                            cmd.Parameters.AddWithValue("@apReport", MD.Instance.apReport);
+                            cmd.Parameters.AddWithValue("@descr", MD.Instance.descr);
+                            cmd.Parameters.AddWithValue("@cause", MD.Instance.cause);
+                            cmd.Parameters.AddWithValue("@notes", MD.Instance.notes);
 
-                    cmd.Parameters.AddWithValue("@firstAidIdx", MD.Instance.firstAidIdx);
-                    cmd.Parameters.AddWithValue("@title", MD.Instance.title);
-                    cmd.Parameters.AddWithValue("@investigation", MD.Instance.investigation);
-                    cmd.Parameters.AddWithValue("@apReport", MD.Instance.apReport);
-                    cmd.Parameters.AddWithValue("@descr", MD.Instance.descr);
-                    cmd.Parameters.AddWithValue("@cause", MD.Instance.cause);
-                    cmd.Parameters.AddWithValue("@notes", MD.Instance.notes);
 
+                            cmd.ExecuteNonQuery();
+                        }
 
-                    cmd.ExecuteNonQuery();
+                        transaction.Commit();
+
+                        Frm_FirstAids? frm = Application.OpenForms["Frm_FirstAids"] as Frm_FirstAids;
+
+                        if(frm != null)
+                        {
+                            frm.LoadDgvFirstAidList();
+                            frm.ApplySearchFilter();
+                        }
+
+                        this.Close();
+                    }
+                    catch(Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show(ex.Message);
+                    }
                 }
+
             }
 
-            this.Close();
+            
         }
     }
 }

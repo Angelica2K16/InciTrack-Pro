@@ -103,8 +103,7 @@ namespace InciTrack_Pro.Helper_Classes
                     // Find the maxId row
                     for (int row = startRow; row <= lastRow; row++)
                     {
-                        
-
+                       
                         int currentId = Convert.ToInt32(ws.Cells[row, 3].Value);
                         if (currentId == maxValue)
                         {

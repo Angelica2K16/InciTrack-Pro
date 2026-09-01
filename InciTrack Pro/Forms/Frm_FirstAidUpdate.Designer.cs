@@ -59,6 +59,7 @@
             panel1 = new Panel();
             btn_save = new Sunny.UI.UIButton();
             btn_cancel = new Sunny.UI.UIButton();
+            btn_createHazard = new Sunny.UI.UIButton();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
@@ -381,6 +382,7 @@
             // panel1
             // 
             panel1.BackColor = Color.Transparent;
+            panel1.Controls.Add(btn_createHazard);
             panel1.Controls.Add(btn_save);
             panel1.Controls.Add(btn_cancel);
             panel1.Dock = DockStyle.Bottom;
@@ -432,6 +434,28 @@
             btn_cancel.TabIndex = 0;
             btn_cancel.Text = "Cancel";
             btn_cancel.TipsFont = new Font("Microsoft Sans Serif", 9F);
+            // 
+            // btn_createHazard
+            // 
+            btn_createHazard.BackColor = Color.Transparent;
+            btn_createHazard.FillColor = Color.IndianRed;
+            btn_createHazard.FillColor2 = Color.IndianRed;
+            btn_createHazard.FillHoverColor = Color.FromArgb(255, 192, 192);
+            btn_createHazard.FillPressColor = Color.FromArgb(255, 192, 192);
+            btn_createHazard.FillSelectedColor = Color.FromArgb(255, 192, 192);
+            btn_createHazard.Font = new Font("Calibri", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_createHazard.Location = new Point(13, 7);
+            btn_createHazard.MinimumSize = new Size(1, 1);
+            btn_createHazard.Name = "btn_createHazard";
+            btn_createHazard.Radius = 15;
+            btn_createHazard.RectColor = Color.Black;
+            btn_createHazard.RectHoverColor = Color.Black;
+            btn_createHazard.RectPressColor = Color.Black;
+            btn_createHazard.RectSelectedColor = Color.Black;
+            btn_createHazard.Size = new Size(100, 35);
+            btn_createHazard.TabIndex = 2;
+            btn_createHazard.Text = "Create Hazard";
+            btn_createHazard.TipsFont = new Font("Microsoft Sans Serif", 9F);
             // 
             // Frm_FirstAidUpdate
             // 
@@ -496,6 +520,7 @@
         private Panel panel1;
         private Sunny.UI.UIButton btn_cancel;
         private Sunny.UI.UIButton btn_save;
+        private Sunny.UI.UIButton btn_createHazard;
         //private Guna.UI2.WinForms.Guna2Button btn_createHazard;
         //private Guna.UI2.WinForms.Guna2Button guna2Button2;
         //private Guna.UI2.WinForms.Guna2Button guna2Button1;

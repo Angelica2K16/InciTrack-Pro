@@ -164,12 +164,25 @@ namespace InciTrack_Pro.Forms
             LoadDgvFirstAidList();
         }
 
-        private void txtSearch_TextChanged(object sender, EventArgs e)
+        private void txtSearch_TextChanged(object? sender, EventArgs e)
+        {
+            dgv_firstAidsList.ClearSelection();
+            dgv_firstAidsList.CurrentCell = null;
+            ApplySearchFilter();
+        }
+
+        internal void ApplySearchFilter()
         {
             string search = txt_search.Text.Trim().ToLower();
 
+            
+
             foreach (DataGridViewRow row in dgv_firstAidsList.Rows)
             {
+                if(row.IsNewRow) { continue; }
+
+               
+
                 if (string.IsNullOrWhiteSpace(search))
                 {
                     row.Visible = true;
@@ -183,9 +196,15 @@ namespace InciTrack_Pro.Forms
                 c.Value.ToString()!
                 .ToLower()
                 .Contains(search));
+
+                if (row.Cells["Idx"].Value != null && Convert.ToInt32(row.Cells["Idx"].Value) == MD.Instance.firstAidIdx)
+                {
+                    dgv_firstAidsList.ClearSelection();
+                    row.Selected = true;
+                    dgv_firstAidsList.CurrentCell = row.Cells[1];
+                }
             }
         }
-
         private void flpKpiControls()
         {
             flp_Kpi.Controls.Clear();
@@ -384,7 +403,7 @@ namespace InciTrack_Pro.Forms
 
             return areas;
         }
-        private void LoadDgvFirstAidList()
+        internal void LoadDgvFirstAidList()
         {
             dgv_firstAidsList.Columns.Clear();
             dgv_firstAidsList.DataSource = null;
@@ -497,7 +516,7 @@ namespace InciTrack_Pro.Forms
 
         
 
-        private void dgvFirstAids_CellClick(object sender,DataGridViewCellEventArgs e)
+        private void dgvFirstAids_CellClick(object? sender,DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex ==
             dgv_firstAidsList.Columns["Edit"].Index)
