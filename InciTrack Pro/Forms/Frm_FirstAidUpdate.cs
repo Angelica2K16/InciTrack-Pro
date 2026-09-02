@@ -292,91 +292,91 @@ namespace InciTrack_Pro.Forms
             //string.Join(",", selected);
 
 
-            //using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
-            //{
-            //    conn.Open();
-            //    using (SqliteTransaction transaction = conn.BeginTransaction())
-            //    {
-            //        try
-            //        {
-            //            string sql = $@"
-            //                INSERT INTO HAZARDS
-            //                (
-            //                    Date,
-            //                    Title,
-            //                    Reported_By, 
-            //                    Incident_type, 
-            //                    Area, 
-            //                    Injury_Category, 
-            //                    Enviroment_Category,
-            //                    Damage_Category,
-            //                    Incident_Description,
-            //                    Notes, 
-            //                    Status,
-            //                    AP_Report,
-            //                    Risk_Level
-            //                )
-            //                VALUES
-            //                (
-            //                    @Date,
-            //                    @Title,
-            //                    @Reported_By, 
-            //                    @Incident_type, 
-            //                    @Area, 
-            //                    @Injury_Category, 
-            //                    @Enviroment_Category,
-            //                    @Damage_Category,
-            //                    @Incident_Description,
-            //                    @Notes, 
-            //                    @Status,
-            //                    @AP_Report,
-            //                    @Risk_Level
-            //                )
+            using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
+            {
+                conn.Open();
+                using (SqliteTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        string sql = $@"
+                            INSERT INTO HAZARDS
+                            (
+                                Date,
+                                Title,
+                                Reported_By, 
+                                Incident_type, 
+                                Area, 
+                                Injury_Category, 
+                                Environment_Category,
+                                Damage_Category,
+                                Incident_Description,
+                                Notes, 
+                                Status,
+                                AP_Report,
+                                Risk_Level
+                            )
+                            VALUES
+                            (
+                                @Date,
+                                @Title,
+                                @Reported_By, 
+                                @Incident_type, 
+                                @Area, 
+                                @Injury_Category, 
+                                @Environment_Category,
+                                @Damage_Category,
+                                @Incident_Description,
+                                @Notes, 
+                                @Status,
+                                @AP_Report,
+                                @Risk_Level
+                            )
                           
-            //               ";
+                           ";
 
-            //            using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
-            //            {
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
+                        {
 
-            //                cmd.Parameters.AddWithValue("@Date", controlValues["Date"]);
-            //                cmd.Parameters.AddWithValue("@Title", controlValues["Title"]);
-            //                cmd.Parameters.AddWithValue("@Reported_By", controlValues["Name"]);
-            //                cmd.Parameters.AddWithValue("@Incident_type", controlValues["Type"]);
-            //                cmd.Parameters.AddWithValue("@Area", controlValues["Area"]);
-            //                cmd.Parameters.AddWithValue("@Injury_Category", controlValues["Injury Category"]);
-            //                cmd.Parameters.AddWithValue("@Environment_Category", controlValues["Environment Category"]);
-            //                cmd.Parameters.AddWithValue("@Damage_Category", controlValues["Damage Category"]);
-            //                cmd.Parameters.AddWithValue("@Incident_Description", controlValues["Incident Description"]);
-            //                cmd.Parameters.AddWithValue("@Notes", controlValues["Notes"]);
-            //                cmd.Parameters.AddWithValue("@Status", controlValues["Status"]);
-            //                cmd.Parameters.AddWithValue("@AP_Report", controlValues["Ap Report"]);
-            //                cmd.Parameters.AddWithValue("@Risk_Level", controlValues["Risk Level"]);
+                            cmd.Parameters.AddWithValue("@Date", controlValues["lbl_date"]);
+                            cmd.Parameters.AddWithValue("@Title", controlValues["lbl_title"]);
+                            cmd.Parameters.AddWithValue("@Reported_By", controlValues["lbl_empName"]);
+                            cmd.Parameters.AddWithValue("@Incident_type", controlValues["combo_incidentType"]);
+                            cmd.Parameters.AddWithValue("@Area", controlValues["lbl_area"]);
+                            cmd.Parameters.AddWithValue("@Injury_Category", controlValues["Injury Category"]);
+                            cmd.Parameters.AddWithValue("@Environment_Category", controlValues["Environment Category"]);
+                            cmd.Parameters.AddWithValue("@Damage_Category", controlValues["Damage Category"]);
+                            cmd.Parameters.AddWithValue("@Incident_Description", controlValues["rtxt_descr"]);
+                            cmd.Parameters.AddWithValue("@Notes", controlValues["rtxt_notes"]);
+                            cmd.Parameters.AddWithValue("@Status", "Open");
+                            cmd.Parameters.AddWithValue("@AP_Report", controlValues["combo_apReport"]);
+                            cmd.Parameters.AddWithValue("@Risk_Level", "0");
 
-            //                cmd.ExecuteNonQuery();
-            //            }
+                            cmd.ExecuteNonQuery();
+                        }
 
-            //            transaction.Commit();
+                        transaction.Commit();
 
-            //            Frm_FirstAids? frm = Application.OpenForms["Frm_FirstAids"] as Frm_FirstAids;
+                        Frm_FirstAids? frm = Application.OpenForms["Frm_FirstAids"] as Frm_FirstAids;
 
-            //            if (frm != null)
-            //            {
-            //                frm.LoadDgvFirstAidList();
-            //                frm.ApplySearchFilter();
-            //                frm.Show();
-            //                frm.BringToFront();
-            //                this.Close();
-            //            }
+                        if (frm != null)
+                        {
+                            frm.LoadDgvFirstAidList();
+                            frm.ApplySearchFilter();
+                            frm.Show();
+                            frm.BringToFront();
+                            this.Close();
+                        }
 
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            transaction.Rollback();
-            //            MessageBox.Show(ex.Message);
-            //        }
-            //    }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show(ex.Message);
+                    }
+                }
 
-            //}
+            }
         }
 
 
@@ -806,8 +806,6 @@ new ColumnStyle(SizeType.Percent, 100));
                 }
 
             }
-
-            
         }
     }
 }
