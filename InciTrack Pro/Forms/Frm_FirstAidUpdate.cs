@@ -1,5 +1,6 @@
 ﻿using FontAwesome.Sharp;
 using Microsoft.Data.Sqlite;
+using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,8 @@ namespace InciTrack_Pro.Forms
 {
     public partial class Frm_FirstAidUpdate : Form
     {
+       public Dictionary<string, string> controlValues = new Dictionary<string, string>();
+
         public Frm_FirstAidUpdate()
         {
             InitializeComponent();
@@ -74,8 +77,21 @@ namespace InciTrack_Pro.Forms
 
         private void Btn_cancel_Click(object? sender, EventArgs e)
         {
-            this.Close();
+            Form?  frm = Application.OpenForms["Frm_FirstAids"];
+            if( frm != null )
+            {
+                frm.Show();
+                frm.BringToFront();
+                this.Close();
+            }
+            else
+            {
+
+            }
+           
         }
+
+        private TableLayoutPanel? _hazardTable;
 
         private void Btn_createHazard_Click(object? sender, EventArgs e)
         {
@@ -90,11 +106,13 @@ namespace InciTrack_Pro.Forms
 
             TableLayoutPanel tbl = new TableLayoutPanel
             {
+                Name = "tbl_FaUpdateMain",
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 BackColor = Color.Transparent,
                 ColumnCount = 2
             };
+            _hazardTable = tbl;
 
             tbl.ColumnStyles.Add(
             new ColumnStyle(SizeType.Absolute, 180));
@@ -103,6 +121,7 @@ namespace InciTrack_Pro.Forms
             new ColumnStyle(SizeType.Percent, 100));
 
             popup.Controls.Add(tbl);
+            
 
             List<string> labels = new List<string>
             { 
@@ -115,7 +134,7 @@ namespace InciTrack_Pro.Forms
                 "Notes",
                 "Incident Type",
                 "Injury Category",
-                "Environmrnt Category",
+                "Environment Category",
                 "Damage Category",
                 "Corrective Action",
                 "Risk Level"
@@ -132,8 +151,234 @@ namespace InciTrack_Pro.Forms
                 AddDetailRow(tbl, label);
             }
 
+            int row = tbl.RowCount;
+            tbl.RowCount++;
+
+            UIButton btn_saveFaHazard = new UIButton
+            {
+                Text = "Save",
+                Width = 100,
+                Height = 45,
+                
+
+                FillColor = Color.Firebrick,
+                FillHoverColor = Color.IndianRed,
+                FillPressColor = Color.DarkRed,
+
+                ForeColor = Color.White,
+                Font = new Font("Calibri", 12, FontStyle.Bold),
+
+                Radius = 8,
+                Cursor = Cursors.Hand,
+
+                Margin = new Padding(5),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Anchor = AnchorStyles.Right,
+
+                
+            };
+            
+            btn_saveFaHazard.Click += Btn_saveFaHazard_Click;
+
+            tbl.Controls.Add(btn_saveFaHazard, 1, row);
+           // var btn = GV.GetControlByName(tbl, "btn_saveFaHazard");
+           // btn.Tag = 
+            this.Hide();
             popup.ShowDialog();
         }
+
+        private void Btn_saveFaHazard_Click(object? sender, EventArgs e)
+        {
+            controlValues.Clear();
+
+            foreach (Control control in _hazardTable.Controls)
+            {
+                switch (control)
+                {
+                    case Label lbl:
+                        controlValues[lbl.Name] = lbl.Text;
+                        break;
+
+                    case TextBox txt:
+                        controlValues[txt.Name] = txt.Text;
+                        break;
+
+                    case RichTextBox rtb:
+                        controlValues[rtb.Name] = rtb.Text;
+                        break;
+
+                    case ComboBox cbo:
+                        controlValues[cbo.Name] =
+                        cbo.SelectedItem?.ToString() ?? "";
+                        break;
+
+
+                }
+            }
+
+            Panel pnl1 =_hazardTable.Controls["pnlInjuryCategories"] as Panel;
+
+            TableLayoutPanel catTable1 =
+            pnl1.Controls.OfType<TableLayoutPanel>().First();
+
+            List<string> selected1 = new();
+
+            foreach (CheckBox chk in catTable1.Controls.OfType<CheckBox>())
+            {
+                if (chk.Checked)
+                    selected1.Add(chk.Text);
+            }
+
+            string injuryCategories = string.Join(", ", selected1);
+
+            Panel pnl2 = _hazardTable.Controls["pnlEnviromentCategories"] as Panel;
+
+            TableLayoutPanel catTable2 =
+            pnl2.Controls.OfType<TableLayoutPanel>().First();
+
+            List<string> selected2 = new();
+
+            foreach (CheckBox chk in catTable2.Controls.OfType<CheckBox>())
+            {
+                if (chk.Checked)
+                    selected2.Add(chk.Text);
+            }
+
+            string environmentCategories = string.Join(", ", selected2);
+
+            Panel pnl3 = _hazardTable.Controls["pnlDamageCategory"] as Panel;
+
+            TableLayoutPanel catTable3 =
+            pnl3.Controls.OfType<TableLayoutPanel>().First();
+
+            List<string> selected3 = new();
+
+            foreach (CheckBox chk in catTable3.Controls.OfType<CheckBox>())
+            {
+                if (chk.Checked)
+                    selected3.Add(chk.Text);
+            }
+
+            string damageCategories = string.Join(", ", selected3);
+
+
+
+            controlValues.Add("Injury Category", injuryCategories);
+            controlValues.Add("Environment Category", environmentCategories);
+            controlValues.Add("Damage Category", damageCategories);
+
+
+            //string title = controlValues["lbl_title"];
+            MessageBox.Show(controlValues["Damage Category"]);
+
+
+
+            // use this below to get the checkbox results in each panel
+            //Panel pnl =(Panel)tbl.Controls["pnlInjuryCategories"];
+
+            //TableLayoutPanel catPanel =
+            //pnl.Controls.OfType<TableLayoutPanel>()
+            //.First();
+
+            //List<string> selected = new();
+
+            //foreach (CheckBox chk in catPanel.Controls.OfType<CheckBox>())
+            //{
+            //    if (chk.Checked)
+            //        selected.Add(chk.Text);
+            //}
+
+            //string injuryCategories =
+            //string.Join(",", selected);
+
+
+            //using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
+            //{
+            //    conn.Open();
+            //    using (SqliteTransaction transaction = conn.BeginTransaction())
+            //    {
+            //        try
+            //        {
+            //            string sql = $@"
+            //                INSERT INTO HAZARDS
+            //                (
+            //                    Date,
+            //                    Title,
+            //                    Reported_By, 
+            //                    Incident_type, 
+            //                    Area, 
+            //                    Injury_Category, 
+            //                    Enviroment_Category,
+            //                    Damage_Category,
+            //                    Incident_Description,
+            //                    Notes, 
+            //                    Status,
+            //                    AP_Report,
+            //                    Risk_Level
+            //                )
+            //                VALUES
+            //                (
+            //                    @Date,
+            //                    @Title,
+            //                    @Reported_By, 
+            //                    @Incident_type, 
+            //                    @Area, 
+            //                    @Injury_Category, 
+            //                    @Enviroment_Category,
+            //                    @Damage_Category,
+            //                    @Incident_Description,
+            //                    @Notes, 
+            //                    @Status,
+            //                    @AP_Report,
+            //                    @Risk_Level
+            //                )
+                          
+            //               ";
+
+            //            using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
+            //            {
+
+            //                cmd.Parameters.AddWithValue("@Date", controlValues["Date"]);
+            //                cmd.Parameters.AddWithValue("@Title", controlValues["Title"]);
+            //                cmd.Parameters.AddWithValue("@Reported_By", controlValues["Name"]);
+            //                cmd.Parameters.AddWithValue("@Incident_type", controlValues["Type"]);
+            //                cmd.Parameters.AddWithValue("@Area", controlValues["Area"]);
+            //                cmd.Parameters.AddWithValue("@Injury_Category", controlValues["Injury Category"]);
+            //                cmd.Parameters.AddWithValue("@Environment_Category", controlValues["Environment Category"]);
+            //                cmd.Parameters.AddWithValue("@Damage_Category", controlValues["Damage Category"]);
+            //                cmd.Parameters.AddWithValue("@Incident_Description", controlValues["Incident Description"]);
+            //                cmd.Parameters.AddWithValue("@Notes", controlValues["Notes"]);
+            //                cmd.Parameters.AddWithValue("@Status", controlValues["Status"]);
+            //                cmd.Parameters.AddWithValue("@AP_Report", controlValues["Ap Report"]);
+            //                cmd.Parameters.AddWithValue("@Risk_Level", controlValues["Risk Level"]);
+
+            //                cmd.ExecuteNonQuery();
+            //            }
+
+            //            transaction.Commit();
+
+            //            Frm_FirstAids? frm = Application.OpenForms["Frm_FirstAids"] as Frm_FirstAids;
+
+            //            if (frm != null)
+            //            {
+            //                frm.LoadDgvFirstAidList();
+            //                frm.ApplySearchFilter();
+            //                frm.Show();
+            //                frm.BringToFront();
+            //                this.Close();
+            //            }
+
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            transaction.Rollback();
+            //            MessageBox.Show(ex.Message);
+            //        }
+            //    }
+
+            //}
+        }
+
 
         private void AddDetailRow(TableLayoutPanel tbl, string label)
         {
@@ -146,6 +391,7 @@ namespace InciTrack_Pro.Forms
 
             Label lblField = new Label
             {
+                Name = "lblField_" + label,
                 Text = label + ":",
                 ForeColor = Color.White,
                 AutoSize = true,
@@ -160,50 +406,63 @@ namespace InciTrack_Pro.Forms
                 ColumnCount = 1
             };
 
+            tblCatPnl.ColumnStyles.Add(
+new ColumnStyle(SizeType.Percent, 100));
 
-            Control valueControl = null;
+            Control valueControl = new Label();
+            valueControl.Margin = new Padding(3, 8, 3, 8);
 
             switch(label)
             {
                 case "Title":
                     valueControl = new Label
                     {
-                        Text = MD.Instance.title + "_" + MD.Instance.firstAidIdx,
+                        Name = "lbl_title",
+                        Text = MD.Instance.title + "_FA" + MD.Instance.firstAidIdx,
+                        
                         ForeColor = Color.White,
                         AutoSize = true,
                         Font = new Font("Calibri", 12)
                     };
+                    //controlValues.Add("Title", valueControl.Text);
                     break;
                 case "Date":
                     valueControl = new Label
                     {
+                        Name = "lbl_date",
                         Text = MD.Instance.date.ToString("yyyy-MM-dd"),
                         ForeColor = Color.White,
                         AutoSize = true,
                         Font = new Font("Calibri", 12)
                     };
+                    //controlValues.Add("Date", valueControl.Text);
                     break;
                 case "Name":
                     valueControl = new Label
                     {
+                        Name = "lbl_empName",
                         Text = UserPrincipal.Current.DisplayName,
                         ForeColor = Color.White,
                         AutoSize = true,
                         Font = new Font("Calibri", 12)
                     };
+                    //controlValues.Add("Name", valueControl.Text);
                     break;
                 case "Area":
                     valueControl = new Label
                     {
+                        Name = "lbl_area",
                         Text = MD.Instance.area,
                         ForeColor = Color.White,
                         AutoSize = true,
                         Font = new Font("Calibri", 12)
                     };
+                    //controlValues.Add("Area", valueControl.Text);
                     break;
                 case "Description":
                     valueControl = new RichTextBox
                     {
+                        Name = "rtxt_descr",
                         Text = "First-Aid Description:\n" + MD.Instance.descr + "\n\nHazard Description:\n",
                         ReadOnly = false,
                         BorderStyle = BorderStyle.Fixed3D,
@@ -212,10 +471,12 @@ namespace InciTrack_Pro.Forms
                         Multiline = true,
                         Dock = DockStyle.Fill
                     };
+                   // controlValues.Add("Incident Description", valueControl.Text);
                     break;
                 case "Report to AP":
                     valueControl = new ComboBox
                     {
+                        Name = "combo_apReport",
                         DropDownStyle = ComboBoxStyle.DropDownList,
                         Dock = DockStyle.Fill
                         
@@ -224,22 +485,26 @@ namespace InciTrack_Pro.Forms
                     ComboBox comboAP = (ComboBox)valueControl;
                     comboAP.Items.AddRange(new string[] { "Yes", "No" });
                     comboAP.SelectedItem = MD.Instance.apReport;
+                    //controlValues.Add("AP Report", comboAP.SelectedItem.ToString());
                     break;
                 case "Notes":
                     valueControl = new RichTextBox
                     {
+                        Name = "rtxt_notes",
                         Text = MD.Instance.notes,
                         ReadOnly = false,
-                        BorderStyle = BorderStyle.None,
+                        BorderStyle = BorderStyle.Fixed3D,
                         BackColor = Color.FromArgb(55, 55, 58),
                         ForeColor = Color.White,
                         Multiline = MD.Instance.notes.Length > 75,
                         Dock = DockStyle.Fill
                     };
+                    //controlValues.Add("Notes", valueControl.Text);
                     break;
                 case "Incident Type":
                     valueControl = new ComboBox
                     {
+                        Name = "combo_incidentType",
                         DropDownStyle = ComboBoxStyle.DropDownList,
                         Dock = DockStyle.Fill
 
@@ -248,10 +513,11 @@ namespace InciTrack_Pro.Forms
                     ComboBox comboType = (ComboBox)valueControl;
                     comboType.Items.AddRange(new string[] { "HPNM", "Hazard Share (Unsafe Act)", "Hazard Share (Unsafe Condition)","Minimal Hazard"});
                     comboType.SelectedIndex = -1;
+                    //controlValues.Add("Type", comboType.SelectedItem.ToString());
                     break;
                 case "Injury Category":
-                   
-                    List<string> catDescr = new List<string>
+
+                    List<string> injCatList = new List<string>
                                 {
                                     "Chemical Hazard",
                                     "Electrical Hazard",
@@ -262,12 +528,29 @@ namespace InciTrack_Pro.Forms
 
                                 };
 
-                    valueControl = createCheckBoxes(catDescr, tblCatPnl, valueControl);
+                    valueControl = createCheckBoxes(injCatList, tblCatPnl, valueControl, "pnlInjuryCategories");
                     break;
-                //case "Environamental Category":
-                //    break;
-                //case "Damage Category":
-                //    break;
+                case "Environment Category":
+                    List<string> envCatList = new List<string>
+                                {
+                                    "Release to Air",
+                                    "Release to Ground",
+                                    "Release to Water"
+                                };
+
+                    valueControl = createCheckBoxes(envCatList, tblCatPnl, valueControl, "pnlEnviromentCategories");
+                    break;
+                case "Damage Category":
+                    List<string> damageCatList = new List<string>
+                                {
+                                    "Crimminal Damage",
+                                    "Equipment Damage",
+                                    "Fire Damage",
+                                    "Water Damage"
+                                };
+
+                    valueControl = createCheckBoxes(damageCatList, tblCatPnl, valueControl, "pnlDamageCategory");
+                    break;
                 case "Corrective Action":
                     valueControl = new Button
                     {
@@ -277,11 +560,13 @@ namespace InciTrack_Pro.Forms
                         ForeColor = Color.White
                     };
                     break;
-                //case "Risk Level":
-                  //  break;
+                    //case "Risk Level":
+                    //controlValues.Add("Notes", valueControl.Text);
+                //  break;
                 default:
                     valueControl = new Label
                     {
+                        Name = "lbl_error",
                         Text = "Error",
                         ForeColor = Color.White,
                         AutoSize = true,
@@ -294,8 +579,17 @@ namespace InciTrack_Pro.Forms
             tbl.Controls.Add(valueControl, 1, row);
         }
 
-        private Control createCheckBoxes(List<string> catDescr, TableLayoutPanel tblCatPnl, Control valueControl)
+        private Control createCheckBoxes(List<string> catDescr, TableLayoutPanel tblCatPnl, Control valueControl, string panelName)
         {
+            Panel pnl = new Panel
+            {
+                Name = panelName,
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(75, 75, 78),
+                //Padding = new Padding(10),
+                //Margin = new Padding(0, 10, 0, 5)
+            };
+
             foreach (string item in catDescr)
             {
                 int catRow = tblCatPnl.RowCount;
@@ -307,19 +601,20 @@ namespace InciTrack_Pro.Forms
 
                 valueControl = new CheckBox
                 {
+                    Name = "cb_" + item.Replace(" ", ""),
                     Text = item,
                     ForeColor = Color.White,
-                    BackColor = Color.FromArgb(55, 55, 58),
+                    BackColor = Color.FromArgb(75, 75, 78),
                     Font = new Font("Calibri", 12),
                     Dock = DockStyle.Fill
 
                 };
                 tblCatPnl.Controls.Add(valueControl, 0, catRow);
-
+                pnl.Controls.Add(tblCatPnl);
             }
 
-            valueControl = tblCatPnl;
-            return valueControl;
+           ;
+            return pnl;
         }
 
         //private Image IconCharToImage(IconChar iconChar)
@@ -497,9 +792,11 @@ namespace InciTrack_Pro.Forms
                         {
                             frm.LoadDgvFirstAidList();
                             frm.ApplySearchFilter();
+                            frm.Show();
+                            frm.BringToFront();
+                            this.Close();
                         }
 
-                        this.Close();
                     }
                     catch(Exception ex)
                     {

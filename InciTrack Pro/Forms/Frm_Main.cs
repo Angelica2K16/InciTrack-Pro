@@ -160,8 +160,8 @@ namespace InciTrack_Pro
 
             var (hazardCount, firstAidCount, ltiCount) = GetCountData();
 
-            flp_Kpi.Controls.Add(CreateKpiCard(DateTime.Now.Year + " Hazards", hazardCount,Color.Firebrick,(s, e) =>{new Frm_Hazards().ShowDialog();}));
-            flp_Kpi.Controls.Add(CreateKpiCard(DateTime.Now.Year + " First Aids", firstAidCount, Color.Firebrick, (s, e) => { new Frm_FirstAids().ShowDialog(); }));
+            flp_Kpi.Controls.Add(CreateKpiCard(DateTime.Now.Year + " Hazards", hazardCount,Color.Firebrick,(s, e) =>{ this.Hide();  new Frm_Hazards().ShowDialog();}));
+            flp_Kpi.Controls.Add(CreateKpiCard(DateTime.Now.Year + " First Aids", firstAidCount, Color.Firebrick, (s, e) => { this.Hide();  new Frm_FirstAids().ShowDialog(); }));
             flp_Kpi.Controls.Add(CreateKpiCard("Days Since Last LTI", ltiCount, Color.ForestGreen, null));
 
         }

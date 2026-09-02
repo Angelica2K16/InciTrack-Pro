@@ -41,7 +41,17 @@ namespace InciTrack_Pro.Forms
 
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
-            //go back to main dashboard form
+            Form? frm = Application.OpenForms["Frm_Main"];
+            if (frm != null)
+            {
+                frm.Show();
+                frm.BringToFront();
+                this.Close();
+            }
+            else
+            {
+
+            }
         }
         private void Pb_minimize_Click(object? sender, EventArgs e)
         {
@@ -527,6 +537,7 @@ namespace InciTrack_Pro.Forms
 
                 Frm_FirstAidUpdate frm = new Frm_FirstAidUpdate();
 
+                this.Hide();
                 frm.ShowDialog();
 
                 //LoadGrid();
