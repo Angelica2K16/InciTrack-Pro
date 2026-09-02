@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.DirectoryServices.AccountManagement;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -103,19 +104,38 @@ namespace InciTrack_Pro.Forms
 
             popup.Controls.Add(tbl);
 
-            for (int i = 0; i <= 15; i++)
+            List<string> labels = new List<string>
+            { 
+                "Title",
+                "Date",
+                "Name",
+                "Area",
+                "Description",
+                "Report to AP",
+                "Notes",
+                "Incident Type",
+                "Injury Category",
+                "Environmrnt Category",
+                "Damage Category",
+                "Corrective Action",
+                "Risk Level"
+
+            };
+
+
+            foreach (string label in labels )
             {
                 //string columnName = dr.GetName(i);
                 //string value = dr[i]?.ToString() ?? "";
 
                 //AddDetailRow(tbl, columnName, value);
-                AddDetailRow(tbl, null, null);
+                AddDetailRow(tbl, label);
             }
 
             popup.ShowDialog();
         }
 
-        private void AddDetailRow(TableLayoutPanel tbl, string label, string value)
+        private void AddDetailRow(TableLayoutPanel tbl, string label)
         {
             int row = tbl.RowCount;
 
@@ -132,19 +152,174 @@ namespace InciTrack_Pro.Forms
                 Font = new Font("Calibri", 12, FontStyle.Bold)
             };
 
-            TextBox txtValue = new TextBox
+            TableLayoutPanel tblCatPnl = new TableLayoutPanel
             {
-                Text = "Test",
-                ReadOnly = true,
-                BorderStyle = BorderStyle.None,
-                BackColor = Color.FromArgb(45, 45, 48),
-                ForeColor = Color.White,
-                //Multiline = value.Length > 75,
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor = Color.Transparent,
+                ColumnCount = 1
             };
 
+
+            Control valueControl = null;
+
+            switch(label)
+            {
+                case "Title":
+                    valueControl = new Label
+                    {
+                        Text = MD.Instance.title + "_" + MD.Instance.firstAidIdx,
+                        ForeColor = Color.White,
+                        AutoSize = true,
+                        Font = new Font("Calibri", 12)
+                    };
+                    break;
+                case "Date":
+                    valueControl = new Label
+                    {
+                        Text = MD.Instance.date.ToString("yyyy-MM-dd"),
+                        ForeColor = Color.White,
+                        AutoSize = true,
+                        Font = new Font("Calibri", 12)
+                    };
+                    break;
+                case "Name":
+                    valueControl = new Label
+                    {
+                        Text = UserPrincipal.Current.DisplayName,
+                        ForeColor = Color.White,
+                        AutoSize = true,
+                        Font = new Font("Calibri", 12)
+                    };
+                    break;
+                case "Area":
+                    valueControl = new Label
+                    {
+                        Text = MD.Instance.area,
+                        ForeColor = Color.White,
+                        AutoSize = true,
+                        Font = new Font("Calibri", 12)
+                    };
+                    break;
+                case "Description":
+                    valueControl = new RichTextBox
+                    {
+                        Text = "First-Aid Description:\n" + MD.Instance.descr + "\n\nHazard Description:\n",
+                        ReadOnly = false,
+                        BorderStyle = BorderStyle.Fixed3D,
+                        BackColor = Color.FromArgb(55, 55, 58),
+                        ForeColor = Color.White,
+                        Multiline = true,
+                        Dock = DockStyle.Fill
+                    };
+                    break;
+                case "Report to AP":
+                    valueControl = new ComboBox
+                    {
+                        DropDownStyle = ComboBoxStyle.DropDownList,
+                        Dock = DockStyle.Fill
+                        
+                    };
+
+                    ComboBox comboAP = (ComboBox)valueControl;
+                    comboAP.Items.AddRange(new string[] { "Yes", "No" });
+                    comboAP.SelectedItem = MD.Instance.apReport;
+                    break;
+                case "Notes":
+                    valueControl = new RichTextBox
+                    {
+                        Text = MD.Instance.notes,
+                        ReadOnly = false,
+                        BorderStyle = BorderStyle.None,
+                        BackColor = Color.FromArgb(55, 55, 58),
+                        ForeColor = Color.White,
+                        Multiline = MD.Instance.notes.Length > 75,
+                        Dock = DockStyle.Fill
+                    };
+                    break;
+                case "Incident Type":
+                    valueControl = new ComboBox
+                    {
+                        DropDownStyle = ComboBoxStyle.DropDownList,
+                        Dock = DockStyle.Fill
+
+                    };
+
+                    ComboBox comboType = (ComboBox)valueControl;
+                    comboType.Items.AddRange(new string[] { "HPNM", "Hazard Share (Unsafe Act)", "Hazard Share (Unsafe Condition)","Minimal Hazard"});
+                    comboType.SelectedIndex = -1;
+                    break;
+                case "Injury Category":
+                   
+                    List<string> catDescr = new List<string>
+                                {
+                                    "Chemical Hazard",
+                                    "Electrical Hazard",
+                                    "Heavy Lifting",
+                                     "Physical (Cuts, Burns, Crushing, Pinching)",
+                                     "Repetitive Motion",
+                                     "Slip, Trip, and/or Fall"
+
+                                };
+
+                    valueControl = createCheckBoxes(catDescr, tblCatPnl, valueControl);
+                    break;
+                //case "Environamental Category":
+                //    break;
+                //case "Damage Category":
+                //    break;
+                case "Corrective Action":
+                    valueControl = new Button
+                    {
+                        Text = "Add",
+                        AutoSize = true,
+                        BackColor = Color.DodgerBlue,
+                        ForeColor = Color.White
+                    };
+                    break;
+                //case "Risk Level":
+                  //  break;
+                default:
+                    valueControl = new Label
+                    {
+                        Text = "Error",
+                        ForeColor = Color.White,
+                        AutoSize = true,
+                        Font = new Font("Calibri", 12)
+                    };
+                    break;
+            }
+
             tbl.Controls.Add(lblField, 0, row);
-            tbl.Controls.Add(txtValue, 1, row);
+            tbl.Controls.Add(valueControl, 1, row);
+        }
+
+        private Control createCheckBoxes(List<string> catDescr, TableLayoutPanel tblCatPnl, Control valueControl)
+        {
+            foreach (string item in catDescr)
+            {
+                int catRow = tblCatPnl.RowCount;
+
+                tblCatPnl.RowCount++;
+
+                tblCatPnl.RowStyles.Add(
+                new RowStyle(SizeType.AutoSize));
+
+                valueControl = new CheckBox
+                {
+                    Text = item,
+                    ForeColor = Color.White,
+                    BackColor = Color.FromArgb(55, 55, 58),
+                    Font = new Font("Calibri", 12),
+                    Dock = DockStyle.Fill
+
+                };
+                tblCatPnl.Controls.Add(valueControl, 0, catRow);
+
+            }
+
+            valueControl = tblCatPnl;
+            return valueControl;
         }
 
         //private Image IconCharToImage(IconChar iconChar)
