@@ -20,8 +20,12 @@ namespace InciTrack_Pro.Forms
 {
     public partial class Frm_FirstAidUpdate : Form
     {
-       public Dictionary<string, string> controlValues = new Dictionary<string, string>();
+        #region Class Level Variables
+        public Dictionary<string, string> controlValues = new Dictionary<string, string>();
+        private TableLayoutPanel? _hazardTable;
+        #endregion
 
+        #region Constructors
         public Frm_FirstAidUpdate()
         {
             InitializeComponent();
@@ -35,9 +39,9 @@ namespace InciTrack_Pro.Forms
             btn_cancel.Click += Btn_cancel_Click;
             btn_createHazard.Click += Btn_createHazard_Click;
         }
+        #endregion
 
-       
-
+        #region Load Form Event
         private void Frm_FirstAidUpdate_Load(object? sender, EventArgs e)
         {
             lbl_header.Text = "First Aid Incident Update";
@@ -48,7 +52,9 @@ namespace InciTrack_Pro.Forms
             GetFirstAidIncidentDataFromSQL();
             SetControlsWithMdData();
         }
+        #endregion
 
+        #region Button Events - Save and Cancel First Aid Update
         private void Btn_save_Click(object? sender, EventArgs e)
         {
             if(!ValidateControls(out var errs, out var controlFocus))
@@ -90,11 +96,14 @@ namespace InciTrack_Pro.Forms
             }
            
         }
+        #endregion
 
-        private TableLayoutPanel? _hazardTable;
+        #region Create Hazard From First Aid Incident
 
+        #region Button Click Event - Create First Aid Hazard
         private void Btn_createHazard_Click(object? sender, EventArgs e)
         {
+            #region Create Form and Controls 
             //create Popup form
             Form popup = new Form();
             popup.BackColor = Color.FromArgb(45, 45, 48);
@@ -121,8 +130,9 @@ namespace InciTrack_Pro.Forms
             new ColumnStyle(SizeType.Percent, 100));
 
             popup.Controls.Add(tbl);
-            
+            #endregion
 
+            #region Add Controls to TableLayoutPanel
             List<string> labels = new List<string>
             { 
                 "Title",
@@ -150,7 +160,9 @@ namespace InciTrack_Pro.Forms
                 //AddDetailRow(tbl, columnName, value);
                 AddDetailRow(tbl, label);
             }
+            #endregion
 
+            #region Add Save Button to TableLayoutPanel
             int row = tbl.RowCount;
             tbl.RowCount++;
 
@@ -181,16 +193,24 @@ namespace InciTrack_Pro.Forms
             btn_saveFaHazard.Click += Btn_saveFaHazard_Click;
 
             tbl.Controls.Add(btn_saveFaHazard, 1, row);
-           // var btn = GV.GetControlByName(tbl, "btn_saveFaHazard");
-           // btn.Tag = 
+            #endregion
+
+            #region Show Popup Form 
             this.Hide();
             popup.ShowDialog();
+            #endregion
         }
 
+        #endregion
+
+        #region Button Click Event - Save First Aid Hazard
         private void Btn_saveFaHazard_Click(object? sender, EventArgs e)
         {
+            #region Clear Previous Control Values
             controlValues.Clear();
+            #endregion region 
 
+            #region Loop Through Controls and Store TValues
             foreach (Control control in _hazardTable.Controls)
             {
                 switch (control)
@@ -216,6 +236,8 @@ namespace InciTrack_Pro.Forms
                 }
             }
 
+            #region Get Selected Categories from CheckBoxes
+            #region Injury Categories
             Panel pnl1 =_hazardTable.Controls["pnlInjuryCategories"] as Panel;
 
             TableLayoutPanel catTable1 =
@@ -230,7 +252,9 @@ namespace InciTrack_Pro.Forms
             }
 
             string injuryCategories = string.Join(", ", selected1);
+            #endregion
 
+            #region Environment Categories
             Panel pnl2 = _hazardTable.Controls["pnlEnviromentCategories"] as Panel;
 
             TableLayoutPanel catTable2 =
@@ -245,7 +269,9 @@ namespace InciTrack_Pro.Forms
             }
 
             string environmentCategories = string.Join(", ", selected2);
+            #endregion
 
+            #region Damage Categories
             Panel pnl3 = _hazardTable.Controls["pnlDamageCategory"] as Panel;
 
             TableLayoutPanel catTable3 =
@@ -260,38 +286,18 @@ namespace InciTrack_Pro.Forms
             }
 
             string damageCategories = string.Join(", ", selected3);
+            #endregion
 
-
-
+            #region Store Selected Categories in Control Values
             controlValues.Add("Injury Category", injuryCategories);
             controlValues.Add("Environment Category", environmentCategories);
             controlValues.Add("Damage Category", damageCategories);
+            #endregion
+            #endregion
 
+            #endregion
 
-            //string title = controlValues["lbl_title"];
-            MessageBox.Show(controlValues["Damage Category"]);
-
-
-
-            // use this below to get the checkbox results in each panel
-            //Panel pnl =(Panel)tbl.Controls["pnlInjuryCategories"];
-
-            //TableLayoutPanel catPanel =
-            //pnl.Controls.OfType<TableLayoutPanel>()
-            //.First();
-
-            //List<string> selected = new();
-
-            //foreach (CheckBox chk in catPanel.Controls.OfType<CheckBox>())
-            //{
-            //    if (chk.Checked)
-            //        selected.Add(chk.Text);
-            //}
-
-            //string injuryCategories =
-            //string.Join(",", selected);
-
-
+            #region SQL - Insert Data into HAZARDS Table
             using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
             {
                 conn.Open();
@@ -377,11 +383,14 @@ namespace InciTrack_Pro.Forms
                 }
 
             }
+            #endregion
         }
+        #endregion
 
-
+        #region Method - Add Controls to TableLayoutPanel (Create First Aid Hazard)
         private void AddDetailRow(TableLayoutPanel tbl, string label)
         {
+           
             int row = tbl.RowCount;
 
             tbl.RowCount++;
@@ -389,6 +398,7 @@ namespace InciTrack_Pro.Forms
             tbl.RowStyles.Add(
             new RowStyle(SizeType.AutoSize));
 
+            #region Create Label Control for Field Name
             Label lblField = new Label
             {
                 Name = "lblField_" + label,
@@ -397,7 +407,9 @@ namespace InciTrack_Pro.Forms
                 AutoSize = true,
                 Font = new Font("Calibri", 12, FontStyle.Bold)
             };
+            #endregion
 
+            #region Create TableLayoutPanel for Category CheckBoxes
             TableLayoutPanel tblCatPnl = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -406,14 +418,16 @@ namespace InciTrack_Pro.Forms
                 ColumnCount = 1
             };
 
-            tblCatPnl.ColumnStyles.Add(
-new ColumnStyle(SizeType.Percent, 100));
+            tblCatPnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            #endregion
 
             Control valueControl = new Label();
             valueControl.Margin = new Padding(3, 8, 3, 8);
 
-            switch(label)
+            #region Switch Code to p[lace correct control based on label
+            switch (label)
             {
+                #region Title Field
                 case "Title":
                     valueControl = new Label
                     {
@@ -426,6 +440,9 @@ new ColumnStyle(SizeType.Percent, 100));
                     };
                     //controlValues.Add("Title", valueControl.Text);
                     break;
+                #endregion
+
+                #region Date Field
                 case "Date":
                     valueControl = new Label
                     {
@@ -437,6 +454,9 @@ new ColumnStyle(SizeType.Percent, 100));
                     };
                     //controlValues.Add("Date", valueControl.Text);
                     break;
+                #endregion
+
+                #region Name Field
                 case "Name":
                     valueControl = new Label
                     {
@@ -448,6 +468,9 @@ new ColumnStyle(SizeType.Percent, 100));
                     };
                     //controlValues.Add("Name", valueControl.Text);
                     break;
+                #endregion
+
+                #region Area Field
                 case "Area":
                     valueControl = new Label
                     {
@@ -459,6 +482,9 @@ new ColumnStyle(SizeType.Percent, 100));
                     };
                     //controlValues.Add("Area", valueControl.Text);
                     break;
+                #endregion
+
+                #region Description Field
                 case "Description":
                     valueControl = new RichTextBox
                     {
@@ -473,6 +499,9 @@ new ColumnStyle(SizeType.Percent, 100));
                     };
                    // controlValues.Add("Incident Description", valueControl.Text);
                     break;
+                #endregion
+
+                #region Report to AP Field
                 case "Report to AP":
                     valueControl = new ComboBox
                     {
@@ -487,6 +516,9 @@ new ColumnStyle(SizeType.Percent, 100));
                     comboAP.SelectedItem = MD.Instance.apReport;
                     //controlValues.Add("AP Report", comboAP.SelectedItem.ToString());
                     break;
+                #endregion
+
+                #region Notes Field
                 case "Notes":
                     valueControl = new RichTextBox
                     {
@@ -501,6 +533,9 @@ new ColumnStyle(SizeType.Percent, 100));
                     };
                     //controlValues.Add("Notes", valueControl.Text);
                     break;
+                #endregion
+
+                #region Incident Type Field
                 case "Incident Type":
                     valueControl = new ComboBox
                     {
@@ -515,6 +550,9 @@ new ColumnStyle(SizeType.Percent, 100));
                     comboType.SelectedIndex = -1;
                     //controlValues.Add("Type", comboType.SelectedItem.ToString());
                     break;
+                #endregion
+
+                #region Injury Category Field
                 case "Injury Category":
 
                     List<string> injCatList = new List<string>
@@ -530,6 +568,9 @@ new ColumnStyle(SizeType.Percent, 100));
 
                     valueControl = createCheckBoxes(injCatList, tblCatPnl, valueControl, "pnlInjuryCategories");
                     break;
+                #endregion
+
+                #region Environment Category Field
                 case "Environment Category":
                     List<string> envCatList = new List<string>
                                 {
@@ -540,6 +581,9 @@ new ColumnStyle(SizeType.Percent, 100));
 
                     valueControl = createCheckBoxes(envCatList, tblCatPnl, valueControl, "pnlEnviromentCategories");
                     break;
+                #endregion
+
+                #region Damage Category Field
                 case "Damage Category":
                     List<string> damageCatList = new List<string>
                                 {
@@ -551,6 +595,9 @@ new ColumnStyle(SizeType.Percent, 100));
 
                     valueControl = createCheckBoxes(damageCatList, tblCatPnl, valueControl, "pnlDamageCategory");
                     break;
+                #endregion
+
+                #region Corrective Action Field
                 case "Corrective Action":
                     valueControl = new Button
                     {
@@ -560,9 +607,15 @@ new ColumnStyle(SizeType.Percent, 100));
                         ForeColor = Color.White
                     };
                     break;
-                    //case "Risk Level":
-                    //controlValues.Add("Notes", valueControl.Text);
+                #endregion
+
+                #region Risk Level Field
+                //case "Risk Level":
+                //controlValues.Add("Notes", valueControl.Text);
                 //  break;
+                #endregion
+
+                #region Switch Default
                 default:
                     valueControl = new Label
                     {
@@ -573,14 +626,20 @@ new ColumnStyle(SizeType.Percent, 100));
                         Font = new Font("Calibri", 12)
                     };
                     break;
+                #endregion
             }
+            #endregion
 
+            #region Add All Controls to TableLayoutPanel
             tbl.Controls.Add(lblField, 0, row);
             tbl.Controls.Add(valueControl, 1, row);
+            #endregion
         }
 
+        #region Method - Create Controls for Category sections
         private Control createCheckBoxes(List<string> catDescr, TableLayoutPanel tblCatPnl, Control valueControl, string panelName)
         {
+            #region Create Section Panels - Visual Effect
             Panel pnl = new Panel
             {
                 Name = panelName,
@@ -589,7 +648,9 @@ new ColumnStyle(SizeType.Percent, 100));
                 //Padding = new Padding(10),
                 //Margin = new Padding(0, 10, 0, 5)
             };
+            #endregion
 
+            #region Create Checkboxes 
             foreach (string item in catDescr)
             {
                 int catRow = tblCatPnl.RowCount;
@@ -611,23 +672,22 @@ new ColumnStyle(SizeType.Percent, 100));
                 };
                 tblCatPnl.Controls.Add(valueControl, 0, catRow);
                 pnl.Controls.Add(tblCatPnl);
-            }
+            };
+            #endregion
 
-           ;
+            #region Return Panel with added checkboxes
             return pnl;
+            #endregion
         }
+        #endregion
 
-        //private Image IconCharToImage(IconChar iconChar)
-        //{
-        //    using IconPictureBox icon = new IconPictureBox();
+        #endregion
 
-        //    icon.IconChar = iconChar;
-        //    icon.IconColor = Color.White;
-        //    icon.IconSize = 24;
+        #endregion
 
-        //    return icon.Image!;
-        //}
+        #region Helper Methods
 
+        #region Method - SQL Data Retrieval
         private void GetFirstAidIncidentDataFromSQL()
         {
             using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
@@ -664,7 +724,9 @@ new ColumnStyle(SizeType.Percent, 100));
                 }
             }
         }
+        #endregion
 
+        #region Method - Set Controls with Data From ModelData Class
         private void SetControlsWithMdData()
         {
             lbl_date.Text = MD.Instance.date.ToString("yyyy-MM-dd");
@@ -678,7 +740,9 @@ new ColumnStyle(SizeType.Percent, 100));
             rtxt_cause.Text = MD.Instance.cause;
             rtxt_notes.Text = MD.Instance.notes;
         }
+        #endregion
 
+        #region Method -Validate Controls to Save First Aid
         private bool ValidateControls(out List<string> errors, out Control? firstInvalid)
         {
            errors = new List<string>();
@@ -736,7 +800,9 @@ new ColumnStyle(SizeType.Percent, 100));
             if (!filled) errors.Add($"{label} is required.");
             return filled;
         }
+        #endregion
 
+        #region Method - Set ModelData Class with Data from Controls 
         private void SetModelDataClass()
         {
             MD.Instance.title = txt_Title.Text;
@@ -746,7 +812,9 @@ new ColumnStyle(SizeType.Percent, 100));
             MD.Instance.cause = rtxt_cause.Text;
             MD.Instance.notes = rtxt_notes.Text;
         }
+        #endregion
 
+        #region Method - SQL Data Update
         private void UpdateSqlData()
         {
             using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
@@ -807,5 +875,9 @@ new ColumnStyle(SizeType.Percent, 100));
 
             }
         }
+        #endregion
+
+        #endregion
+
     }
 }

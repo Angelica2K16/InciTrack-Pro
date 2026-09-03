@@ -22,6 +22,7 @@ namespace InciTrack_Pro.Forms
 {
     public partial class Frm_FirstAids : Form
     {
+        #region Constructors
         public Frm_FirstAids()
         {
             InitializeComponent();
@@ -39,6 +40,20 @@ namespace InciTrack_Pro.Forms
             dgv_firstAidsList.CellClick += dgvFirstAids_CellClick;
         }
 
+        #endregion
+
+        #region Load Event - Form Load - Load KPI Controls and DGV
+        private void Frm_FirstAids_Load(object? sender, EventArgs e)
+        {
+            flpKpiControls();
+
+            cb_apReports.Checked = false;
+
+            LoadDgvFirstAidList();
+        }
+        #endregion
+
+        #region Custom Control Box Events
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
             Form? frm = Application.OpenForms["Frm_Main"];
@@ -57,7 +72,63 @@ namespace InciTrack_Pro.Forms
         {
             this.WindowState = FormWindowState.Minimized;
         }
+        #endregion
 
+        #region CheckBox Event - AP Reports Filter - When Checked, Filter DGV to Show Only First Aids Reported to AP
+        private void Cb_apReports_CheckedChanged(object? sender, EventArgs e)
+        {
+            txt_search.Text = string.Empty;
+            LoadDgvFirstAidList();
+        }
+        #endregion 
+
+        #region Search Filter
+        private void txtSearch_TextChanged(object? sender, EventArgs e)
+        {
+            dgv_firstAidsList.ClearSelection();
+            dgv_firstAidsList.CurrentCell = null;
+            ApplySearchFilter();
+        }
+
+        internal void ApplySearchFilter()
+        {
+            string search = txt_search.Text.Trim().ToLower();
+
+
+
+            foreach (DataGridViewRow row in dgv_firstAidsList.Rows)
+            {
+                if (row.IsNewRow) { continue; }
+
+
+
+                if (string.IsNullOrWhiteSpace(search))
+                {
+                    row.Visible = true;
+                    continue;
+                }
+
+                row.Visible = row.Cells
+                .Cast<DataGridViewCell>()
+                .Any(c =>
+                c.Value != null &&
+                c.Value.ToString()!
+                .ToLower()
+                .Contains(search));
+
+                if (row.Cells["Idx"].Value != null && Convert.ToInt32(row.Cells["Idx"].Value) == MD.Instance.firstAidIdx)
+                {
+                    dgv_firstAidsList.ClearSelection();
+                    row.Selected = true;
+                    dgv_firstAidsList.CurrentCell = row.Cells[1];
+                }
+            }
+        }
+        #endregion
+
+        #region DGV Events
+
+        #region Cell Double Click - Popup Frm for Full Incident Details
         private void Dgv_firstAidsList_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
             if(e.RowIndex < 0) return;
@@ -65,10 +136,11 @@ namespace InciTrack_Pro.Forms
 
             int firstAidIdx = Convert.ToInt32(dgv_firstAidsList.Rows[e.RowIndex].Cells["Idx"].Value);
 
-
+            //Call method to read first aid data from sqlite
             GetFADetails(firstAidIdx);
         }
 
+        #region Method - Read First Aid Data from SQLite and Display in Popup Form
         private void GetFADetails(int firstAidIdx)
         {
             using SqliteConnection conn = new SqliteConnection(GV.shesDB);
@@ -157,64 +229,35 @@ namespace InciTrack_Pro.Forms
             tbl.Controls.Add(lblField, 0, row);
             tbl.Controls.Add(txtValue, 1, row);
         }
+        #endregion
 
+        #endregion
 
-        private void Cb_apReports_CheckedChanged(object? sender, EventArgs e)
+        #region Cell Click - Edit Button Click - Open Frm_FirstAidUpdate
+        private void dgvFirstAids_CellClick(object? sender, DataGridViewCellEventArgs e)
         {
-            txt_search.Text = string.Empty;
-            LoadDgvFirstAidList();
-        }
-
-        private void Frm_FirstAids_Load(object? sender, EventArgs e)
-        {
-            flpKpiControls();
-
-            cb_apReports.Checked = false;
-
-            LoadDgvFirstAidList();
-        }
-
-        private void txtSearch_TextChanged(object? sender, EventArgs e)
-        {
-            dgv_firstAidsList.ClearSelection();
-            dgv_firstAidsList.CurrentCell = null;
-            ApplySearchFilter();
-        }
-
-        internal void ApplySearchFilter()
-        {
-            string search = txt_search.Text.Trim().ToLower();
-
-            
-
-            foreach (DataGridViewRow row in dgv_firstAidsList.Rows)
+            if (e.ColumnIndex ==
+            dgv_firstAidsList.Columns["Edit"].Index)
             {
-                if(row.IsNewRow) { continue; }
+                MD.Instance.firstAidIdx = Convert.ToInt32(
+                dgv_firstAidsList.Rows[e.RowIndex]
+                .Cells["Idx"].Value);
 
-               
+                Frm_FirstAidUpdate frm = new Frm_FirstAidUpdate();
 
-                if (string.IsNullOrWhiteSpace(search))
-                {
-                    row.Visible = true;
-                    continue;
-                }
-
-                row.Visible = row.Cells
-                .Cast<DataGridViewCell>()
-                .Any(c =>
-                c.Value != null &&
-                c.Value.ToString()!
-                .ToLower()
-                .Contains(search));
-
-                if (row.Cells["Idx"].Value != null && Convert.ToInt32(row.Cells["Idx"].Value) == MD.Instance.firstAidIdx)
-                {
-                    dgv_firstAidsList.ClearSelection();
-                    row.Selected = true;
-                    dgv_firstAidsList.CurrentCell = row.Cells[1];
-                }
+                this.Hide();
+                frm.ShowDialog();
             }
         }
+        #endregion
+
+        #endregion
+
+        #region Helper Methods
+
+        #region Method - Load KPI Controls
+
+        #region Method - KPI Cards
         private void flpKpiControls()
         {
             flp_Kpi.Controls.Clear();
@@ -323,10 +366,12 @@ namespace InciTrack_Pro.Forms
             return card;
 
         }
+        #endregion
 
+        #region Method - Create Top 3 Areas Chart
         private void CreateTop3AreasChart()
         {
-            var data = GetTop5Areas();
+            var data = GetTop3Areas();
 
             string[] labels = data.Keys.ToArray();
             int[] values = data.Values.ToArray();
@@ -369,18 +414,12 @@ namespace InciTrack_Pro.Forms
                 }
             };
 
-            //chart.Title = new LabelVisual
-            //{
-            //    Text = "Top 3 Areas",
-            //    TextSize = 14
-            //};
-
             pnlChart.Controls.Add(chart);
             pnlChart.Controls.Add(lblTitle);
             tableLayoutPanel1.Controls.Add(pnlChart, 1, 0);
         }
 
-        private Dictionary<string, int> GetTop5Areas()
+        private Dictionary<string, int> GetTop3Areas()
         {
             Dictionary<string, int> areas = new();
 
@@ -413,6 +452,11 @@ namespace InciTrack_Pro.Forms
 
             return areas;
         }
+        #endregion region 
+
+        #endregion region
+
+        #region Method - Load DGV with First Aid Records
         internal void LoadDgvFirstAidList()
         {
             dgv_firstAidsList.Columns.Clear();
@@ -472,14 +516,10 @@ namespace InciTrack_Pro.Forms
                 dgv_firstAidsList.Columns["Edit"].DisplayIndex = dgv_firstAidsList.Columns.Count - 1;
             }
 
-
-
-
-           
-
             FormatDgv();
         }
 
+        #region Method - Format DGV
         private void FormatDgv()
         {
             dgv_firstAidsList.AutoGenerateColumns = true;
@@ -523,25 +563,11 @@ namespace InciTrack_Pro.Forms
             }
 
         }
+        #endregion
 
-        
+        #endregion
 
-        private void dgvFirstAids_CellClick(object? sender,DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex ==
-            dgv_firstAidsList.Columns["Edit"].Index)
-            {
-                MD.Instance.firstAidIdx = Convert.ToInt32(
-                dgv_firstAidsList.Rows[e.RowIndex]
-                .Cells["Idx"].Value);
+        #endregion
 
-                Frm_FirstAidUpdate frm = new Frm_FirstAidUpdate();
-
-                this.Hide();
-                frm.ShowDialog();
-
-                //LoadGrid();
-            }
-        }
     }
 }

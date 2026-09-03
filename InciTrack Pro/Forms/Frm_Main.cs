@@ -26,7 +26,7 @@ namespace InciTrack_Pro
 {
     public partial class Frm_Main : Form
     {
-        
+        #region Constructors
         public Frm_Main()
         {
             InitializeComponent();
@@ -59,17 +59,9 @@ namespace InciTrack_Pro
             
         }
 
-    
-        private void Pb_minimize_Click(object? sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
+        #endregion
 
-        private void Pb_exit_Click(object? sender, EventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
+        #region Anti-Flickering
         protected override void WndProc(ref Message m)
         {
             const int WM_ERASEBKGND = 0x0014;
@@ -79,17 +71,22 @@ namespace InciTrack_Pro
 
             base.WndProc(ref m);
         }
+        #endregion
 
-
+        #region Form Load Event
         private void Frm_Main_Load(object? sender, EventArgs e)
         {
+            #region Startup Code
+            #region Check for Duplicates
             //Making sure only one instance of an applicaton is running 
-            if(DuplicateInstanceCheck.IsDuplicateAppInstance(Process.GetCurrentProcess().ProcessName))
+            if (DuplicateInstanceCheck.IsDuplicateAppInstance(Process.GetCurrentProcess().ProcessName))
             {
                 MessageBox.Show($"There is already a running instance of this application. You cannot run more than 1 instance at a time.", "Duplicate App Instances", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     Environment.Exit(1);
             }
-           
+            #endregion
+
+            #region Wake G Drive
             //Wake Drives
             WD.WakeDrives wakeG = new WD.WakeDrives();
             List<string> drive = new List<string> { @"G:\" };
@@ -99,7 +96,9 @@ namespace InciTrack_Pro
                 MessageBox.Show("G Drive is inaccessible, contact administrator if problem persists.", "Drive Failure", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 Environment.Exit(1);
             }
+            #endregion
 
+            #region Checking Authorized User
             //Getting Current User => is is Authroized?
             string currentUser = UserPrincipal.Current.DisplayName;
             EmployeeSearch.ListResult officeStaff = EmployeeSearch.GetOfficeStaffList();
@@ -116,22 +115,30 @@ namespace InciTrack_Pro
                 MessageBox.Show("Error: You are not an authorized user for this application.", "Authorized User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
             }
+            #endregion
 
+            #region Checking for any new Incidents
             //Look for any new incidents reported
-            if(currentUser == "Angel Lively" || currentUser == "Vincent Jackson")
+            if (currentUser == "Angel Lively" || currentUser == "Vincent Jackson")
             {
                 string updateIncidents = "";
                 updateIncidents = Helper_Classes.HazardRetrieval.GetHazards();
                 updateIncidents += "\n\n" + Helper_Classes.FirstAidRetrieval.GetFirstAids();
-                //MessageBox.Show(updateIncidents, "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(updateIncidents, "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
                 MessageBox.Show("New incident records may be available that are not currently displayed. SHES Manager/Lead should run the application to check for and retrieve the latest submissions.", "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            flpKpiControls();
+            #endregion
+            #endregion
 
+            #region Setting up KPI Controls
+            flpKpiControls();
+            #endregion
+
+            #region Creating sidebar menu
             Label lblTitle = new Label
             {
                 Text = "Menu",
@@ -144,16 +151,34 @@ namespace InciTrack_Pro
             flp_menu.Controls.Add(lblTitle);
 
             LoadButtons();
+            #endregion
 
+            #region Creating Charts
             tableLayoutPanel1.SuspendLayout();
             CreateHazardsVsFirstAidsChart();
             CreateHazardTypeChart();
             CreateHazardYoYChart();
             CreateFirstAidYoYChart();
             tableLayoutPanel1.ResumeLayout();
+            #endregion
         }
 
+        #endregion
 
+        #region Custom Control Box Events
+        private void Pb_minimize_Click(object? sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void Pb_exit_Click(object? sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        #endregion
+
+        #region Methods - KPI Controls
         private void flpKpiControls()
         {
             flp_Kpi.Controls.Clear();
@@ -262,7 +287,9 @@ namespace InciTrack_Pro
             return card;
 
         }
+        #endregion
 
+        #region Methods - Side Menu Buttons
         private void LoadButtons()
         {
             AddMenuButton("Summary",
@@ -278,23 +305,7 @@ namespace InciTrack_Pro
             (s, e) => MessageBox.Show("Corrective Actions"));
         }
 
-        //private void AddMenuButton(string text,EventHandler clickEvent, IconChar icon)
-        //{
-
-            
-        //    IconButton btnCustom = CreateMenuButton(text);
-
-
-        //    btnCustom.Image = IconCharToImage(icon);
-        //    btnCustom.ImageAlign = ContentAlignment.MiddleLeft;
-
-        //    btnCustom.Click += clickEvent;
-
-        //    flp_menu.Controls.Add(btnCustom);
-
-           
-        //}
-
+       
         private void AddMenuButton(string text, EventHandler clickEvent)
         {
             UIButton btn = CreateMenuButton(text);
@@ -304,19 +315,6 @@ namespace InciTrack_Pro
             flp_menu.Controls.Add(btn);
         }
 
-        //private IconButton CreateMenuButton(string text)
-        //{
-        //    return new IconButton
-        //    {
-        //        Text = text,
-        //        Width = 190,
-        //        Height = 45,
-        //        ForeColor = Color.White,
-        //        Font = new Font("Calibri", 12, FontStyle.Bold),
-        //        Margin = new Padding(5, 5, 0, 5),
-        //        Cursor = Cursors.Hand
-        //    };
-        //}
 
         private UIButton CreateMenuButton(string text)
         {
@@ -340,19 +338,11 @@ namespace InciTrack_Pro
                 TextAlign = ContentAlignment.MiddleLeft
             };
         }
+        #endregion
 
+        #region Methods - Charts
 
-        //private Image IconCharToImage(IconChar iconChar)
-        //{
-        //    using IconPictureBox icon = new IconPictureBox();
-
-        //    icon.IconChar = iconChar;
-        //    icon.IconColor = Color.White;
-        //    icon.IconSize = 24;
-
-        //    return icon.Image!;
-        //}
-
+        #region Hazards vs First Aid Chart
         private void CreateHazardsVsFirstAidsChart()
         {
             string[] months =
@@ -370,35 +360,10 @@ namespace InciTrack_Pro
             int[] firstAids =
             GetMonthlyCounts("First_Aids", year);
 
-            //CartesianChart chart = new CartesianChart
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
             string titleText = $"Hazards vs First Aids ({year})";
             Panel pnlChart = CreatePanelChart(titleText).Item1;
             Label lblTitle = CreatePanelChart(titleText).Item2;
             CartesianChart chart = CreatePanelChart(null).Item3;
-
-            //Panel pnlChart = new Panel
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
-            //Label lblTitle = new Label
-            //{
-            //    Text = $"Hazards vs First Aids ({year})",
-            //    Dock = DockStyle.Top,
-            //    Height = 35,
-            //    TextAlign = ContentAlignment.MiddleCenter,
-            //    Font = new Font("Calibri", 14, FontStyle.Bold),
-            //    ForeColor = Color.White
-            //};
-
-            //CartesianChart chart = new CartesianChart
-            //{
-            //    Dock = DockStyle.Fill
-            //};
 
             chart.Series = new ISeries[]
             {
@@ -427,9 +392,10 @@ namespace InciTrack_Pro
             pnlChart.Controls.Add(lblTitle);
 
             tableLayoutPanel1.Controls.Add(pnlChart, 0, 0);
-
         }
+        #endregion
 
+        #region Hazard by Type Chart
         private void CreateHazardTypeChart()
         {
             
@@ -439,28 +405,7 @@ namespace InciTrack_Pro
             Panel pnlChart = CreatePanelChart(titleText).Item1;
             Label lblTitle = CreatePanelChart(titleText).Item2;
             CartesianChart chart = CreatePanelChart(null).Item3;
-            //Panel pnlChart = new Panel
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
-            //Label lblTitle = new Label
-            //{
-            //    Text = "Hazards By Type" + $"({ DateTime.Now.Year.ToString() })",
-            //    Dock = DockStyle.Top,
-            //    Height = 35,
-            //    TextAlign = ContentAlignment.MiddleCenter,
-            //    Font = new Font("Calibri", 14, FontStyle.Bold),
-            //    ForeColor = Color.White
-            //};
-
-            //CartesianChart chart = new CartesianChart
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
-            //chart.TooltipPosition = LiveChartsCore.Measure.TooltipPosition.Hidden;
-            //string[] labels = data.Keys.ToArray();
+            
             string[] labels = data.Keys
                 .Select(x =>
                 x.Replace("Hazard Share (", "")
@@ -468,12 +413,6 @@ namespace InciTrack_Pro
                 .Replace(" ", "\n"))
                 .ToArray();
             int[] values = data.Values.ToArray();
-
-            //chart.Title = new LabelVisual
-            //{
-            //    Text = "Hazards By Type" + $" ({DateTime.Now.Year.ToString()})",
-            //    TextSize = 20
-            //};
 
             chart.Series = new ISeries[]
             {
@@ -497,11 +436,11 @@ namespace InciTrack_Pro
             pnlChart.Controls.Add(chart);
             pnlChart.Controls.Add(lblTitle);
 
-            //tableLayoutPanel1.Controls.Add(pnlChart, 0, 0);
-
             tableLayoutPanel1.Controls.Add(pnlChart, 1, 0);
         }
+        #endregion
 
+        #region Hazard Year-Over-Year Chart
         private void CreateHazardYoYChart()
         {
             string[] months =
@@ -523,32 +462,7 @@ namespace InciTrack_Pro
             Panel pnlChart = CreatePanelChart(titleText).Item1;
             Label lblTitle = CreatePanelChart(titleText).Item2;
             CartesianChart chart = CreatePanelChart(null).Item3;
-            //Panel pnlChart = new Panel
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
-            //Label lblTitle = new Label
-            //{
-            //    Text = $"Hazards ({year - 1} vs {year})",
-            //    Dock = DockStyle.Top,
-            //    Height = 35,
-            //    TextAlign = ContentAlignment.MiddleCenter,
-            //    Font = new Font("Calibri", 14, FontStyle.Bold),
-            //    ForeColor = Color.White
-            //};
-
-            //CartesianChart chart = new CartesianChart
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
-            //chart.Title = new LabelVisual
-            //{
-            //    Text = $"Hazards ({year - 1} vs {year})",
-            //    TextSize = 20
-            //};
-
+            
             chart.Series = new ISeries[]
             {
                 new LineSeries<int>
@@ -578,7 +492,9 @@ namespace InciTrack_Pro
             pnlChart.Controls.Add(lblTitle);
             tableLayoutPanel1.Controls.Add(pnlChart, 0, 1);
         }
+        #endregion
 
+        #region First Aid Year-OVer-Year Chart
         private void CreateFirstAidYoYChart()
         {
             string[] months =
@@ -600,33 +516,6 @@ namespace InciTrack_Pro
             Panel pnlChart = CreatePanelChart(null).Item1;
             Label lblTitle = CreatePanelChart(titleText).Item2;
             CartesianChart chart = CreatePanelChart(null).Item3;
-
-            //Panel pnlChart = new Panel
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
-            //Label lblTitle = new Label
-            //{
-            //    Text = $"First Aids ({year - 1} vs {year})",
-            //    Dock = DockStyle.Top,
-            //    Height = 35,
-            //    TextAlign = ContentAlignment.MiddleCenter,
-            //    Font = new Font("Calibri", 14, FontStyle.Bold),
-            //    ForeColor = Color.White
-            //};
-
-
-            //CartesianChart chart = new CartesianChart
-            //{
-            //    Dock = DockStyle.Fill
-            //};
-
-            //chart.Title = new LabelVisual
-            //{
-            //    Text = $"First Aids ({year - 1} vs {year})",
-            //    TextSize = 20
-            //};
 
             chart.Series = new ISeries[]
             {
@@ -657,7 +546,9 @@ namespace InciTrack_Pro
             pnlChart.Controls.Add(lblTitle);
             tableLayoutPanel1.Controls.Add(pnlChart, 1, 1);
         }
+        #endregion
 
+        #region Method - Create Chart Headers
         private (Panel, Label, CartesianChart) CreatePanelChart(string? titleText)
         {
             Panel pnlChart = new Panel
@@ -667,7 +558,7 @@ namespace InciTrack_Pro
 
             Label lblTitle = new Label
             {
-                Text = $"First Aids ({DateTime.Now.Year - 1} vs {DateTime.Now.Year})",
+                Text = titleText,
                 Dock = DockStyle.Top,
                 Height = 35,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -682,6 +573,9 @@ namespace InciTrack_Pro
 
             return (pnlChart, lblTitle, chart);
         }
+        #endregion
+
+        #region Method - Get Monlthy Counts for Charts
         private int[] GetMonthlyCounts(string tableName, int year)
         {
             int[] counts = new int[12];
@@ -715,7 +609,9 @@ namespace InciTrack_Pro
 
             return counts;
         }
+        #endregion
 
+        #region Method - Get Hazards Count by type for Chart
         private Dictionary<string, int> GetHazardsByType()
         {
             Dictionary<string, int> data = new();
@@ -752,6 +648,9 @@ namespace InciTrack_Pro
 
             return data;
         }
+        #endregion
+
+        #endregion
     }
 }
 

@@ -8,14 +8,13 @@ namespace InciTrack_Pro.Base_Classes
 {
     public class ModelData
     {
+        #region Class Setup Code
         private static readonly Lazy<ModelData> _instance = new(() => new ModelData());
         public static ModelData Instance => _instance.Value;
-
         private ModelData() { }
+        #endregion 
 
-        /*
-         First Aid Update Variables
-         */
+        #region First Aid Update Variables
         public int firstAidIdx { get; set; }
         public string? title { get; set; }
         public DateTime date { get; set; }
@@ -24,11 +23,10 @@ namespace InciTrack_Pro.Base_Classes
         public string? area { get; set; }
         public string? descr { get; set; }
         public string? cause { get; set; }
-       // public string? details { get; set; }  --> dont even use this field anymore 
         public string? investigation { get; set; }
         public string? apReport { get; set; }
         public string? notes { get; set; }
-        
+        #endregion
 
     }
 }

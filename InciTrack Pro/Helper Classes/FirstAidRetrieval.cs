@@ -12,8 +12,6 @@ namespace InciTrack_Pro.Helper_Classes
 {
     internal class FirstAidRetrieval
     {
-        
-
         public static string GetFirstAids()
         {
             try

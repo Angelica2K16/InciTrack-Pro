@@ -37,7 +37,6 @@ namespace InciTrack_Pro.Helper_Classes
                     string fileName = EpplusWork(Convert.ToInt32(maxValue)).excelFileName;
                     int resultFound = EpplusWork(Convert.ToInt32(maxValue)).newHazardsFound;
 
-
                     if (resultFound > 0)
                     {
                         result = $"Hazard Retrieval: \nFile name: {fileName} \n\nMessage: \nContained total of {resultFound} new hazard records and they were added to the database.";
@@ -55,8 +54,6 @@ namespace InciTrack_Pro.Helper_Classes
             {
                 return $"An error occurred while importing hazards:\n{ex.Message}";
             }
-
-            
         }
 
         private static (int newHazardsFound, string excelFileName )EpplusWork(int maxValue)
@@ -65,8 +62,6 @@ namespace InciTrack_Pro.Helper_Classes
             //string returnMessage = "";
 
             ExcelPackage.License.SetNonCommercialPersonal("<Dan-Mar Company - Internal Use>");
-
-
 
             string userName = Environment.UserName;
             string filePath = string.Empty;
