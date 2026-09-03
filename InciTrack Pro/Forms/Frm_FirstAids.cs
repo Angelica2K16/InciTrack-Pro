@@ -291,7 +291,7 @@ namespace InciTrack_Pro.Forms
                                      SELECT
                                      COUNT(*)
                                      FROM FIRST_AIDS
-                                     WHERE strftime('%m',Date) = strftime('%Y-%m', 'now')
+                                     WHERE strftime('%Y-%m',Date) = strftime('%Y-%m', 'now')
                                 ) AS FAMonthCount,
                                 (
                                       SELECT CAST (
