@@ -172,7 +172,7 @@ namespace InciTrack_Pro.Forms
                 "Potential Injury",
                 "Potential Environmental Impact",
                 "Potential Property Damage / Loss",
-                "Corrective Action",
+             //   "Corrective Action",
                 "Risk Level"
 
             };
@@ -666,17 +666,23 @@ namespace InciTrack_Pro.Forms
                     break;
                 #endregion
 
-                #region Corrective Action Field
-                case "Corrective Action":
-                    valueControl = new Button
-                    {
-                        Text = "Add",
-                        AutoSize = true,
-                        BackColor = Color.DodgerBlue,
-                        ForeColor = Color.White
-                    };
-                    break;
-                #endregion
+                //#region Corrective Action Field
+                //case "Corrective Action":
+                //    //valueControl = new Button
+                //    Button btn_AddCa = new Button
+                //    {
+                //        Name = "btn_addCorrectiveAction",
+                //        Text = "Add",
+                //        AutoSize = true,
+                //        BackColor = Color.DodgerBlue,
+                //        ForeColor = Color.White
+                //    };
+
+                //    btn_AddCa.Click += Btn_AddCa_Click;
+                //    valueControl = btn_AddCa;
+
+                //    break;
+                //#endregion
 
                 #region Risk Level Field
                 case "Risk Level":
@@ -715,6 +721,8 @@ namespace InciTrack_Pro.Forms
             tbl.Controls.Add(valueControl, 1, row);
             #endregion
         }
+
+        
 
         #region Method - Create Controls for Category sections
         private Control createCheckBoxes(List<string> catDescr, TableLayoutPanel tblCatPnl, Control valueControl, string panelName)
