@@ -616,6 +616,8 @@ namespace InciTrack_Pro
         {
             Dictionary<string, int> data = new();
 
+            data.Clear();
+
             using SqliteConnection conn =
             new SqliteConnection(GV.shesDB);
 
