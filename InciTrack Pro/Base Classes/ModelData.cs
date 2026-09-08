@@ -28,5 +28,9 @@ namespace InciTrack_Pro.Base_Classes
         public string? notes { get; set; }
         #endregion
 
+        #region Hazard Update Variables
+        public int hazardIdx { get; set; }
+        #endregion
+
     }
 }

@@ -94,13 +94,9 @@ namespace InciTrack_Pro.Forms
         {
             string search = txt_search.Text.Trim().ToLower();
 
-
-
             foreach (DataGridViewRow row in dgv_firstAidsList.Rows)
             {
                 if (row.IsNewRow) { continue; }
-
-
 
                 if (string.IsNullOrWhiteSpace(search))
                 {
