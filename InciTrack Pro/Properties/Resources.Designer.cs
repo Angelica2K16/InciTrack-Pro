@@ -109,5 +109,15 @@ namespace InciTrack_Pro.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RiskMatrix {
+            get {
+                object obj = ResourceManager.GetObject("RiskMatrix", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

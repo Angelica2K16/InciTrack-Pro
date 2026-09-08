@@ -30,6 +30,22 @@ namespace InciTrack_Pro.Base_Classes
 
         #region Hazard Update Variables
         public int hazardIdx { get; set; }
+        public string? hazTitle { get; set; }
+        public DateTime hazDate { get; set; }
+        //public DateTime time { get; set; }
+        //public string? empName { get; set; }
+        public string? hazArea { get; set; }
+        public string? hazReportedBy { get; set; }
+        public string? hazDescr { get; set; }
+        public string? hazIncidentType { get; set; }
+        public string? hazRiskMatrix { get; set; }
+        public string? hazApReport { get; set; }
+        public string? hazNotes { get; set; }
+        public string? hazStatus { get; set; }
+        public string? hazInjury { get; set; }
+        public string? hazEnv { get; set; }
+        public string? hazDamage { get; set; }
+
         #endregion
 
     }

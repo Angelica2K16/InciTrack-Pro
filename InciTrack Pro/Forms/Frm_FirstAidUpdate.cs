@@ -260,6 +260,12 @@ namespace InciTrack_Pro.Forms
             else
             {
                 #region Loop Through Controls and Store Values
+
+                if(_hazardTable == null)
+                {
+                    return;
+                }
+
                 foreach (Control control in _hazardTable.Controls)
                 {
                     switch (control)
@@ -292,6 +298,7 @@ namespace InciTrack_Pro.Forms
                 if(pnl1 == null)
                 {
                     MessageBox.Show("Error: Injury Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
                 TableLayoutPanel catTable1 =
@@ -314,6 +321,7 @@ namespace InciTrack_Pro.Forms
                 if(pnl2 == null)
                 {
                     MessageBox.Show("Error: Environment Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
                 TableLayoutPanel catTable2 =
@@ -336,6 +344,7 @@ namespace InciTrack_Pro.Forms
                 if(pnl3 == null)
                 {
                     MessageBox.Show("Error: Damage Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
                 TableLayoutPanel catTable3 =
@@ -597,7 +606,7 @@ namespace InciTrack_Pro.Forms
                         BorderStyle = BorderStyle.Fixed3D,
                         BackColor = Color.FromArgb(55, 55, 58),
                         ForeColor = Color.White,
-                        Multiline = MD.Instance.notes.Length > 75,
+                        Multiline = (MD.Instance.notes?.Length ?? 0) > 75,
                         Dock = DockStyle.Fill
                     };
                     //controlValues.Add("Notes", valueControl.Text);
@@ -863,7 +872,7 @@ namespace InciTrack_Pro.Forms
 
             if (!CheckComboBox(combo_apReport, "combo_apReport", errors))
             {
-                if (firstInvalid == null) firstInvalid = _hazardTable.Controls["combo_apReport"];
+                if (firstInvalid == null) firstInvalid = _hazardTable?.Controls["combo_apReport"];
             }
 
             if (!CheckComboBox(combo_investigation, "Investigation Required", errors))
@@ -873,12 +882,12 @@ namespace InciTrack_Pro.Forms
 
             if (!CheckComboBox(combo_investigation, "combo_incidentType", errors))
             {
-                if (firstInvalid == null) firstInvalid =  _hazardTable.Controls["combo_incidentType"];
+                if (firstInvalid == null) firstInvalid =  _hazardTable?.Controls["combo_incidentType"];
             }
 
             if (!CheckComboBox(combo_investigation, "combo_riskLevel", errors))
             {
-                if (firstInvalid == null) firstInvalid = _hazardTable.Controls["combo_riskLevel"];
+                if (firstInvalid == null) firstInvalid = _hazardTable?.Controls["combo_riskLevel"];
             }
 
             return errors.Count == 0;
@@ -895,47 +904,77 @@ namespace InciTrack_Pro.Forms
             ComboBox? cboIncident =
             _hazardTable?.Controls["combo_incidentType"] as ComboBox;
 
-            if (!CheckComboBox(cboIncident, "Incident Type", errors))
+            if(cboIncident == null)
             {
-                if (firstInvalid == null)
-                    firstInvalid = cboIncident;
+                errors.Add("Incident Type Control not found.");
+                
             }
+            else
+            {
+                if (!CheckComboBox(cboIncident, "Incident Type", errors))
+                {
+                    if (firstInvalid == null)
+                        firstInvalid = cboIncident;
+                }
+            }
+           
 
             // AP Report
             ComboBox? cboAP =
             _hazardTable?.Controls["combo_apReport"] as ComboBox;
 
-            if (!CheckComboBox(cboAP, "Report to AP", errors))
+            if(cboAP == null)
             {
-                if (firstInvalid == null)
-                    firstInvalid = cboAP;
+                errors.Add("Report to AP Control not found.");
+            }
+            else
+            {
+                if (!CheckComboBox(cboAP, "Report to AP", errors))
+                {
+                    if (firstInvalid == null)
+                        firstInvalid = cboAP;
+                }
             }
 
             // Risk Level
             ComboBox? cboRisk =
             _hazardTable?.Controls["combo_riskLevel"] as ComboBox;
 
-            if (!CheckComboBox(cboRisk, "Risk Level", errors))
+            if (cboRisk == null)
             {
-                if (firstInvalid == null)
-                    firstInvalid = cboRisk;
+                errors.Add("Risk Level Control not found.");
             }
-
+            else
+            {
+                if (!CheckComboBox(cboRisk, "Risk Level", errors))
+                {
+                    if (firstInvalid == null)
+                        firstInvalid = cboRisk;
+                }
+            }
             // Description
             RichTextBox? rtxtDescr =
             _hazardTable?.Controls["rtxt_descr"] as RichTextBox;
 
-            if (!CheckRichTextBox(rtxtDescr, "Description", errors))
+            if(rtxtDescr == null)
             {
-                if (firstInvalid == null)
-                    firstInvalid = rtxtDescr;
+                errors.Add("Description Control not found.");
+            }
+            else
+            {
+                if (!CheckRichTextBox(rtxtDescr, "Description", errors))
+                {
+                    if (firstInvalid == null)
+                        firstInvalid = rtxtDescr;
+                }
+
             }
 
             //Check checkboxes
             if (!CheckAnyCategorySelected(errors))
             {
                 if (firstInvalid == null)
-                    firstInvalid = _hazardTable.Controls["pnlInjuryCategories"];
+                    firstInvalid = _hazardTable?.Controls["pnlInjuryCategories"];
             }
 
             return errors.Count == 0;
@@ -955,7 +994,7 @@ namespace InciTrack_Pro.Forms
 
             bool filled = !string.IsNullOrWhiteSpace(rtb.Text);
 
-            if(Form.ActiveForm.Name != "Frm_firstAidHazard")
+            if(Form.ActiveForm?.Name != "Frm_firstAidHazard")
             {
                 rtb.BackColor = filled ? SystemColors.Window : Color.LightPink;
             }
@@ -971,7 +1010,7 @@ namespace InciTrack_Pro.Forms
         private bool CheckComboBox(ComboBox comboB, string label, List<string> errors)
         {
 
-            bool filled = (comboB.SelectedIndex > 0);
+            bool filled = (comboB.SelectedIndex >= 0);
             comboB.BackColor = filled ? SystemColors.Window : Color.LightPink;
             if (!filled) errors.Add($"{label} is required.");
             return filled;
@@ -979,6 +1018,11 @@ namespace InciTrack_Pro.Forms
 
         private bool CheckAnyCategorySelected(List<string> errors)
         {
+            if (_hazardTable == null)
+            {
+                return false;
+            }
+
             bool anyChecked = _hazardTable.Controls
             .OfType<Panel>()
             .SelectMany(p => p.Controls.OfType<TableLayoutPanel>())

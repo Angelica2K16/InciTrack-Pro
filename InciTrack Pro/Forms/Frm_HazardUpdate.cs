@@ -22,7 +22,7 @@ namespace InciTrack_Pro.Forms
     {
         #region Class Level Variables
         public Dictionary<string, string> controlValues = new Dictionary<string, string>();
-        private TableLayoutPanel? _hazardTable;
+        private Panel? pnlHelp;
         #endregion
 
         #region Constructors
@@ -30,35 +30,40 @@ namespace InciTrack_Pro.Forms
         {
             InitializeComponent();
             InitializeEvents();
+            
         }
 
         private void InitializeEvents()
         {
-            this.Load += Frm_FirstAidUpdate_Load;
+            this.Load += Frm_HazardUpdate_Load;
             pb_exit.Click += Pb_exit_Click;
             pb_minimize.Click += Pb_minimize_Click;
             btn_save.Click += Btn_save_Click;
             btn_cancel.Click += Btn_cancel_Click;
             //btn_createHazard.Click += Btn_createHazard_Click;
+            pb_riskMatrix.MouseEnter += Pb_riskMatrix_MouseEnter;
+            pb_riskMatrix.MouseLeave += Pb_riskMatrix_MouseLeave;
+
         }
         #endregion
 
         #region Load Form Event
-        private void Frm_FirstAidUpdate_Load(object? sender, EventArgs e)
+        private void Frm_HazardUpdate_Load(object? sender, EventArgs e)
         {
             lbl_header.Text = "Hazard Incident Update";
             
             lbl_header.TextAlign = ContentAlignment.MiddleCenter;
 
-           // GetHazardDataFromSQL();
-           // SetControlsWithMdData();
+            CreateHelpPanel();
+            GetHazardDataFromSQL();
+            SetControlsWithMdData();
         }
         #endregion
 
         #region Custom Control Box Events
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
-            Form? frm = Application.OpenForms["Frm_FirstAids"];
+            Form? frm = Application.OpenForms["Frm_Hazards"];
             if (frm != null)
             {
                 frm.Show();
@@ -78,7 +83,56 @@ namespace InciTrack_Pro.Forms
 
         #endregion
 
-        #region Button Events - Save and Cancel First Aid Update
+        #region Risk Matrix PictureBox Events
+        private void Pb_riskMatrix_MouseEnter(object? sender, EventArgs e)
+        {
+            pnlHelp!.Location = new Point(
+            pb_riskMatrix.Right + 200,
+            pb_riskMatrix.Top + 100);
+
+            pnlHelp?.BringToFront();
+            pnlHelp!.Visible = true;
+        }
+        private void Pb_riskMatrix_MouseLeave(object? sender, EventArgs e)
+        {
+            pnlHelp!.Visible = false;
+        }
+        private void CreateHelpPanel()
+        {
+            pnlHelp = new Panel
+            {
+                Size = new Size(450, 350),
+                Visible = false,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.White
+            };
+
+            PictureBox pbMatrix = new PictureBox
+            {
+                Dock = DockStyle.Top,
+                Height = 250,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Image = Properties.Resources.RiskMatrix
+            };
+
+            Label lblLegend = new Label
+            {
+                Dock = DockStyle.Fill,
+                Text =
+            "1 = Minimal Hazard\r\n" +
+            "2 = Hazard SHare\r\n" +
+            "3/4 = HPNM / AP Report\r\n"
+            
+            };
+
+            pnlHelp.Controls.Add(lblLegend);
+            pnlHelp.Controls.Add(pbMatrix);
+
+            Controls.Add(pnlHelp);
+        }
+        #endregion
+
+        #region Button Events - Save and Cancel Hazard Update
         private void Btn_save_Click(object? sender, EventArgs e)
         {
             if(!ValidateControls(out var errs, out var controlFocus))
@@ -122,655 +176,655 @@ namespace InciTrack_Pro.Forms
         }
         #endregion
 
-        #region Create Hazard From First Aid Incident
+        //#region Create Hazard From First Aid Incident
 
-        #region Button Click Event - Create First Aid Hazard
-        private void Btn_createHazard_Click(object? sender, EventArgs e)
-        {
-            #region Create Form and Controls 
-            //create Popup form
-            Form popup = new Form();
-            popup.Name = "Frm_firstAidHazard";
-            popup.BackColor = Color.FromArgb(45, 45, 48);
-            popup.Text = "Create a Hazard";
-            popup.Size = new Size(900, 400);
-            popup.ShowIcon = false;
-            popup.StartPosition = FormStartPosition.CenterParent;
-
-
-            TableLayoutPanel tbl = new TableLayoutPanel
-            {
-                Name = "tbl_FaUpdateMain",
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                BackColor = Color.Transparent,
-                ColumnCount = 2
-            };
-            _hazardTable = tbl;
-
-            tbl.ColumnStyles.Add(
-            new ColumnStyle(SizeType.Absolute, 180));
-
-            tbl.ColumnStyles.Add(
-            new ColumnStyle(SizeType.Percent, 100));
-
-            popup.Controls.Add(tbl);
-            #endregion
-
-            #region Add Controls to TableLayoutPanel
-            List<string> labels = new List<string>
-            { 
-                "Title",
-                "Date",
-                "Name",
-                "Area",
-                "Description",
-                "Report to AP",
-                "Notes",
-                "Incident Type",
-                "Potential Injury",
-                "Potential Environmental Impact",
-                "Potential Property Damage / Loss",
-             //   "Corrective Action",
-                "Risk Level"
-
-            };
+        //#region Button Click Event - Create First Aid Hazard
+        //private void Btn_createHazard_Click(object? sender, EventArgs e)
+        //{
+        //    #region Create Form and Controls 
+        //    //create Popup form
+        //    Form popup = new Form();
+        //    popup.Name = "Frm_firstAidHazard";
+        //    popup.BackColor = Color.FromArgb(45, 45, 48);
+        //    popup.Text = "Create a Hazard";
+        //    popup.Size = new Size(900, 400);
+        //    popup.ShowIcon = false;
+        //    popup.StartPosition = FormStartPosition.CenterParent;
 
 
-            foreach (string label in labels )
-            {
-                //string columnName = dr.GetName(i);
-                //string value = dr[i]?.ToString() ?? "";
+        //    TableLayoutPanel tbl = new TableLayoutPanel
+        //    {
+        //        Name = "tbl_FaUpdateMain",
+        //        Dock = DockStyle.Fill,
+        //        AutoScroll = true,
+        //        BackColor = Color.Transparent,
+        //        ColumnCount = 2
+        //    };
+        //    _hazardTable = tbl;
 
-                //AddDetailRow(tbl, columnName, value);
-                AddDetailRow(tbl, label);
-            }
-            #endregion
+        //    tbl.ColumnStyles.Add(
+        //    new ColumnStyle(SizeType.Absolute, 180));
 
-            #region Add Save Button to TableLayoutPanel
-            int row = tbl.RowCount;
-            tbl.RowCount++;
+        //    tbl.ColumnStyles.Add(
+        //    new ColumnStyle(SizeType.Percent, 100));
 
-            UIButton btn_saveFaHazard = new UIButton
-            {
-                Text = "Save",
-                Width = 100,
-                Height = 45,
+        //    popup.Controls.Add(tbl);
+        //    #endregion
+
+        //    #region Add Controls to TableLayoutPanel
+        //    List<string> labels = new List<string>
+        //    { 
+        //        "Title",
+        //        "Date",
+        //        "Name",
+        //        "Area",
+        //        "Description",
+        //        "Report to AP",
+        //        "Notes",
+        //        "Incident Type",
+        //        "Potential Injury",
+        //        "Potential Environmental Impact",
+        //        "Potential Property Damage / Loss",
+        //     //   "Corrective Action",
+        //        "Risk Level"
+
+        //    };
+
+
+        //    foreach (string label in labels )
+        //    {
+        //        //string columnName = dr.GetName(i);
+        //        //string value = dr[i]?.ToString() ?? "";
+
+        //        //AddDetailRow(tbl, columnName, value);
+        //        AddDetailRow(tbl, label);
+        //    }
+        //    #endregion
+
+        //    #region Add Save Button to TableLayoutPanel
+        //    int row = tbl.RowCount;
+        //    tbl.RowCount++;
+
+        //    UIButton btn_saveFaHazard = new UIButton
+        //    {
+        //        Text = "Save",
+        //        Width = 100,
+        //        Height = 45,
                 
 
-                FillColor = Color.Firebrick,
-                FillHoverColor = Color.IndianRed,
-                FillPressColor = Color.DarkRed,
+        //        FillColor = Color.Firebrick,
+        //        FillHoverColor = Color.IndianRed,
+        //        FillPressColor = Color.DarkRed,
 
-                ForeColor = Color.White,
-                Font = new Font("Calibri", 12, FontStyle.Bold),
+        //        ForeColor = Color.White,
+        //        Font = new Font("Calibri", 12, FontStyle.Bold),
 
-                Radius = 8,
-                Cursor = Cursors.Hand,
+        //        Radius = 8,
+        //        Cursor = Cursors.Hand,
 
-                Margin = new Padding(5),
-                TextAlign = ContentAlignment.MiddleCenter,
-                Anchor = AnchorStyles.Right,
+        //        Margin = new Padding(5),
+        //        TextAlign = ContentAlignment.MiddleCenter,
+        //        Anchor = AnchorStyles.Right,
 
                 
-            };
+        //    };
             
-            btn_saveFaHazard.Click += Btn_saveFaHazard_Click;
+        //    btn_saveFaHazard.Click += Btn_saveFaHazard_Click;
 
-            tbl.Controls.Add(btn_saveFaHazard, 1, row);
-            #endregion
+        //    tbl.Controls.Add(btn_saveFaHazard, 1, row);
+        //    #endregion
 
-            #region Show Popup Form 
-            this.Hide();
-            popup.ShowDialog();
-            this.Show();
-            #endregion
-        }
+        //    #region Show Popup Form 
+        //    this.Hide();
+        //    popup.ShowDialog();
+        //    this.Show();
+        //    #endregion
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Button Click Event - Save First Aid Hazard
-        private void Btn_saveFaHazard_Click(object? sender, EventArgs e)
-        {
+        //#region Button Click Event - Save First Aid Hazard
+        //private void Btn_saveFaHazard_Click(object? sender, EventArgs e)
+        //{
            
 
-            #region Clear Previous Control Values
-            controlValues.Clear();
-            #endregion region 
+        //    #region Clear Previous Control Values
+        //    controlValues.Clear();
+        //    #endregion region 
 
-            #region Validate Controls 
-            if (!ValidateHazardControls(out var errors,out var controlFocus))
-            {
-                // Build readable message text
-                string message = string.Join("\n• ", errors);
-                message = "Please correct the following:\n\n• " + message;
+        //    #region Validate Controls 
+        //    if (!ValidateHazardControls(out var errors,out var controlFocus))
+        //    {
+        //        // Build readable message text
+        //        string message = string.Join("\n• ", errors);
+        //        message = "Please correct the following:\n\n• " + message;
 
-                MessageBox.Show(
-                    message,
-                    "Validation Errors",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+        //        MessageBox.Show(
+        //            message,
+        //            "Validation Errors",
+        //            MessageBoxButtons.OK,
+        //            MessageBoxIcon.Warning
+        //        );
 
-                // Optionally set focus to the first invalid control
-                controlFocus?.Focus();
-                return;
-            }
-            else
-            {
-                #region Loop Through Controls and Store Values
-                foreach (Control control in _hazardTable.Controls)
-                {
-                    switch (control)
-                    {
-                        case Label lbl:
-                            controlValues[lbl.Name] = lbl.Text;
-                            break;
+        //        // Optionally set focus to the first invalid control
+        //        controlFocus?.Focus();
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        #region Loop Through Controls and Store Values
+        //        foreach (Control control in _hazardTable.Controls)
+        //        {
+        //            switch (control)
+        //            {
+        //                case Label lbl:
+        //                    controlValues[lbl.Name] = lbl.Text;
+        //                    break;
 
-                        case TextBox txt:
-                            controlValues[txt.Name] = txt.Text;
-                            break;
+        //                case TextBox txt:
+        //                    controlValues[txt.Name] = txt.Text;
+        //                    break;
 
-                        case RichTextBox rtb:
-                            controlValues[rtb.Name] = rtb.Text;
-                            break;
+        //                case RichTextBox rtb:
+        //                    controlValues[rtb.Name] = rtb.Text;
+        //                    break;
 
-                        case ComboBox cbo:
-                            controlValues[cbo.Name] =
-                            cbo.SelectedItem?.ToString() ?? "";
-                            break;
+        //                case ComboBox cbo:
+        //                    controlValues[cbo.Name] =
+        //                    cbo.SelectedItem?.ToString() ?? "";
+        //                    break;
 
 
-                    }
-                }
+        //            }
+        //        }
 
-                #region Get Selected Categories from CheckBoxes
-                #region Injury Categories
-                Panel? pnl1 = _hazardTable.Controls["pnlInjuryCategories"] as Panel;
+        //        #region Get Selected Categories from CheckBoxes
+        //        #region Injury Categories
+        //        Panel? pnl1 = _hazardTable.Controls["pnlInjuryCategories"] as Panel;
 
-                if(pnl1 == null)
-                {
-                    MessageBox.Show("Error: Injury Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+        //        if(pnl1 == null)
+        //        {
+        //            MessageBox.Show("Error: Injury Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        }
 
-                TableLayoutPanel catTable1 =
-                pnl1.Controls.OfType<TableLayoutPanel>().First();
+        //        TableLayoutPanel catTable1 =
+        //        pnl1.Controls.OfType<TableLayoutPanel>().First();
 
-                List<string> selected1 = new();
+        //        List<string> selected1 = new();
 
-                foreach (CheckBox chk in catTable1.Controls.OfType<CheckBox>())
-                {
-                    if (chk.Checked)
-                        selected1.Add(chk.Text);
-                }
+        //        foreach (CheckBox chk in catTable1.Controls.OfType<CheckBox>())
+        //        {
+        //            if (chk.Checked)
+        //                selected1.Add(chk.Text);
+        //        }
 
-                string injuryCategories = string.Join(", ", selected1);
-                #endregion
+        //        string injuryCategories = string.Join(", ", selected1);
+        //        #endregion
 
-                #region Environment Categories
-                Panel? pnl2 = _hazardTable.Controls["pnlEnviromentCategories"] as Panel;
+        //        #region Environment Categories
+        //        Panel? pnl2 = _hazardTable.Controls["pnlEnviromentCategories"] as Panel;
                 
-                if(pnl2 == null)
-                {
-                    MessageBox.Show("Error: Environment Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+        //        if(pnl2 == null)
+        //        {
+        //            MessageBox.Show("Error: Environment Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        }
 
-                TableLayoutPanel catTable2 =
-                pnl2.Controls.OfType<TableLayoutPanel>().First();
+        //        TableLayoutPanel catTable2 =
+        //        pnl2.Controls.OfType<TableLayoutPanel>().First();
 
-                List<string> selected2 = new();
+        //        List<string> selected2 = new();
 
-                foreach (CheckBox chk in catTable2.Controls.OfType<CheckBox>())
-                {
-                    if (chk.Checked)
-                        selected2.Add(chk.Text);
-                }
+        //        foreach (CheckBox chk in catTable2.Controls.OfType<CheckBox>())
+        //        {
+        //            if (chk.Checked)
+        //                selected2.Add(chk.Text);
+        //        }
 
-                string environmentCategories = string.Join(", ", selected2);
-                #endregion
+        //        string environmentCategories = string.Join(", ", selected2);
+        //        #endregion
 
-                #region Damage Categories
-                Panel? pnl3 = _hazardTable.Controls["pnlDamageCategory"] as Panel;
+        //        #region Damage Categories
+        //        Panel? pnl3 = _hazardTable.Controls["pnlDamageCategory"] as Panel;
                 
-                if(pnl3 == null)
-                {
-                    MessageBox.Show("Error: Damage Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+        //        if(pnl3 == null)
+        //        {
+        //            MessageBox.Show("Error: Damage Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        }
 
-                TableLayoutPanel catTable3 =
-                pnl3.Controls.OfType<TableLayoutPanel>().First();
+        //        TableLayoutPanel catTable3 =
+        //        pnl3.Controls.OfType<TableLayoutPanel>().First();
 
-                List<string> selected3 = new();
+        //        List<string> selected3 = new();
 
-                foreach (CheckBox chk in catTable3.Controls.OfType<CheckBox>())
-                {
-                    if (chk.Checked)
-                        selected3.Add(chk.Text);
-                }
+        //        foreach (CheckBox chk in catTable3.Controls.OfType<CheckBox>())
+        //        {
+        //            if (chk.Checked)
+        //                selected3.Add(chk.Text);
+        //        }
 
-                string damageCategories = string.Join(", ", selected3);
-                #endregion
+        //        string damageCategories = string.Join(", ", selected3);
+        //        #endregion
 
-                #region Store Selected Categories in Control Values
-                controlValues.Add("Injury Category", injuryCategories);
-                controlValues.Add("Environment Category", environmentCategories);
-                controlValues.Add("Damage Category", damageCategories);
-                #endregion
-                #endregion
+        //        #region Store Selected Categories in Control Values
+        //        controlValues.Add("Injury Category", injuryCategories);
+        //        controlValues.Add("Environment Category", environmentCategories);
+        //        controlValues.Add("Damage Category", damageCategories);
+        //        #endregion
+        //        #endregion
 
-                #endregion
+        //        #endregion
 
-                #region SQL - Insert Data into HAZARDS Table
-                using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
-                {
-                    conn.Open();
-                    using (SqliteTransaction transaction = conn.BeginTransaction())
-                    {
-                        try
-                        {
-                            string sql = $@"
-                            INSERT INTO HAZARDS
-                            (
-                                Date,
-                                Title,
-                                Reported_By, 
-                                Incident_type, 
-                                Area, 
-                                Injury_Category, 
-                                Environment_Category,
-                                Damage_Category,
-                                Incident_Description,
-                                Notes, 
-                                Status,
-                                AP_Report,
-                                Risk_Level
-                            )
-                            VALUES
-                            (
-                                @Date,
-                                @Title,
-                                @Reported_By, 
-                                @Incident_type, 
-                                @Area, 
-                                @Injury_Category, 
-                                @Environment_Category,
-                                @Damage_Category,
-                                @Incident_Description,
-                                @Notes, 
-                                @Status,
-                                @AP_Report,
-                                @Risk_Level
-                            )
+        //        #region SQL - Insert Data into HAZARDS Table
+        //        using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
+        //        {
+        //            conn.Open();
+        //            using (SqliteTransaction transaction = conn.BeginTransaction())
+        //            {
+        //                try
+        //                {
+        //                    string sql = $@"
+        //                    INSERT INTO HAZARDS
+        //                    (
+        //                        Date,
+        //                        Title,
+        //                        Reported_By, 
+        //                        Incident_type, 
+        //                        Area, 
+        //                        Injury_Category, 
+        //                        Environment_Category,
+        //                        Damage_Category,
+        //                        Incident_Description,
+        //                        Notes, 
+        //                        Status,
+        //                        AP_Report,
+        //                        Risk_Level
+        //                    )
+        //                    VALUES
+        //                    (
+        //                        @Date,
+        //                        @Title,
+        //                        @Reported_By, 
+        //                        @Incident_type, 
+        //                        @Area, 
+        //                        @Injury_Category, 
+        //                        @Environment_Category,
+        //                        @Damage_Category,
+        //                        @Incident_Description,
+        //                        @Notes, 
+        //                        @Status,
+        //                        @AP_Report,
+        //                        @Risk_Level
+        //                    )
                           
-                           ";
+        //                   ";
 
-                            using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
-                            {
+        //                    using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
+        //                    {
 
-                                cmd.Parameters.AddWithValue("@Date", controlValues["lbl_date"]);
-                                cmd.Parameters.AddWithValue("@Title", controlValues["lbl_title"]);
-                                cmd.Parameters.AddWithValue("@Reported_By", controlValues["lbl_empName"]);
-                                cmd.Parameters.AddWithValue("@Incident_type", controlValues["combo_incidentType"]);
-                                cmd.Parameters.AddWithValue("@Area", controlValues["lbl_area"]);
-                                cmd.Parameters.AddWithValue("@Injury_Category", controlValues["Injury Category"]);
-                                cmd.Parameters.AddWithValue("@Environment_Category", controlValues["Environment Category"]);
-                                cmd.Parameters.AddWithValue("@Damage_Category", controlValues["Damage Category"]);
-                                cmd.Parameters.AddWithValue("@Incident_Description", controlValues["rtxt_descr"]);
-                                cmd.Parameters.AddWithValue("@Notes", controlValues["rtxt_notes"]);
-                                cmd.Parameters.AddWithValue("@Status", "Open");
-                                cmd.Parameters.AddWithValue("@AP_Report", controlValues["combo_apReport"]);
-                                cmd.Parameters.AddWithValue("@Risk_Level", controlValues["combo_riskLevel"]);
+        //                        cmd.Parameters.AddWithValue("@Date", controlValues["lbl_date"]);
+        //                        cmd.Parameters.AddWithValue("@Title", controlValues["lbl_title"]);
+        //                        cmd.Parameters.AddWithValue("@Reported_By", controlValues["lbl_empName"]);
+        //                        cmd.Parameters.AddWithValue("@Incident_type", controlValues["combo_incidentType"]);
+        //                        cmd.Parameters.AddWithValue("@Area", controlValues["lbl_area"]);
+        //                        cmd.Parameters.AddWithValue("@Injury_Category", controlValues["Injury Category"]);
+        //                        cmd.Parameters.AddWithValue("@Environment_Category", controlValues["Environment Category"]);
+        //                        cmd.Parameters.AddWithValue("@Damage_Category", controlValues["Damage Category"]);
+        //                        cmd.Parameters.AddWithValue("@Incident_Description", controlValues["rtxt_descr"]);
+        //                        cmd.Parameters.AddWithValue("@Notes", controlValues["rtxt_notes"]);
+        //                        cmd.Parameters.AddWithValue("@Status", "Open");
+        //                        cmd.Parameters.AddWithValue("@AP_Report", controlValues["combo_apReport"]);
+        //                        cmd.Parameters.AddWithValue("@Risk_Level", controlValues["combo_riskLevel"]);
 
-                                cmd.ExecuteNonQuery();
-                            }
+        //                        cmd.ExecuteNonQuery();
+        //                    }
 
-                            transaction.Commit();
+        //                    transaction.Commit();
 
-                            Frm_FirstAids? frm = Application.OpenForms["Frm_FirstAids"] as Frm_FirstAids;
+        //                    Frm_FirstAids? frm = Application.OpenForms["Frm_FirstAids"] as Frm_FirstAids;
 
-                            if (frm != null)
-                            {
-                                frm.LoadDgvFirstAidList();
-                                frm.ApplySearchFilter();
-                                frm.Show();
-                                frm.BringToFront();
-                                this.Close();
-                            }
+        //                    if (frm != null)
+        //                    {
+        //                        frm.LoadDgvFirstAidList();
+        //                        frm.ApplySearchFilter();
+        //                        frm.Show();
+        //                        frm.BringToFront();
+        //                        this.Close();
+        //                    }
 
-                        }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-                            MessageBox.Show(ex.Message);
-                        }
-                    }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    transaction.Rollback();
+        //                    MessageBox.Show(ex.Message);
+        //                }
+        //            }
 
-                }
-                #endregion
-            }
-            #endregion
-
-
+        //        }
+        //        #endregion
+        //    }
+        //    #endregion
 
 
-        }
-        #endregion
 
-        #region Method - Add Controls to TableLayoutPanel (Create First Aid Hazard)
-        private void AddDetailRow(TableLayoutPanel tbl, string label)
-        {
+
+        //}
+        //#endregion
+
+        //#region Method - Add Controls to TableLayoutPanel (Create First Aid Hazard)
+        //private void AddDetailRow(TableLayoutPanel tbl, string label)
+        //{
            
-            int row = tbl.RowCount;
+        //    int row = tbl.RowCount;
 
-            tbl.RowCount++;
+        //    tbl.RowCount++;
 
-            tbl.RowStyles.Add(
-            new RowStyle(SizeType.AutoSize));
+        //    tbl.RowStyles.Add(
+        //    new RowStyle(SizeType.AutoSize));
 
-            #region Create Label Control for Field Name
-            Label lblField = new Label
-            {
-                Name = "lblField_" + label,
-                Text = label + ":",
-                ForeColor = Color.White,
-                AutoSize = true,
-                Font = new Font("Calibri", 12, FontStyle.Bold)
-            };
-            #endregion
+        //    #region Create Label Control for Field Name
+        //    Label lblField = new Label
+        //    {
+        //        Name = "lblField_" + label,
+        //        Text = label + ":",
+        //        ForeColor = Color.White,
+        //        AutoSize = true,
+        //        Font = new Font("Calibri", 12, FontStyle.Bold)
+        //    };
+        //    #endregion
 
-            #region Create TableLayoutPanel for Category CheckBoxes
-            TableLayoutPanel tblCatPnl = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                BackColor = Color.Transparent,
-                ColumnCount = 1
-            };
+        //    #region Create TableLayoutPanel for Category CheckBoxes
+        //    TableLayoutPanel tblCatPnl = new TableLayoutPanel
+        //    {
+        //        Dock = DockStyle.Fill,
+        //        AutoScroll = true,
+        //        BackColor = Color.Transparent,
+        //        ColumnCount = 1
+        //    };
 
-            tblCatPnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            #endregion
+        //    tblCatPnl.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        //    #endregion
 
-            Control valueControl = new Label();
-            valueControl.Margin = new Padding(3, 8, 3, 8);
+        //    Control valueControl = new Label();
+        //    valueControl.Margin = new Padding(3, 8, 3, 8);
 
-            #region Switch Code to place correct control based on label
-            switch (label)
-            {
-                #region Title Field
-                case "Title":
-                    valueControl = new Label
-                    {
-                        Name = "lbl_title",
-                        Text = MD.Instance.title + "_FA" + MD.Instance.firstAidIdx,
+        //    #region Switch Code to place correct control based on label
+        //    switch (label)
+        //    {
+        //        #region Title Field
+        //        case "Title":
+        //            valueControl = new Label
+        //            {
+        //                Name = "lbl_title",
+        //                Text = MD.Instance.title + "_FA" + MD.Instance.firstAidIdx,
                         
-                        ForeColor = Color.White,
-                        AutoSize = true,
-                        Font = new Font("Calibri", 12)
-                    };
-                    //controlValues.Add("Title", valueControl.Text);
-                    break;
-                #endregion
+        //                ForeColor = Color.White,
+        //                AutoSize = true,
+        //                Font = new Font("Calibri", 12)
+        //            };
+        //            //controlValues.Add("Title", valueControl.Text);
+        //            break;
+        //        #endregion
 
-                #region Date Field
-                case "Date":
-                    valueControl = new Label
-                    {
-                        Name = "lbl_date",
-                        Text = MD.Instance.date.ToString("yyyy-MM-dd"),
-                        ForeColor = Color.White,
-                        AutoSize = true,
-                        Font = new Font("Calibri", 12)
-                    };
-                    //controlValues.Add("Date", valueControl.Text);
-                    break;
-                #endregion
+        //        #region Date Field
+        //        case "Date":
+        //            valueControl = new Label
+        //            {
+        //                Name = "lbl_date",
+        //                Text = MD.Instance.date.ToString("yyyy-MM-dd"),
+        //                ForeColor = Color.White,
+        //                AutoSize = true,
+        //                Font = new Font("Calibri", 12)
+        //            };
+        //            //controlValues.Add("Date", valueControl.Text);
+        //            break;
+        //        #endregion
 
-                #region Name Field
-                case "Name":
-                    valueControl = new Label
-                    {
-                        Name = "lbl_empName",
-                        Text = UserPrincipal.Current.DisplayName,
-                        ForeColor = Color.White,
-                        AutoSize = true,
-                        Font = new Font("Calibri", 12)
-                    };
-                    //controlValues.Add("Name", valueControl.Text);
-                    break;
-                #endregion
+        //        #region Name Field
+        //        case "Name":
+        //            valueControl = new Label
+        //            {
+        //                Name = "lbl_empName",
+        //                Text = UserPrincipal.Current.DisplayName,
+        //                ForeColor = Color.White,
+        //                AutoSize = true,
+        //                Font = new Font("Calibri", 12)
+        //            };
+        //            //controlValues.Add("Name", valueControl.Text);
+        //            break;
+        //        #endregion
 
-                #region Area Field
-                case "Area":
-                    valueControl = new Label
-                    {
-                        Name = "lbl_area",
-                        Text = MD.Instance.area,
-                        ForeColor = Color.White,
-                        AutoSize = true,
-                        Font = new Font("Calibri", 12)
-                    };
-                    //controlValues.Add("Area", valueControl.Text);
-                    break;
-                #endregion
+        //        #region Area Field
+        //        case "Area":
+        //            valueControl = new Label
+        //            {
+        //                Name = "lbl_area",
+        //                Text = MD.Instance.area,
+        //                ForeColor = Color.White,
+        //                AutoSize = true,
+        //                Font = new Font("Calibri", 12)
+        //            };
+        //            //controlValues.Add("Area", valueControl.Text);
+        //            break;
+        //        #endregion
 
-                #region Description Field
-                case "Description":
-                    valueControl = new RichTextBox
-                    {
-                        Name = "rtxt_descr",
-                        Text = "First-Aid Description:\n" + MD.Instance.descr + "\n\nHazard Description:\n",
-                        ReadOnly = false,
-                        BorderStyle = BorderStyle.Fixed3D,
-                        BackColor = Color.FromArgb(55, 55, 58),
-                        ForeColor = Color.White,
-                        Multiline = true,
-                        Dock = DockStyle.Fill
-                    };
-                   // controlValues.Add("Incident Description", valueControl.Text);
-                    break;
-                #endregion
+        //        #region Description Field
+        //        case "Description":
+        //            valueControl = new RichTextBox
+        //            {
+        //                Name = "rtxt_descr",
+        //                Text = "First-Aid Description:\n" + MD.Instance.descr + "\n\nHazard Description:\n",
+        //                ReadOnly = false,
+        //                BorderStyle = BorderStyle.Fixed3D,
+        //                BackColor = Color.FromArgb(55, 55, 58),
+        //                ForeColor = Color.White,
+        //                Multiline = true,
+        //                Dock = DockStyle.Fill
+        //            };
+        //           // controlValues.Add("Incident Description", valueControl.Text);
+        //            break;
+        //        #endregion
 
-                #region Report to AP Field
-                case "Report to AP":
-                    valueControl = new ComboBox
-                    {
-                        Name = "combo_apReport",
-                        DropDownStyle = ComboBoxStyle.DropDownList,
-                        Dock = DockStyle.Fill
+        //        #region Report to AP Field
+        //        case "Report to AP":
+        //            valueControl = new ComboBox
+        //            {
+        //                Name = "combo_apReport",
+        //                DropDownStyle = ComboBoxStyle.DropDownList,
+        //                Dock = DockStyle.Fill
                         
-                    };
+        //            };
 
-                    ComboBox comboAP = (ComboBox)valueControl;
-                    comboAP.Items.AddRange(new string[] { "Yes", "No" });
-                    comboAP.SelectedItem = MD.Instance.apReport;
-                    break;
-                #endregion
+        //            ComboBox comboAP = (ComboBox)valueControl;
+        //            comboAP.Items.AddRange(new string[] { "Yes", "No" });
+        //            comboAP.SelectedItem = MD.Instance.apReport;
+        //            break;
+        //        #endregion
 
-                #region Notes Field
-                case "Notes":
-                    valueControl = new RichTextBox
-                    {
-                        Name = "rtxt_notes",
-                        Text = MD.Instance.notes,
-                        ReadOnly = false,
-                        BorderStyle = BorderStyle.Fixed3D,
-                        BackColor = Color.FromArgb(55, 55, 58),
-                        ForeColor = Color.White,
-                        Multiline = MD.Instance.notes.Length > 75,
-                        Dock = DockStyle.Fill
-                    };
-                    //controlValues.Add("Notes", valueControl.Text);
-                    break;
-                #endregion
+        //        #region Notes Field
+        //        case "Notes":
+        //            valueControl = new RichTextBox
+        //            {
+        //                Name = "rtxt_notes",
+        //                Text = MD.Instance.notes,
+        //                ReadOnly = false,
+        //                BorderStyle = BorderStyle.Fixed3D,
+        //                BackColor = Color.FromArgb(55, 55, 58),
+        //                ForeColor = Color.White,
+        //                Multiline = MD.Instance.notes.Length > 75,
+        //                Dock = DockStyle.Fill
+        //            };
+        //            //controlValues.Add("Notes", valueControl.Text);
+        //            break;
+        //        #endregion
 
-                #region Incident Type Field
-                case "Incident Type":
-                    valueControl = new ComboBox
-                    {
-                        Name = "combo_incidentType",
-                        DropDownStyle = ComboBoxStyle.DropDownList,
-                        Dock = DockStyle.Fill
+        //        #region Incident Type Field
+        //        case "Incident Type":
+        //            valueControl = new ComboBox
+        //            {
+        //                Name = "combo_incidentType",
+        //                DropDownStyle = ComboBoxStyle.DropDownList,
+        //                Dock = DockStyle.Fill
 
-                    };
+        //            };
 
-                    ComboBox comboType = (ComboBox)valueControl;
-                    comboType.Items.AddRange(new string[] { "HPNM", "Hazard Share (Unsafe Act)", "Hazard Share (Unsafe Condition)","Minimal Hazard"});
-                    comboType.SelectedIndex = -1;
+        //            ComboBox comboType = (ComboBox)valueControl;
+        //            comboType.Items.AddRange(new string[] { "HPNM", "Hazard Share (Unsafe Act)", "Hazard Share (Unsafe Condition)","Minimal Hazard"});
+        //            comboType.SelectedIndex = -1;
                     
-                    break;
-                #endregion
+        //            break;
+        //        #endregion
 
-                #region Injury Category Field
-                case "Potential Injury":
+        //        #region Injury Category Field
+        //        case "Potential Injury":
 
-                    List<string> injCatList = new List<string>
-                                {
-                                    "Chemical Hazard",
-                                    "Electrical Hazard",
-                                    "Heavy Lifting",
-                                     "Physical (Cuts, Burns, Crushing, Pinching)",
-                                     "Repetitive Motion",
-                                     "Slip, Trip, and/or Fall"
+        //            List<string> injCatList = new List<string>
+        //                        {
+        //                            "Chemical Hazard",
+        //                            "Electrical Hazard",
+        //                            "Heavy Lifting",
+        //                             "Physical (Cuts, Burns, Crushing, Pinching)",
+        //                             "Repetitive Motion",
+        //                             "Slip, Trip, and/or Fall"
 
-                                };
+        //                        };
 
-                    valueControl = createCheckBoxes(injCatList, tblCatPnl, valueControl, "pnlInjuryCategories");
-                    break;
-                #endregion
+        //            valueControl = createCheckBoxes(injCatList, tblCatPnl, valueControl, "pnlInjuryCategories");
+        //            break;
+        //        #endregion
 
-                #region Environment Category Field
-                case "Potential Environmental Impact":
-                    List<string> envCatList = new List<string>
-                                {
-                                    "Release to Air",
-                                    "Release to Ground",
-                                    "Release to Water"
-                                };
+        //        #region Environment Category Field
+        //        case "Potential Environmental Impact":
+        //            List<string> envCatList = new List<string>
+        //                        {
+        //                            "Release to Air",
+        //                            "Release to Ground",
+        //                            "Release to Water"
+        //                        };
 
-                    valueControl = createCheckBoxes(envCatList, tblCatPnl, valueControl, "pnlEnviromentCategories");
-                    break;
-                #endregion
+        //            valueControl = createCheckBoxes(envCatList, tblCatPnl, valueControl, "pnlEnviromentCategories");
+        //            break;
+        //        #endregion
 
-                #region Damage Category Field
-                case "Potential Property Damage / Loss":
-                    List<string> damageCatList = new List<string>
-                                {
-                                    "Crimminal Damage",
-                                    "Equipment Damage",
-                                    "Fire Damage",
-                                    "Water Damage"
-                                };
+        //        #region Damage Category Field
+        //        case "Potential Property Damage / Loss":
+        //            List<string> damageCatList = new List<string>
+        //                        {
+        //                            "Crimminal Damage",
+        //                            "Equipment Damage",
+        //                            "Fire Damage",
+        //                            "Water Damage"
+        //                        };
 
-                    valueControl = createCheckBoxes(damageCatList, tblCatPnl, valueControl, "pnlDamageCategory");
-                    break;
-                #endregion
+        //            valueControl = createCheckBoxes(damageCatList, tblCatPnl, valueControl, "pnlDamageCategory");
+        //            break;
+        //        #endregion
 
-                //#region Corrective Action Field
-                //case "Corrective Action":
-                //    //valueControl = new Button
-                //    Button btn_AddCa = new Button
-                //    {
-                //        Name = "btn_addCorrectiveAction",
-                //        Text = "Add",
-                //        AutoSize = true,
-                //        BackColor = Color.DodgerBlue,
-                //        ForeColor = Color.White
-                //    };
+        //        //#region Corrective Action Field
+        //        //case "Corrective Action":
+        //        //    //valueControl = new Button
+        //        //    Button btn_AddCa = new Button
+        //        //    {
+        //        //        Name = "btn_addCorrectiveAction",
+        //        //        Text = "Add",
+        //        //        AutoSize = true,
+        //        //        BackColor = Color.DodgerBlue,
+        //        //        ForeColor = Color.White
+        //        //    };
 
-                //    btn_AddCa.Click += Btn_AddCa_Click;
-                //    valueControl = btn_AddCa;
+        //        //    btn_AddCa.Click += Btn_AddCa_Click;
+        //        //    valueControl = btn_AddCa;
 
-                //    break;
-                //#endregion
+        //        //    break;
+        //        //#endregion
 
-                #region Risk Level Field
-                case "Risk Level":
-                    valueControl = new ComboBox
-                    {
-                        Name = "combo_riskLevel",
-                        DropDownStyle = ComboBoxStyle.DropDownList,
-                        Dock = DockStyle.Fill
-                    };
+        //        #region Risk Level Field
+        //        case "Risk Level":
+        //            valueControl = new ComboBox
+        //            {
+        //                Name = "combo_riskLevel",
+        //                DropDownStyle = ComboBoxStyle.DropDownList,
+        //                Dock = DockStyle.Fill
+        //            };
 
-                    ComboBox comboLevel = (ComboBox)valueControl;
-                    comboLevel.Items.AddRange(new string[] { "0", "1", "2", "3", "4"});
+        //            ComboBox comboLevel = (ComboBox)valueControl;
+        //            comboLevel.Items.AddRange(new string[] { "0", "1", "2", "3", "4"});
 
-                    comboLevel.SelectedIndex = -1;
+        //            comboLevel.SelectedIndex = -1;
 
-                    break;
-                #endregion
+        //            break;
+        //        #endregion
 
-                #region Switch Default
-                default:
-                    valueControl = new Label
-                    {
-                        Name = "lbl_error",
-                        Text = "Error",
-                        ForeColor = Color.White,
-                        AutoSize = true,
-                        Font = new Font("Calibri", 12)
-                    };
-                    break;
-                #endregion
-            }
-            #endregion
+        //        #region Switch Default
+        //        default:
+        //            valueControl = new Label
+        //            {
+        //                Name = "lbl_error",
+        //                Text = "Error",
+        //                ForeColor = Color.White,
+        //                AutoSize = true,
+        //                Font = new Font("Calibri", 12)
+        //            };
+        //            break;
+        //        #endregion
+        //    }
+        //    #endregion
 
-            #region Add All Controls to TableLayoutPanel
-            tbl.Controls.Add(lblField, 0, row);
-            tbl.Controls.Add(valueControl, 1, row);
-            #endregion
-        }
+        //    #region Add All Controls to TableLayoutPanel
+        //    tbl.Controls.Add(lblField, 0, row);
+        //    tbl.Controls.Add(valueControl, 1, row);
+        //    #endregion
+        //}
 
         
 
-        #region Method - Create Controls for Category sections
-        private Control createCheckBoxes(List<string> catDescr, TableLayoutPanel tblCatPnl, Control valueControl, string panelName)
-        {
-            #region Create Section Panels - Visual Effect
-            Panel pnl = new Panel
-            {
-                Name = panelName,
-                Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(75, 75, 78),
-                //Padding = new Padding(10),
-                //Margin = new Padding(0, 10, 0, 5)
-            };
-            #endregion
+        //#region Method - Create Controls for Category sections
+        //private Control createCheckBoxes(List<string> catDescr, TableLayoutPanel tblCatPnl, Control valueControl, string panelName)
+        //{
+        //    #region Create Section Panels - Visual Effect
+        //    Panel pnl = new Panel
+        //    {
+        //        Name = panelName,
+        //        Dock = DockStyle.Fill,
+        //        BackColor = Color.FromArgb(75, 75, 78),
+        //        //Padding = new Padding(10),
+        //        //Margin = new Padding(0, 10, 0, 5)
+        //    };
+        //    #endregion
 
-            #region Create Checkboxes 
-            foreach (string item in catDescr)
-            {
-                int catRow = tblCatPnl.RowCount;
+        //    #region Create Checkboxes 
+        //    foreach (string item in catDescr)
+        //    {
+        //        int catRow = tblCatPnl.RowCount;
 
-                tblCatPnl.RowCount++;
+        //        tblCatPnl.RowCount++;
 
-                tblCatPnl.RowStyles.Add(
-                new RowStyle(SizeType.AutoSize));
+        //        tblCatPnl.RowStyles.Add(
+        //        new RowStyle(SizeType.AutoSize));
 
-                valueControl = new CheckBox
-                {
-                    Name = "cb_" + item.Replace(" ", ""),
-                    Text = item,
-                    ForeColor = Color.White,
-                    BackColor = Color.FromArgb(75, 75, 78),
-                    Font = new Font("Calibri", 12),
-                    Dock = DockStyle.Fill
+        //        valueControl = new CheckBox
+        //        {
+        //            Name = "cb_" + item.Replace(" ", ""),
+        //            Text = item,
+        //            ForeColor = Color.White,
+        //            BackColor = Color.FromArgb(75, 75, 78),
+        //            Font = new Font("Calibri", 12),
+        //            Dock = DockStyle.Fill
 
-                };
-                tblCatPnl.Controls.Add(valueControl, 0, catRow);
-                pnl.Controls.Add(tblCatPnl);
-            };
-            #endregion
+        //        };
+        //        tblCatPnl.Controls.Add(valueControl, 0, catRow);
+        //        pnl.Controls.Add(tblCatPnl);
+        //    };
+        //    #endregion
 
-            #region Return Panel with added checkboxes
-            return pnl;
-            #endregion
-        }
-        #endregion
+        //    #region Return Panel with added checkboxes
+        //    return pnl;
+        //    #endregion
+        //}
+        //#endregion
 
-        #endregion
+        //#endregion
 
-        #endregion
+        //#endregion
 
         #region Helper Methods
 
@@ -795,16 +849,20 @@ namespace InciTrack_Pro.Forms
                     {
                         while (dr.Read())
                         {
-                            MD.Instance.title = dr["Title"].ToString();
-                            MD.Instance.date = Convert.ToDateTime(dr["Date"]);
-                            MD.Instance.time = Convert.ToDateTime(dr["Time"]);
-                            MD.Instance.empName = dr["Employee_Name"].ToString();
-                            MD.Instance.area = dr["Area"].ToString();
-                            MD.Instance.descr = dr["Incident_Description"].ToString();
-                            MD.Instance.cause = dr["Cause"].ToString();
-                            MD.Instance.investigation = dr["Investigation"].ToString();
-                            MD.Instance.apReport = dr["AP_Report"].ToString();
-                            MD.Instance.notes = dr["Notes"].ToString();
+                            MD.Instance.hazTitle = dr["Title"].ToString();
+                            MD.Instance.hazDate = Convert.ToDateTime(dr["Date"]);
+                            MD.Instance.hazReportedBy = dr["Reported_By"].ToString();
+                            MD.Instance.hazArea = dr["Area"].ToString();
+                            MD.Instance.hazDescr = dr["Incident_Description"].ToString();
+                            MD.Instance.hazApReport = dr["AP_Report"].ToString();
+                            MD.Instance.hazNotes = dr["Notes"].ToString();
+                            MD.Instance.hazIncidentType = dr["Incident_type"].ToString();
+                            MD.Instance.hazRiskMatrix = dr["Risk_Level"].ToString();
+                            MD.Instance.hazInjury = dr["Injury_Category"].ToString();
+                            MD.Instance.hazEnv = dr["Environment_Category"].ToString();
+                            MD.Instance.hazDamage = dr["Damage_Category"].ToString();
+                            MD.Instance.hazStatus = dr["Status"].ToString();
+
 
                         }
                     }
@@ -816,20 +874,62 @@ namespace InciTrack_Pro.Forms
         #region Method - Set Controls with Data From ModelData Class
         private void SetControlsWithMdData()
         {
-            lbl_date.Text = MD.Instance.date.ToString("yyyy-MM-dd");
-            lbl_emp.Text = MD.Instance.time.ToString("hh:mm tt");
-            lbl_empName.Text = MD.Instance.empName;
-            lbl_area.Text = MD.Instance.area;
-            txt_Title.Text = MD.Instance.title;
-            combo_riskMatrix.SelectedItem = MD.Instance.investigation;
-            combo_apReport.SelectedItem = MD.Instance.apReport;
-            rtxt_descr.Text = MD.Instance.descr;
-            //rtxt_cause.Text = MD.Instance.cause;
-            rtxt_notes.Text = MD.Instance.notes;
+            lbl_date.Text = MD.Instance.hazDate.ToString("yyyy-MM-dd");
+            lbl_emp.Text= MD.Instance.hazReportedBy;
+            lbl_area.Text = MD.Instance.hazArea;
+            txt_Title.Text = MD.Instance.hazTitle;
+            combo_apReport.SelectedItem = MD.Instance.hazApReport;
+            rtxt_descr.Text = MD.Instance.hazDescr;
+            rtxt_notes.Text = MD.Instance.hazNotes;
+            combo_incidentType.SelectedItem = MD.Instance.hazIncidentType;
+            combo_riskMatrix.SelectedItem = MD.Instance.hazRiskMatrix;
+            combo_status.SelectedItem = MD.Instance.hazStatus;
+
+            SetCheckedValues(cbg_injury, MD.Instance.hazInjury ?? "");
+            SetCheckedValues(cbg_env, MD.Instance.hazEnv ?? "");
+            SetCheckedValues(cbg_damage, MD.Instance.hazDamage ?? "");
+
         }
+
+        private void SetCheckedValues(UICheckBoxGroup group, string categoryString)
+        {
+            var selectedValues = ParseCategories(categoryString)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (UICheckBox chk in group.Controls.OfType<UICheckBox>())
+            {
+                chk.Checked = selectedValues.Contains(chk.Text);
+            }
+        }
+
+        private List<string> ParseCategories(string value)
+        {
+            value = value.Replace(
+            "Slip, Trip, and / or Fall",
+            "__SLIP__");
+
+            value = value.Replace(
+            "Physical (Cuts, Burns, Crushing, Pinching)",
+            "__PHYSICAL__");
+
+            var categories = value
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .ToList();
+
+            for (int i = 0; i < categories.Count; i++)
+            {
+                categories[i] = categories[i]
+                .Replace("__SLIP__", "Slip, Trip, and / or Fall")
+                .Replace("__PHYSICAL__", "Physical (Cuts, Burns, Crushing, Pinching)");
+            }
+
+            return categories;
+        }
+
+      
         #endregion
 
-        #region Method -Validate Controls to Save First Aid
+        #region Method -Validate Controls to Save Hazard
         private bool ValidateControls(out List<string> errors, out Control? firstInvalid)
         {
            
@@ -848,10 +948,10 @@ namespace InciTrack_Pro.Forms
                 if (firstInvalid == null) firstInvalid = rtxt_descr;
             }
 
-            if (!CheckRichTextBox(rtxt_descr, "rtxt_description", errors))
-            {
-                if (firstInvalid == null) firstInvalid = rtxt_descr;
-            }
+            //if (!CheckRichTextBox(rtxt_descr, "rtxt_description", errors))
+            //{
+            //    if (firstInvalid == null) firstInvalid = rtxt_descr;
+            //}
 
 
             //Check ComboBoxes
@@ -860,85 +960,107 @@ namespace InciTrack_Pro.Forms
                 if (firstInvalid == null) firstInvalid = combo_apReport;
             }
 
-            if (!CheckComboBox(combo_apReport, "combo_apReport", errors))
-            {
-                if (firstInvalid == null) firstInvalid = _hazardTable.Controls["combo_apReport"];
-            }
-
-            if (!CheckComboBox(combo_riskMatrix, "Investigation Required", errors))
+            if (!CheckComboBox(combo_riskMatrix, "Risk Matrix Level", errors))
             {
                 if (firstInvalid == null) firstInvalid = combo_riskMatrix;
             }
 
-            if (!CheckComboBox(combo_riskMatrix, "combo_incidentType", errors))
+            if (!CheckComboBox(combo_status, "Status", errors))
             {
-                if (firstInvalid == null) firstInvalid =  _hazardTable.Controls["combo_incidentType"];
+                if (firstInvalid == null) firstInvalid = combo_status;
             }
 
-            if (!CheckComboBox(combo_riskMatrix, "combo_riskLevel", errors))
+            if (!CheckComboBox(combo_incidentType, "Hazard Incident Type", errors))
             {
-                if (firstInvalid == null) firstInvalid = _hazardTable.Controls["combo_riskLevel"];
+                if (firstInvalid == null) firstInvalid = combo_incidentType;
             }
+            //if (!CheckComboBox(combo_apReport, "combo_apReport", errors))
+            //{
+            //    if (firstInvalid == null) firstInvalid = _hazardTable.Controls["combo_apReport"];
+            //}
 
-            return errors.Count == 0;
+            //if (!CheckComboBox(combo_riskMatrix, "Investigation Required", errors))
+            //{
+            //    if (firstInvalid == null) firstInvalid = combo_riskMatrix;
+            //}
 
-        }
+            //if (!CheckComboBox(combo_riskMatrix, "combo_incidentType", errors))
+            //{
+            //    if (firstInvalid == null) firstInvalid =  _hazardTable.Controls["combo_incidentType"];
+            //}
 
-        private bool ValidateHazardControls(out List<string> errors, out Control? firstInvalid)
-        {
-
-            errors = new();
-            firstInvalid = null;
-
-            // Incident Type
-            ComboBox? cboIncident =
-            _hazardTable?.Controls["combo_incidentType"] as ComboBox;
-
-            if (!CheckComboBox(cboIncident, "Incident Type", errors))
-            {
-                if (firstInvalid == null)
-                    firstInvalid = cboIncident;
-            }
-
-            // AP Report
-            ComboBox? cboAP =
-            _hazardTable?.Controls["combo_apReport"] as ComboBox;
-
-            if (!CheckComboBox(cboAP, "Report to AP", errors))
-            {
-                if (firstInvalid == null)
-                    firstInvalid = cboAP;
-            }
-
-            // Risk Level
-            ComboBox? cboRisk =
-            _hazardTable?.Controls["combo_riskLevel"] as ComboBox;
-
-            if (!CheckComboBox(cboRisk, "Risk Level", errors))
-            {
-                if (firstInvalid == null)
-                    firstInvalid = cboRisk;
-            }
-
-            // Description
-            RichTextBox? rtxtDescr =
-            _hazardTable?.Controls["rtxt_descr"] as RichTextBox;
-
-            if (!CheckRichTextBox(rtxtDescr, "Description", errors))
-            {
-                if (firstInvalid == null)
-                    firstInvalid = rtxtDescr;
-            }
+            //if (!CheckComboBox(combo_riskMatrix, "combo_riskLevel", errors))
+            //{
+            //    if (firstInvalid == null) firstInvalid = _hazardTable.Controls["combo_riskLevel"];
+            //}
 
             //Check checkboxes
             if (!CheckAnyCategorySelected(errors))
             {
                 if (firstInvalid == null)
-                    firstInvalid = _hazardTable.Controls["pnlInjuryCategories"];
+                    firstInvalid = tableLayoutPanel1.Controls["cbg_injury"];
             }
 
+
             return errors.Count == 0;
+
         }
+
+        //private bool ValidateHazardControls(out List<string> errors, out Control? firstInvalid)
+        //{
+
+        //    errors = new();
+        //    firstInvalid = null;
+
+        //    // Incident Type
+        //    ComboBox? cboIncident =
+        //    _hazardTable?.Controls["combo_incidentType"] as ComboBox;
+
+        //    if (!CheckComboBox(cboIncident, "Incident Type", errors))
+        //    {
+        //        if (firstInvalid == null)
+        //            firstInvalid = cboIncident;
+        //    }
+
+        //    // AP Report
+        //    ComboBox? cboAP =
+        //    _hazardTable?.Controls["combo_apReport"] as ComboBox;
+
+        //    if (!CheckComboBox(cboAP, "Report to AP", errors))
+        //    {
+        //        if (firstInvalid == null)
+        //            firstInvalid = cboAP;
+        //    }
+
+        //    // Risk Level
+        //    ComboBox? cboRisk =
+        //    _hazardTable?.Controls["combo_riskLevel"] as ComboBox;
+
+        //    if (!CheckComboBox(cboRisk, "Risk Level", errors))
+        //    {
+        //        if (firstInvalid == null)
+        //            firstInvalid = cboRisk;
+        //    }
+
+        //    // Description
+        //    RichTextBox? rtxtDescr =
+        //    _hazardTable?.Controls["rtxt_descr"] as RichTextBox;
+
+        //    if (!CheckRichTextBox(rtxtDescr, "Description", errors))
+        //    {
+        //        if (firstInvalid == null)
+        //            firstInvalid = rtxtDescr;
+        //    }
+
+        //    //Check checkboxes
+        //    if (!CheckAnyCategorySelected(errors))
+        //    {
+        //        if (firstInvalid == null)
+        //            firstInvalid = _hazardTable.Controls["pnlInjuryCategories"];
+        //    }
+
+        //    return errors.Count == 0;
+        //}
 
         private bool CheckTextBox(TextBox tb, string label, List<string> errors)
         {
@@ -954,7 +1076,7 @@ namespace InciTrack_Pro.Forms
 
             bool filled = !string.IsNullOrWhiteSpace(rtb.Text);
 
-            if(Form.ActiveForm.Name != "Frm_firstAidHazard")
+            if(Form.ActiveForm?.Name != "Frm_firstAidHazard")
             {
                 rtb.BackColor = filled ? SystemColors.Window : Color.LightPink;
             }
@@ -970,7 +1092,7 @@ namespace InciTrack_Pro.Forms
         private bool CheckComboBox(ComboBox comboB, string label, List<string> errors)
         {
 
-            bool filled = (comboB.SelectedIndex > 0);
+            bool filled = (comboB.SelectedIndex >= 0);
             comboB.BackColor = filled ? SystemColors.Window : Color.LightPink;
             if (!filled) errors.Add($"{label} is required.");
             return filled;
@@ -978,36 +1100,42 @@ namespace InciTrack_Pro.Forms
 
         private bool CheckAnyCategorySelected(List<string> errors)
         {
-            bool anyChecked = _hazardTable.Controls
-            .OfType<Panel>()
-            .SelectMany(p => p.Controls.OfType<TableLayoutPanel>())
-            .SelectMany(t => t.Controls.OfType<CheckBox>())
+            
+
+            //bool anyChecked = tableLayoutPanel1.Controls
+            //.OfType<UICheckBoxGroup>()
+            //.SelectMany(p => p.Controls.OfType<TableLayoutPanel>())
+            //.SelectMany(t => t.Controls.OfType<CheckBox>())
+            //.Any(chk => chk.Checked);
+
+            var groups = tableLayoutPanel1.Controls
+.OfType<UICheckBoxGroup>()
+.ToList();
+
+            bool anyChecked = groups
+            .SelectMany(g => g.Controls.OfType<UICheckBox>())
             .Any(chk => chk.Checked);
+
+            //TODO: have to figure out the checkbox bug
+           sdlkjfsdlkjfh
 
             if (!anyChecked)
             {
                 errors.Add("At least one category must be selected.");
 
-                foreach (Panel pnl in _hazardTable.Controls.OfType<Panel>())
+                foreach (var group in groups)
                 {
-                    if (pnl.Name == "pnlInjuryCategories" ||
-                    pnl.Name == "pnlEnviromentCategories" ||
-                    pnl.Name == "pnlDamageCategory")
-                    {
-                        pnl.BackColor = Color.LightPink;
-                    }
+                    group.FillColor = Color.IndianRed;
+                    group.RectColor = Color.Red;
                 }
+
             }
             else
             {
-                foreach (Panel pnl in _hazardTable.Controls.OfType<Panel>())
+                foreach (var group in groups)
                 {
-                    if (pnl.Name == "pnlInjuryCategories" ||
-                    pnl.Name == "pnlEnviromentCategories" ||
-                    pnl.Name == "pnlDamageCategory")
-                    {
-                        pnl.BackColor = Color.FromArgb(75, 75, 78);
-                    }
+                    group.FillColor = Color.FromArgb(243, 249, 255);
+                    group.RectColor = Color.FromArgb(80, 160, 255);
                 }
             }
 
@@ -1018,12 +1146,28 @@ namespace InciTrack_Pro.Forms
         #region Method - Set ModelData Class with Data from Controls 
         private void SetModelDataClass()
         {
-            MD.Instance.title = txt_Title.Text;
-            MD.Instance.investigation = combo_riskMatrix.SelectedItem?.ToString();
-            MD.Instance.apReport = combo_apReport.SelectedItem?.ToString();
-            MD.Instance.descr = rtxt_descr.Text;
-           // MD.Instance.cause = rtxt_cause.Text;
-            MD.Instance.notes = rtxt_notes.Text;
+           MD.Instance.hazIncidentType = combo_incidentType.SelectedItem?.ToString() ?? "";
+           MD.Instance.hazRiskMatrix = combo_riskMatrix.SelectedItem?.ToString() ?? "";
+           MD.Instance.hazApReport = combo_apReport.SelectedItem?.ToString() ?? "";
+           MD.Instance.hazDescr = rtxt_descr.Text;
+           MD.Instance.hazNotes = rtxt_notes.Text;
+           MD.Instance.hazStatus = combo_status.SelectedItem?.ToString() ?? "";
+           MD.Instance.hazTitle = txt_Title.Text;
+
+           MD.Instance.hazInjury = string.Join(", ", cbg_injury.Controls.OfType<UICheckBox>()
+                .SelectMany(g => g.Controls.OfType<CheckBox>())
+                .Where(cb => cb.Checked)
+                .Select(cb => cb.Text));
+
+           MD.Instance.hazEnv = string.Join(", ", cbg_env.Controls.OfType<UICheckBox>()
+                .SelectMany(g => g.Controls.OfType<CheckBox>())
+                .Where(cb => cb.Checked)
+                .Select(cb => cb.Text));
+
+           MD.Instance.hazDamage = string.Join(", ", cbg_damage.Controls.OfType<UICheckBox>()
+                .SelectMany(g => g.Controls.OfType<CheckBox>())
+                .Where(cb => cb.Checked)
+                .Select(cb => cb.Text));
         }
         #endregion
 
@@ -1038,28 +1182,36 @@ namespace InciTrack_Pro.Forms
                     try
                     {
                         string sql = $@"
-                            UPDATE FIRST_AIDS SET
+                            UPDATE HAZARDS SET
                             
                                 Title = @title,
-                                Investigation = @investigation,
+                                Incident_type = @incidentType,
+                                Risk_Level = @riskLevel,
                                 AP_Report = @apReport,
+                                Injury_Category = @injuryCat,
+                                Environment_Category = @envCat, 
+                                Damage_Category = @damageCat,
                                 Incident_Description = @descr,
-                                Cause = @cause,
-                                Notes = @notes
+                                Notes = @notes,
+                                Status = @status            
                             
-                            WHERE Idx  = @firstAidIdx
+                            WHERE Idx  = @hazardIdx
                            ";
 
                         using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
                         {
                             
-                            cmd.Parameters.AddWithValue("@firstAidIdx", MD.Instance.firstAidIdx);
-                            cmd.Parameters.AddWithValue("@title", MD.Instance.title);
-                            cmd.Parameters.AddWithValue("@investigation", MD.Instance.investigation);
-                            cmd.Parameters.AddWithValue("@apReport", MD.Instance.apReport);
-                            cmd.Parameters.AddWithValue("@descr", MD.Instance.descr);
-                            cmd.Parameters.AddWithValue("@cause", MD.Instance.cause);
-                            cmd.Parameters.AddWithValue("@notes", MD.Instance.notes);
+                            cmd.Parameters.AddWithValue("@hazardIdx", MD.Instance.hazardIdx);
+                            cmd.Parameters.AddWithValue("@title", MD.Instance.hazTitle);
+                            cmd.Parameters.AddWithValue("@incidentType", MD.Instance.hazIncidentType);
+                            cmd.Parameters.AddWithValue("@riskLevel", MD.Instance.hazRiskMatrix);
+                            cmd.Parameters.AddWithValue("@apReport", MD.Instance.hazApReport);
+                            cmd.Parameters.AddWithValue("@injuryCat", MD.Instance.hazInjury);
+                            cmd.Parameters.AddWithValue("@envCat", MD.Instance.hazEnv);
+                            cmd.Parameters.AddWithValue("@damageCat", MD.Instance.hazDamage);
+                            cmd.Parameters.AddWithValue("@descr", MD.Instance.hazDescr);
+                            cmd.Parameters.AddWithValue("@notes", MD.Instance.hazNotes);
+                            cmd.Parameters.AddWithValue("@status", MD.Instance.hazStatus);
 
 
                             cmd.ExecuteNonQuery();
@@ -1067,11 +1219,11 @@ namespace InciTrack_Pro.Forms
 
                         transaction.Commit();
 
-                        Frm_FirstAids? frm = Application.OpenForms["Frm_FirstAids"] as Frm_FirstAids;
+                        Frm_Hazards? frm = Application.OpenForms["Frm_Hazards"] as Frm_Hazards;
 
                         if(frm != null)
                         {
-                            frm.LoadDgvFirstAidList();
+                            frm.LoadDgvHazardsList();
                             frm.ApplySearchFilter();
                             frm.Show();
                             frm.BringToFront();

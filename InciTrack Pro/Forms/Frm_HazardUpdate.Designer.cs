@@ -601,12 +601,12 @@
         private Label lbl_header;
         private TableLayoutPanel tbl_main;
         private Label lbl_datelbl;
-        private Label lbl_employeeLbl;
+        //private Label lbl_employeeLbl;
         private Label lbl_areaLbl;
         private Label lbl_title;
         private Label lbl_riskLbl;
         private Label lbl_area;
-        private Label lbl_empName;
+        //private Label lbl_empName;
         private Label lbl_emp;
         private Label lbl_date;
         private Label lbl_empLbl;
