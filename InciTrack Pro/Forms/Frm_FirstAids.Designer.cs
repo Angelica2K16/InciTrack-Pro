@@ -28,6 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             pnl_controlBox = new Panel();
             label1 = new Label();
             pb_dmLogo = new PictureBox();
@@ -41,7 +46,7 @@
             cb_apReports = new CheckBox();
             flp_Kpi = new FlowLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
-            dgv_firstAidsList = new DataGridView();
+            dgv_firstAidsList = new Sunny.UI.UIDataGridView();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
@@ -208,11 +213,48 @@
             // 
             // dgv_firstAidsList
             // 
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(235, 243, 255);
+            dgv_firstAidsList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dgv_firstAidsList.BackgroundColor = Color.White;
+            dgv_firstAidsList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(80, 160, 255);
+            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgv_firstAidsList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgv_firstAidsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dgv_firstAidsList.DefaultCellStyle = dataGridViewCellStyle3;
             dgv_firstAidsList.Dock = DockStyle.Fill;
+            dgv_firstAidsList.EnableHeadersVisualStyles = false;
+            dgv_firstAidsList.Font = new Font("Microsoft Sans Serif", 12F);
+            dgv_firstAidsList.GridColor = Color.FromArgb(80, 160, 255);
             dgv_firstAidsList.Location = new Point(3, 3);
             dgv_firstAidsList.Name = "dgv_firstAidsList";
+            dgv_firstAidsList.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(235, 243, 255);
+            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle4.ForeColor = Color.FromArgb(48, 48, 48);
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(80, 160, 255);
+            dataGridViewCellStyle4.SelectionForeColor = Color.White;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgv_firstAidsList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.BackColor = Color.White;
+            dataGridViewCellStyle5.Font = new Font("Microsoft Sans Serif", 12F);
+            dgv_firstAidsList.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            dgv_firstAidsList.SelectedIndex = -1;
             dgv_firstAidsList.Size = new Size(1274, 448);
+            dgv_firstAidsList.StripeOddColor = Color.FromArgb(235, 243, 255);
             dgv_firstAidsList.TabIndex = 0;
             // 
             // Frm_FirstAids
@@ -258,9 +300,9 @@
         private TableLayoutPanel tableLayoutPanel3;
         private FlowLayoutPanel flp_Kpi;
         private TableLayoutPanel tableLayoutPanel2;
-        private DataGridView dgv_firstAidsList;
         private Label label2;
         private TextBox txt_search;
         private CheckBox cb_apReports;
+        private Sunny.UI.UIDataGridView dgv_firstAidsList;
     }
 }

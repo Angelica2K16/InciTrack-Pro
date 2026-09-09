@@ -34,16 +34,16 @@
             pb_minimize = new PictureBox();
             pb_exit = new PictureBox();
             tableLayoutPanel1 = new TableLayoutPanel();
-            flowLayoutPanel1 = new FlowLayoutPanel();
+            rtxt_notes = new Sunny.UI.UIRichTextBox();
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
             label5 = new Label();
             btn_saveCa = new Sunny.UI.UIButton();
             combo_empName = new Sunny.UI.UIComboBox();
-            dtp_dueDate = new Sunny.UI.UIDatePicker();
             rtxt_Ca = new Sunny.UI.UIRichTextBox();
-            rtxt_notes = new Sunny.UI.UIRichTextBox();
+            dtp_dueDate = new Sunny.UI.UIDatePicker();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             lbl_title = new Label();
             lbl_date = new Label();
             lbl_type = new Label();
@@ -123,8 +123,8 @@
             tableLayoutPanel1.Controls.Add(label5, 0, 3);
             tableLayoutPanel1.Controls.Add(btn_saveCa, 1, 4);
             tableLayoutPanel1.Controls.Add(combo_empName, 1, 0);
-            tableLayoutPanel1.Controls.Add(dtp_dueDate, 1, 1);
             tableLayoutPanel1.Controls.Add(rtxt_Ca, 1, 2);
+            tableLayoutPanel1.Controls.Add(dtp_dueDate, 1, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 101);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -137,18 +137,20 @@
             tableLayoutPanel1.Size = new Size(916, 422);
             tableLayoutPanel1.TabIndex = 2;
             // 
-            // flowLayoutPanel1
+            // rtxt_notes
             // 
-            flowLayoutPanel1.BackColor = Color.IndianRed;
-            flowLayoutPanel1.Controls.Add(lbl_title);
-            flowLayoutPanel1.Controls.Add(lbl_date);
-            flowLayoutPanel1.Controls.Add(lbl_type);
-            flowLayoutPanel1.Dock = DockStyle.Top;
-            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel1.Location = new Point(0, 37);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(916, 64);
-            flowLayoutPanel1.TabIndex = 3;
+            rtxt_notes.FillColor = Color.White;
+            rtxt_notes.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            rtxt_notes.Location = new Point(184, 225);
+            rtxt_notes.Margin = new Padding(4, 5, 4, 5);
+            rtxt_notes.MinimumSize = new Size(1, 1);
+            rtxt_notes.Name = "rtxt_notes";
+            rtxt_notes.Padding = new Padding(2);
+            rtxt_notes.RectColor = Color.IndianRed;
+            rtxt_notes.ShowText = false;
+            rtxt_notes.Size = new Size(719, 120);
+            rtxt_notes.TabIndex = 8;
+            rtxt_notes.TextAlignment = ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
@@ -220,7 +222,8 @@
             // 
             combo_empName.DataSource = null;
             combo_empName.FillColor = Color.White;
-            combo_empName.Font = new Font("Microsoft Sans Serif", 12F);
+            combo_empName.FilterIgnoreCase = true;
+            combo_empName.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             combo_empName.ItemHoverColor = Color.FromArgb(155, 200, 255);
             combo_empName.ItemSelectForeColor = Color.FromArgb(235, 243, 255);
             combo_empName.Location = new Point(184, 5);
@@ -228,59 +231,67 @@
             combo_empName.MinimumSize = new Size(63, 0);
             combo_empName.Name = "combo_empName";
             combo_empName.Padding = new Padding(0, 0, 30, 2);
-            combo_empName.Size = new Size(150, 29);
+            combo_empName.Radius = 2;
+            combo_empName.RectColor = Color.IndianRed;
+            combo_empName.ShowFilter = true;
+            combo_empName.Size = new Size(243, 29);
+            combo_empName.Sorted = true;
             combo_empName.SymbolSize = 24;
             combo_empName.TabIndex = 5;
             combo_empName.TextAlignment = ContentAlignment.MiddleLeft;
+            combo_empName.TrimFilter = true;
             combo_empName.Watermark = "";
-            // 
-            // dtp_dueDate
-            // 
-            dtp_dueDate.DateCultureInfo = new System.Globalization.CultureInfo("");
-            dtp_dueDate.FillColor = Color.White;
-            dtp_dueDate.Font = new Font("Microsoft Sans Serif", 12F);
-            dtp_dueDate.Location = new Point(184, 44);
-            dtp_dueDate.Margin = new Padding(4, 5, 4, 5);
-            dtp_dueDate.MaxLength = 10;
-            dtp_dueDate.MinimumSize = new Size(63, 0);
-            dtp_dueDate.Name = "dtp_dueDate";
-            dtp_dueDate.Padding = new Padding(0, 0, 30, 2);
-            dtp_dueDate.Size = new Size(150, 29);
-            dtp_dueDate.SymbolDropDown = 61555;
-            dtp_dueDate.SymbolNormal = 61555;
-            dtp_dueDate.SymbolSize = 24;
-            dtp_dueDate.TabIndex = 6;
-            dtp_dueDate.TextAlignment = ContentAlignment.MiddleLeft;
-            dtp_dueDate.Value = new DateTime(2026, 9, 3, 13, 24, 59, 313);
-            dtp_dueDate.Watermark = "";
             // 
             // rtxt_Ca
             // 
             rtxt_Ca.FillColor = Color.White;
-            rtxt_Ca.Font = new Font("Microsoft Sans Serif", 12F);
+            rtxt_Ca.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             rtxt_Ca.Location = new Point(184, 87);
             rtxt_Ca.Margin = new Padding(4, 5, 4, 5);
             rtxt_Ca.MinimumSize = new Size(1, 1);
             rtxt_Ca.Name = "rtxt_Ca";
             rtxt_Ca.Padding = new Padding(2);
+            rtxt_Ca.RectColor = Color.IndianRed;
             rtxt_Ca.ShowText = false;
             rtxt_Ca.Size = new Size(719, 128);
             rtxt_Ca.TabIndex = 7;
             rtxt_Ca.TextAlignment = ContentAlignment.MiddleCenter;
             // 
-            // rtxt_notes
+            // dtp_dueDate
             // 
-            rtxt_notes.FillColor = Color.White;
-            rtxt_notes.Font = new Font("Microsoft Sans Serif", 12F);
-            rtxt_notes.Location = new Point(184, 225);
-            rtxt_notes.Margin = new Padding(4, 5, 4, 5);
-            rtxt_notes.MinimumSize = new Size(1, 1);
-            rtxt_notes.Name = "rtxt_notes";
-            rtxt_notes.Padding = new Padding(2);
-            rtxt_notes.ShowText = false;
-            rtxt_notes.Size = new Size(719, 120);
-            rtxt_notes.TabIndex = 8;
-            rtxt_notes.TextAlignment = ContentAlignment.MiddleCenter;
+            dtp_dueDate.DateCultureInfo = new System.Globalization.CultureInfo("en-US");
+            dtp_dueDate.FillColor = Color.White;
+            dtp_dueDate.Font = new Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dtp_dueDate.Location = new Point(184, 44);
+            dtp_dueDate.Margin = new Padding(4, 5, 4, 5);
+            dtp_dueDate.MaxLength = 10;
+            dtp_dueDate.MinimumSize = new Size(63, 0);
+            dtp_dueDate.MultiLanguageSupport = false;
+            dtp_dueDate.Name = "dtp_dueDate";
+            dtp_dueDate.Padding = new Padding(0, 0, 30, 2);
+            dtp_dueDate.ShowToday = true;
+            dtp_dueDate.Size = new Size(243, 33);
+            dtp_dueDate.SymbolDropDown = 61555;
+            dtp_dueDate.SymbolNormal = 61555;
+            dtp_dueDate.SymbolSize = 24;
+            dtp_dueDate.TabIndex = 9;
+            dtp_dueDate.Text = "2026-09-09";
+            dtp_dueDate.TextAlignment = ContentAlignment.MiddleLeft;
+            dtp_dueDate.Value = new DateTime(2026, 9, 9, 0, 0, 0, 0);
+            dtp_dueDate.Watermark = "";
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.BackColor = Color.IndianRed;
+            flowLayoutPanel1.Controls.Add(lbl_title);
+            flowLayoutPanel1.Controls.Add(lbl_date);
+            flowLayoutPanel1.Controls.Add(lbl_type);
+            flowLayoutPanel1.Dock = DockStyle.Top;
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(0, 37);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(916, 64);
+            flowLayoutPanel1.TabIndex = 3;
             // 
             // lbl_title
             // 
@@ -360,11 +371,11 @@
         private Label label5;
         private Sunny.UI.UIButton btn_saveCa;
         private Sunny.UI.UIComboBox combo_empName;
-        private Sunny.UI.UIDatePicker dtp_dueDate;
         private Sunny.UI.UIRichTextBox rtxt_notes;
         private Sunny.UI.UIRichTextBox rtxt_Ca;
         private Label lbl_title;
         private Label lbl_date;
         private Label lbl_type;
+        private Sunny.UI.UIDatePicker dtp_dueDate;
     }
 }

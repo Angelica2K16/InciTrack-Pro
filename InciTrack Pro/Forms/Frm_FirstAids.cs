@@ -119,6 +119,8 @@ namespace InciTrack_Pro.Forms
                     dgv_firstAidsList.CurrentCell = row.Cells[1];
                 }
             }
+
+            FormatDgv();
         }
         #endregion
 
@@ -518,11 +520,12 @@ namespace InciTrack_Pro.Forms
         #region Method - Format DGV
         private void FormatDgv()
         {
+            dgv_firstAidsList.ScrollBars = ScrollBars.Vertical;
             dgv_firstAidsList.AutoGenerateColumns = true;
             //dgv_firstAidsList.Dock = DockStyle.Fill;
             dgv_firstAidsList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             dgv_firstAidsList.RowTemplate.Height = 30;
-            dgv_firstAidsList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_firstAidsList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgv_firstAidsList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dgv_firstAidsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_firstAidsList.RowHeadersVisible = false;
@@ -541,11 +544,12 @@ namespace InciTrack_Pro.Forms
 
             dgv_firstAidsList.Columns["Idx"].Visible = false;
            
-            dgv_firstAidsList.Columns["Date"].FillWeight = 10;
-            dgv_firstAidsList.Columns["Title"].FillWeight = 15;
-            dgv_firstAidsList.Columns["Employee"].FillWeight = 8;
-            dgv_firstAidsList.Columns["Area"].FillWeight = 20;
-            dgv_firstAidsList.Columns["Description"].FillWeight = 27;
+            dgv_firstAidsList.Columns["Date"].Width = 100;
+            dgv_firstAidsList.Columns["Title"].Width = 290;
+            dgv_firstAidsList.Columns["Employee"].Width = 160;
+            dgv_firstAidsList.Columns["Area"].Width = 200;
+            dgv_firstAidsList.Columns["Description"].Width = 400;
+            dgv_firstAidsList.Columns["Edit"].Width = 100;
 
             foreach (DataGridViewRow row in dgv_firstAidsList.Rows)
             {

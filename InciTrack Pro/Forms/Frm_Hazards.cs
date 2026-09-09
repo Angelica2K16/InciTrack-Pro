@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -251,6 +252,9 @@ namespace InciTrack_Pro.Forms
 
         internal void ApplySearchFilter()
         {
+            
+
+
             string search = txt_search.Text.Trim().ToLower();
 
             foreach (DataGridViewRow row in dgv_hazardsList.Rows)
@@ -278,6 +282,10 @@ namespace InciTrack_Pro.Forms
                     dgv_hazardsList.CurrentCell = row.Cells[1];
                 }
             }
+
+            FormatDgv();
+
+    
         }
 
         private void flpKpiControls()
@@ -534,15 +542,19 @@ namespace InciTrack_Pro.Forms
             }
 
             FormatDgv();
+
+
+            
         }
 
         private void FormatDgv()
         {
+            dgv_hazardsList.ScrollBars = ScrollBars.Vertical;
             dgv_hazardsList.AutoGenerateColumns = true;
             //dgv_firstAidsList.Dock = DockStyle.Fill;
             dgv_hazardsList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             dgv_hazardsList.RowTemplate.Height = 30;
-            dgv_hazardsList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_hazardsList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgv_hazardsList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dgv_hazardsList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_hazardsList.RowHeadersVisible = false;
@@ -561,12 +573,13 @@ namespace InciTrack_Pro.Forms
 
             dgv_hazardsList.Columns["Idx"].Visible = false;
 
-            dgv_hazardsList.Columns["Date"].FillWeight = 10;
-            dgv_hazardsList.Columns["Title"].FillWeight = 34;
-            dgv_hazardsList.Columns["Incident Type"].FillWeight = 22;
-            dgv_hazardsList.Columns["Corrective_Action"].FillWeight = 14;
-            dgv_hazardsList.Columns["Status"].FillWeight = 10;
-            dgv_hazardsList.Columns["AP Report"].FillWeight = 10;
+            dgv_hazardsList.Columns["Date"].Width = 115;
+            dgv_hazardsList.Columns["Title"].Width = 390;
+            dgv_hazardsList.Columns["Incident Type"].Width = 250;
+            dgv_hazardsList.Columns["Corrective_Action"].Width = 160;
+            dgv_hazardsList.Columns["Status"].Width = 115;
+            dgv_hazardsList.Columns["AP Report"].Width = 115;
+            dgv_hazardsList.Columns["Edit"].Width = 105;
 
             foreach (DataGridViewRow row in dgv_hazardsList.Rows)
             {

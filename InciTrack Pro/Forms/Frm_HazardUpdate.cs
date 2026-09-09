@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace InciTrack_Pro.Forms
             pb_minimize.Click += Pb_minimize_Click;
             btn_save.Click += Btn_save_Click;
             btn_cancel.Click += Btn_cancel_Click;
-            //btn_createHazard.Click += Btn_createHazard_Click;
+            btn_createCa.Click += Btn_createCa_Click;
             pb_riskMatrix.MouseEnter += Pb_riskMatrix_MouseEnter;
             pb_riskMatrix.MouseLeave += Pb_riskMatrix_MouseLeave;
 
@@ -135,7 +136,9 @@ namespace InciTrack_Pro.Forms
         #region Button Events - Save and Cancel Hazard Update
         private void Btn_save_Click(object? sender, EventArgs e)
         {
-            if(!ValidateControls(out var errs, out var controlFocus))
+           
+
+            if (!ValidateControls(out var errs, out var controlFocus))
             {
                 // Build readable message text
                 string message = string.Join("\n• ", errs);
@@ -161,7 +164,7 @@ namespace InciTrack_Pro.Forms
 
         private void Btn_cancel_Click(object? sender, EventArgs e)
         {
-            Form?  frm = Application.OpenForms["Frm_FirstAids"];
+            Form?  frm = Application.OpenForms["Frm_Hazards"];
             if( frm != null )
             {
                 frm.Show();
@@ -178,115 +181,23 @@ namespace InciTrack_Pro.Forms
 
         //#region Create Hazard From First Aid Incident
 
-        //#region Button Click Event - Create First Aid Hazard
-        //private void Btn_createHazard_Click(object? sender, EventArgs e)
-        //{
-        //    #region Create Form and Controls 
-        //    //create Popup form
-        //    Form popup = new Form();
-        //    popup.Name = "Frm_firstAidHazard";
-        //    popup.BackColor = Color.FromArgb(45, 45, 48);
-        //    popup.Text = "Create a Hazard";
-        //    popup.Size = new Size(900, 400);
-        //    popup.ShowIcon = false;
-        //    popup.StartPosition = FormStartPosition.CenterParent;
+        #region Button Click Event - Create Hazard Action
+        private void Btn_createCa_Click(object? sender, EventArgs e)
+        {
+            SetModelDataClass();
 
+            Frm_AddCorrectiveAction frm = new Frm_AddCorrectiveAction();
 
-        //    TableLayoutPanel tbl = new TableLayoutPanel
-        //    {
-        //        Name = "tbl_FaUpdateMain",
-        //        Dock = DockStyle.Fill,
-        //        AutoScroll = true,
-        //        BackColor = Color.Transparent,
-        //        ColumnCount = 2
-        //    };
-        //    _hazardTable = tbl;
+            this.Hide();
+            frm.ShowDialog();
+        }
 
-        //    tbl.ColumnStyles.Add(
-        //    new ColumnStyle(SizeType.Absolute, 180));
-
-        //    tbl.ColumnStyles.Add(
-        //    new ColumnStyle(SizeType.Percent, 100));
-
-        //    popup.Controls.Add(tbl);
-        //    #endregion
-
-        //    #region Add Controls to TableLayoutPanel
-        //    List<string> labels = new List<string>
-        //    { 
-        //        "Title",
-        //        "Date",
-        //        "Name",
-        //        "Area",
-        //        "Description",
-        //        "Report to AP",
-        //        "Notes",
-        //        "Incident Type",
-        //        "Potential Injury",
-        //        "Potential Environmental Impact",
-        //        "Potential Property Damage / Loss",
-        //     //   "Corrective Action",
-        //        "Risk Level"
-
-        //    };
-
-
-        //    foreach (string label in labels )
-        //    {
-        //        //string columnName = dr.GetName(i);
-        //        //string value = dr[i]?.ToString() ?? "";
-
-        //        //AddDetailRow(tbl, columnName, value);
-        //        AddDetailRow(tbl, label);
-        //    }
-        //    #endregion
-
-        //    #region Add Save Button to TableLayoutPanel
-        //    int row = tbl.RowCount;
-        //    tbl.RowCount++;
-
-        //    UIButton btn_saveFaHazard = new UIButton
-        //    {
-        //        Text = "Save",
-        //        Width = 100,
-        //        Height = 45,
-                
-
-        //        FillColor = Color.Firebrick,
-        //        FillHoverColor = Color.IndianRed,
-        //        FillPressColor = Color.DarkRed,
-
-        //        ForeColor = Color.White,
-        //        Font = new Font("Calibri", 12, FontStyle.Bold),
-
-        //        Radius = 8,
-        //        Cursor = Cursors.Hand,
-
-        //        Margin = new Padding(5),
-        //        TextAlign = ContentAlignment.MiddleCenter,
-        //        Anchor = AnchorStyles.Right,
-
-                
-        //    };
-            
-        //    btn_saveFaHazard.Click += Btn_saveFaHazard_Click;
-
-        //    tbl.Controls.Add(btn_saveFaHazard, 1, row);
-        //    #endregion
-
-        //    #region Show Popup Form 
-        //    this.Hide();
-        //    popup.ShowDialog();
-        //    this.Show();
-        //    #endregion
-        //}
-
-        //#endregion
+        #endregion
 
         //#region Button Click Event - Save First Aid Hazard
         //private void Btn_saveFaHazard_Click(object? sender, EventArgs e)
         //{
-           
+
 
         //    #region Clear Previous Control Values
         //    controlValues.Clear();
@@ -363,7 +274,7 @@ namespace InciTrack_Pro.Forms
 
         //        #region Environment Categories
         //        Panel? pnl2 = _hazardTable.Controls["pnlEnviromentCategories"] as Panel;
-                
+
         //        if(pnl2 == null)
         //        {
         //            MessageBox.Show("Error: Environment Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -385,7 +296,7 @@ namespace InciTrack_Pro.Forms
 
         //        #region Damage Categories
         //        Panel? pnl3 = _hazardTable.Controls["pnlDamageCategory"] as Panel;
-                
+
         //        if(pnl3 == null)
         //        {
         //            MessageBox.Show("Error: Damage Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -455,7 +366,7 @@ namespace InciTrack_Pro.Forms
         //                        @AP_Report,
         //                        @Risk_Level
         //                    )
-                          
+
         //                   ";
 
         //                    using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
@@ -513,7 +424,7 @@ namespace InciTrack_Pro.Forms
         //#region Method - Add Controls to TableLayoutPanel (Create First Aid Hazard)
         //private void AddDetailRow(TableLayoutPanel tbl, string label)
         //{
-           
+
         //    int row = tbl.RowCount;
 
         //    tbl.RowCount++;
@@ -556,7 +467,7 @@ namespace InciTrack_Pro.Forms
         //            {
         //                Name = "lbl_title",
         //                Text = MD.Instance.title + "_FA" + MD.Instance.firstAidIdx,
-                        
+
         //                ForeColor = Color.White,
         //                AutoSize = true,
         //                Font = new Font("Calibri", 12)
@@ -631,7 +542,7 @@ namespace InciTrack_Pro.Forms
         //                Name = "combo_apReport",
         //                DropDownStyle = ComboBoxStyle.DropDownList,
         //                Dock = DockStyle.Fill
-                        
+
         //            };
 
         //            ComboBox comboAP = (ComboBox)valueControl;
@@ -670,7 +581,7 @@ namespace InciTrack_Pro.Forms
         //            ComboBox comboType = (ComboBox)valueControl;
         //            comboType.Items.AddRange(new string[] { "HPNM", "Hazard Share (Unsafe Act)", "Hazard Share (Unsafe Condition)","Minimal Hazard"});
         //            comboType.SelectedIndex = -1;
-                    
+
         //            break;
         //        #endregion
 
@@ -775,7 +686,7 @@ namespace InciTrack_Pro.Forms
         //    #endregion
         //}
 
-        
+
 
         //#region Method - Create Controls for Category sections
         //private Control createCheckBoxes(List<string> catDescr, TableLayoutPanel tblCatPnl, Control valueControl, string panelName)
@@ -893,13 +804,24 @@ namespace InciTrack_Pro.Forms
 
         private void SetCheckedValues(UICheckBoxGroup group, string categoryString)
         {
-            var selectedValues = ParseCategories(categoryString)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            foreach (UICheckBox chk in group.Controls.OfType<UICheckBox>())
+            var selectedValues = ParseCategories(categoryString).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            List<int> indexes = new();
+
+            for (int i = 0; i < group.Items.Count; i++)
             {
-                chk.Checked = selectedValues.Contains(chk.Text);
+                string item = group.Items[i].ToString() ?? "";
+
+                if (selectedValues.Contains(item))
+                {
+                    indexes.Add(i);
+                }
             }
+
+            group.SelectedIndexes = indexes;
+
+
         }
 
         private List<string> ParseCategories(string value)
@@ -934,7 +856,7 @@ namespace InciTrack_Pro.Forms
         {
            
             errors = new List<string>();
-           firstInvalid = null;
+            firstInvalid = null;
 
             // Check TextBoxes
             if (!CheckTextBox(txt_Title, "Title", errors))
@@ -947,12 +869,6 @@ namespace InciTrack_Pro.Forms
             {
                 if (firstInvalid == null) firstInvalid = rtxt_descr;
             }
-
-            //if (!CheckRichTextBox(rtxt_descr, "rtxt_description", errors))
-            //{
-            //    if (firstInvalid == null) firstInvalid = rtxt_descr;
-            //}
-
 
             //Check ComboBoxes
             if (!CheckComboBox(combo_apReport, "Reported to AP", errors))
@@ -974,25 +890,6 @@ namespace InciTrack_Pro.Forms
             {
                 if (firstInvalid == null) firstInvalid = combo_incidentType;
             }
-            //if (!CheckComboBox(combo_apReport, "combo_apReport", errors))
-            //{
-            //    if (firstInvalid == null) firstInvalid = _hazardTable.Controls["combo_apReport"];
-            //}
-
-            //if (!CheckComboBox(combo_riskMatrix, "Investigation Required", errors))
-            //{
-            //    if (firstInvalid == null) firstInvalid = combo_riskMatrix;
-            //}
-
-            //if (!CheckComboBox(combo_riskMatrix, "combo_incidentType", errors))
-            //{
-            //    if (firstInvalid == null) firstInvalid =  _hazardTable.Controls["combo_incidentType"];
-            //}
-
-            //if (!CheckComboBox(combo_riskMatrix, "combo_riskLevel", errors))
-            //{
-            //    if (firstInvalid == null) firstInvalid = _hazardTable.Controls["combo_riskLevel"];
-            //}
 
             //Check checkboxes
             if (!CheckAnyCategorySelected(errors))
@@ -1006,65 +903,8 @@ namespace InciTrack_Pro.Forms
 
         }
 
-        //private bool ValidateHazardControls(out List<string> errors, out Control? firstInvalid)
-        //{
-
-        //    errors = new();
-        //    firstInvalid = null;
-
-        //    // Incident Type
-        //    ComboBox? cboIncident =
-        //    _hazardTable?.Controls["combo_incidentType"] as ComboBox;
-
-        //    if (!CheckComboBox(cboIncident, "Incident Type", errors))
-        //    {
-        //        if (firstInvalid == null)
-        //            firstInvalid = cboIncident;
-        //    }
-
-        //    // AP Report
-        //    ComboBox? cboAP =
-        //    _hazardTable?.Controls["combo_apReport"] as ComboBox;
-
-        //    if (!CheckComboBox(cboAP, "Report to AP", errors))
-        //    {
-        //        if (firstInvalid == null)
-        //            firstInvalid = cboAP;
-        //    }
-
-        //    // Risk Level
-        //    ComboBox? cboRisk =
-        //    _hazardTable?.Controls["combo_riskLevel"] as ComboBox;
-
-        //    if (!CheckComboBox(cboRisk, "Risk Level", errors))
-        //    {
-        //        if (firstInvalid == null)
-        //            firstInvalid = cboRisk;
-        //    }
-
-        //    // Description
-        //    RichTextBox? rtxtDescr =
-        //    _hazardTable?.Controls["rtxt_descr"] as RichTextBox;
-
-        //    if (!CheckRichTextBox(rtxtDescr, "Description", errors))
-        //    {
-        //        if (firstInvalid == null)
-        //            firstInvalid = rtxtDescr;
-        //    }
-
-        //    //Check checkboxes
-        //    if (!CheckAnyCategorySelected(errors))
-        //    {
-        //        if (firstInvalid == null)
-        //            firstInvalid = _hazardTable.Controls["pnlInjuryCategories"];
-        //    }
-
-        //    return errors.Count == 0;
-        //}
-
         private bool CheckTextBox(TextBox tb, string label, List<string> errors)
         {
-
             bool filled = !string.IsNullOrWhiteSpace(tb.Text);
             tb.BackColor = filled ? SystemColors.Window : Color.LightPink;
             if (!filled) errors.Add($"{label} is required.");
@@ -1073,7 +913,6 @@ namespace InciTrack_Pro.Forms
 
         private bool CheckRichTextBox(RichTextBox rtb, string label, List<string> errors)
         {
-
             bool filled = !string.IsNullOrWhiteSpace(rtb.Text);
 
             if(Form.ActiveForm?.Name != "Frm_firstAidHazard")
@@ -1091,7 +930,6 @@ namespace InciTrack_Pro.Forms
 
         private bool CheckComboBox(ComboBox comboB, string label, List<string> errors)
         {
-
             bool filled = (comboB.SelectedIndex >= 0);
             comboB.BackColor = filled ? SystemColors.Window : Color.LightPink;
             if (!filled) errors.Add($"{label} is required.");
@@ -1100,25 +938,10 @@ namespace InciTrack_Pro.Forms
 
         private bool CheckAnyCategorySelected(List<string> errors)
         {
-            
+            var groups = tableLayoutPanel1.Controls.OfType<UICheckBoxGroup>().ToList();
+            bool anyChecked = groups.Any(g => g.SelectedItems.Count > 0);
 
-            //bool anyChecked = tableLayoutPanel1.Controls
-            //.OfType<UICheckBoxGroup>()
-            //.SelectMany(p => p.Controls.OfType<TableLayoutPanel>())
-            //.SelectMany(t => t.Controls.OfType<CheckBox>())
-            //.Any(chk => chk.Checked);
-
-            var groups = tableLayoutPanel1.Controls
-.OfType<UICheckBoxGroup>()
-.ToList();
-
-            bool anyChecked = groups
-            .SelectMany(g => g.Controls.OfType<UICheckBox>())
-            .Any(chk => chk.Checked);
-
-            //TODO: have to figure out the checkbox bug
-           sdlkjfsdlkjfh
-
+           
             if (!anyChecked)
             {
                 errors.Add("At least one category must be selected.");
@@ -1153,21 +976,9 @@ namespace InciTrack_Pro.Forms
            MD.Instance.hazNotes = rtxt_notes.Text;
            MD.Instance.hazStatus = combo_status.SelectedItem?.ToString() ?? "";
            MD.Instance.hazTitle = txt_Title.Text;
-
-           MD.Instance.hazInjury = string.Join(", ", cbg_injury.Controls.OfType<UICheckBox>()
-                .SelectMany(g => g.Controls.OfType<CheckBox>())
-                .Where(cb => cb.Checked)
-                .Select(cb => cb.Text));
-
-           MD.Instance.hazEnv = string.Join(", ", cbg_env.Controls.OfType<UICheckBox>()
-                .SelectMany(g => g.Controls.OfType<CheckBox>())
-                .Where(cb => cb.Checked)
-                .Select(cb => cb.Text));
-
-           MD.Instance.hazDamage = string.Join(", ", cbg_damage.Controls.OfType<UICheckBox>()
-                .SelectMany(g => g.Controls.OfType<CheckBox>())
-                .Where(cb => cb.Checked)
-                .Select(cb => cb.Text));
+           MD.Instance.hazInjury = string.Join(", ", cbg_injury.SelectedItems);
+           MD.Instance.hazEnv = string.Join(", ", cbg_env.SelectedItems);
+           MD.Instance.hazDamage = string.Join(", ", cbg_damage.SelectedItems);
         }
         #endregion
 
