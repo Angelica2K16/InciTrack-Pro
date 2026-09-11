@@ -296,13 +296,43 @@ namespace InciTrack_Pro
             (s, e) => new Frm_Hazards().ShowDialog());
 
             AddMenuButton("Hazards",
-            (s, e) => new Frm_Hazards().ShowDialog());
+             (s, e) =>
+             {
+                 this.Hide();
+
+                 using (Frm_Hazards frm = new Frm_Hazards())
+                 {
+                     frm.ShowDialog();
+                 }
+
+                 this.Show();
+             });
 
             AddMenuButton("First Aids",
-            (s, e) => new Frm_FirstAids().ShowDialog());
+            (s, e) =>
+            {
+                this.Hide();
+
+                using (Frm_FirstAids frm = new Frm_FirstAids())
+                {
+                    frm.ShowDialog();
+                }
+
+                this.Show();
+            });
 
             AddMenuButton("Corrective Actions",
-            (s, e) => MessageBox.Show("Corrective Actions"));
+            (s, e) =>
+            {
+                this.Hide();
+
+                using (Frm_ViewCorrectiveActions frm = new Frm_ViewCorrectiveActions())
+                {
+                    frm.ShowDialog();
+                }
+
+                this.Show();
+            });
         }
 
        
