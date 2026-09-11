@@ -32,9 +32,16 @@ namespace InciTrack_Pro.Forms
             pb_exit.Click += Pb_exit_Click;
             pb_minimize.Click += Pb_minimize_Click;
             cb_apReports.CheckedChanged += Cb_apReports_CheckedChanged;
+            cb_includeAll.CheckedChanged += Cb_includeAll_CheckedChanged;
             txt_search.TextChanged += Txt_search_TextChanged;
             dgv_hazardsList.CellDoubleClick += Dgv_hazardsList_CellDoubleClick;
             dgv_hazardsList.CellClick += Dgv_hazardsList_CellClick;
+        }
+
+        private void Cb_includeAll_CheckedChanged(object? sender, EventArgs e)
+        {
+            txt_search.Text = string.Empty;
+            LoadDgvHazardsList();
         }
 
         private void Frm_Hazards_Load(object? sender, EventArgs e)
@@ -484,6 +491,20 @@ namespace InciTrack_Pro.Forms
 
         internal void LoadDgvHazardsList()
         {
+            List<string> conditions = new();
+
+            if (cb_apReports.Checked)
+                conditions.Add("AP_Report = 'Yes'");
+
+            if (cb_includeAll.Checked)
+            {
+                conditions.Add("Status IN ('Open', 'Closed')");
+            }
+            else
+            {
+                conditions.Add("Status = 'Open'");
+            }
+
             dgv_hazardsList.Columns.Clear();
             dgv_hazardsList.DataSource = null;
 
@@ -493,17 +514,35 @@ namespace InciTrack_Pro.Forms
             {
                 conn.Open();
 
-                string query = cb_apReports.Checked ? @"SELECT
-                                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action As 'Corrective Action', Status, AP_Report AS 'AP Report'
-                                  FROM Hazards
-                                  WHERE AP_Report = 'Yes'
-                                  ORDER BY Date Desc"
-                                  :
-                                  @"SELECT
-                                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action, Status, AP_Report AS 'AP Report'
-                                  FROM Hazards
-                                  ORDER BY Date Desc"
-                                  ;
+                //string query = cb_apReports.Checked ? @"SELECT
+                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action As 'Corrective Action', Status, AP_Report AS 'AP Report'
+                //                  FROM Hazards
+                //                  WHERE AP_Report = 'Yes'
+                //                  ORDER BY Date Desc"
+                //                  :
+                //                  @"SELECT
+                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action, Status, AP_Report AS 'AP Report'
+                //                  FROM Hazards
+                //                  ORDER BY Date Desc"
+                //                  ;
+
+                string query = @"
+                                SELECT
+                                Idx,
+                                Date,
+                                Title,
+                                Incident_type AS 'Incident Type',
+                                Corrective_Action AS 'Corrective Action',
+                                Status,
+                                AP_Report AS 'AP Report'
+                                FROM Hazards";
+
+                if (conditions.Count > 0)
+                {
+                    query += " WHERE " + string.Join(" AND ", conditions);
+                }
+
+                query += " ORDER BY Date DESC";
 
                 using (SqliteCommand cmd = new SqliteCommand(query, conn))
                 {
@@ -576,7 +615,7 @@ namespace InciTrack_Pro.Forms
             dgv_hazardsList.Columns["Date"].Width = 115;
             dgv_hazardsList.Columns["Title"].Width = 390;
             dgv_hazardsList.Columns["Incident Type"].Width = 250;
-            dgv_hazardsList.Columns["Corrective_Action"].Width = 160;
+            dgv_hazardsList.Columns["Corrective Action"].Width = 160;
             dgv_hazardsList.Columns["Status"].Width = 115;
             dgv_hazardsList.Columns["AP Report"].Width = 115;
             dgv_hazardsList.Columns["Edit"].Width = 105;

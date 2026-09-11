@@ -47,7 +47,7 @@
             txt_search = new TextBox();
             cb_apReports = new CheckBox();
             dgv_hazardsList = new Sunny.UI.UIDataGridView();
-            
+            cb_includeAll = new CheckBox();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
@@ -175,6 +175,7 @@
             flowLayoutPanel2.Controls.Add(label2);
             flowLayoutPanel2.Controls.Add(txt_search);
             flowLayoutPanel2.Controls.Add(cb_apReports);
+            flowLayoutPanel2.Controls.Add(cb_includeAll);
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Location = new Point(3, 128);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
@@ -256,7 +257,18 @@
             dgv_hazardsList.Size = new Size(1274, 442);
             dgv_hazardsList.StripeOddColor = Color.FromArgb(235, 243, 255);
             dgv_hazardsList.TabIndex = 1;
-         
+            // 
+            // cb_includeAll
+            // 
+            cb_includeAll.AutoSize = true;
+            cb_includeAll.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            cb_includeAll.ForeColor = Color.White;
+            cb_includeAll.Location = new Point(150, 59);
+            cb_includeAll.Name = "cb_includeAll";
+            cb_includeAll.Size = new Size(100, 23);
+            cb_includeAll.TabIndex = 6;
+            cb_includeAll.Text = "Include All";
+            cb_includeAll.UseVisualStyleBackColor = true;
             // 
             // Frm_Hazards
             // 
@@ -305,6 +317,7 @@
         private Label label2;
         private TextBox txt_search;
         private CheckBox cb_apReports;
+        private CheckBox cb_includeAll;
         //private FontAwesome.Sharp.IconMenuItem iconMenuItem1;
     }
 }
