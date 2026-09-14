@@ -35,6 +35,7 @@ namespace InciTrack_Pro.Forms
             btn_addCa.Click += Btn_addCa_Click;
             dgv_caList.CellDoubleClick += Dgv_caList_CellDoubleClick;
             dgv_caList.CellClick += Dgv_caList_CellClick;
+            txt_search.TextChanged += Txt_search_TextChanged;
         }
 
         private void Btn_addCa_Click(object? sender, EventArgs e)
@@ -88,8 +89,9 @@ namespace InciTrack_Pro.Forms
             LoadHazardList();
         }
 
-        private void Btn_ViewAllActions_Click(object? sender, EventArgs e)
+        internal void Btn_ViewAllActions_Click(object? sender, EventArgs e)
         {
+            txt_search.Text = string.Empty;
             cb_includeAll.Enabled = false;
             dgv_hazardList.DataSource = null;
             LoadCaList(null);
@@ -143,7 +145,8 @@ namespace InciTrack_Pro.Forms
              dgv_caList.Columns["Edit"].Index)
             {
 
-                
+                PullCorrectiveActionInfo();
+
                 Frm_UpdateCorrectiveAction frm = new Frm_UpdateCorrectiveAction();
 
                 this.Hide();
@@ -152,6 +155,13 @@ namespace InciTrack_Pro.Forms
             }
 
            
+        }
+
+        private void Txt_search_TextChanged(object? sender, EventArgs e)
+        {
+            dgv_hazardList.ClearSelection();
+            dgv_hazardList.CurrentCell = null;
+            ApplySearchFilter();
         }
 
         private void LoadHazardList()
@@ -242,8 +252,9 @@ namespace InciTrack_Pro.Forms
 
             if (!string.IsNullOrEmpty(hazIdx))
             {
-                conditions.Add($"Hazard_Idx = {hazIdx}");
+                conditions.Add($"ca.Hazard_Idx = {hazIdx}");
             }
+
             conditions.Add("ca.Status = 'Open'");
 
             DataTable dt = new DataTable();
@@ -575,6 +586,95 @@ namespace InciTrack_Pro.Forms
 
         }
 
+        private void PullCorrectiveActionInfo()
+        {
+            DataTable dt = new DataTable();
+
+            using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
+            {
+                conn.Open();
+
+                //string query = cb_apReports.Checked ? @"SELECT
+                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action As 'Corrective Action', Status, AP_Report AS 'AP Report'
+                //                  FROM Hazards
+                //                  WHERE AP_Report = 'Yes'
+                //                  ORDER BY Date Desc"
+                //                  :
+                //                  @"SELECT
+                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action, Status, AP_Report AS 'AP Report'
+                //                  FROM Hazards
+                //                  ORDER BY Date Desc"
+                //                  ;
+
+                string query = @"
+                                SELECT Hazard_Idx, Action, Action_Owner, Due_Date, Completion_Date, Notes, Status From Corrective_Actions Where Idx = @Idx";
+
+                using (SqliteCommand cmd = new SqliteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Idx", MD.Instance.caIdx);
+
+                    using (SqliteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while(reader.Read())
+                        {
+                            MD.Instance.caDueDate = Convert.ToDateTime(reader["Due_Date"]);
+                            MD.Instance.caCompDate = reader["Completion_Date"] == DBNull.Value ? null : Convert.ToDateTime(reader["Completion_Date"]);
+                            MD.Instance.caActionOwner = reader["Action_Owner"].ToString();
+                            MD.Instance.caAction = reader["Action"].ToString();
+                            MD.Instance.caStatus = reader["Status"].ToString();
+                            MD.Instance.caNotes = reader["Notes"].ToString();
+                        }
+                        
+
+                    }
+
+                    if (dt.Rows.Count == 0)
+                    {
+
+                        dgv_hazardList.DataSource = dt;
+
+                    }
+
+
+                }
+            }
+        }
+
+        internal void ApplySearchFilter()
+        {
+
+
+
+            string search = txt_search.Text.Trim().ToLower();
+
+            foreach (DataGridViewRow row in dgv_hazardList.Rows)
+            {
+                if (row.IsNewRow) { continue; }
+
+                if (string.IsNullOrWhiteSpace(search))
+                {
+                    row.Visible = true;
+                    continue;
+                }
+
+                row.Visible = row.Cells
+                .Cast<DataGridViewCell>()
+                .Any(c =>
+                c.Value != null &&
+                c.Value.ToString()!
+                .ToLower()
+                .Contains(search));
+
+                if (row.Cells["Idx"].Value != null && Convert.ToInt32(row.Cells["Idx"].Value) == MD.Instance.hazardIdx && row.Visible)
+                {
+                    dgv_hazardList.ClearSelection();
+                    row.Selected = true;
+                    dgv_hazardList.CurrentCell = row.Cells[1];
+                }
+            }
+
+            FormatDgv(dgv_hazardList, null);
+        }
         //private void EditCaDetails(int caIdx)
         //{
         //    using SqliteConnection conn = new SqliteConnection(GV.shesDB);
@@ -629,7 +729,7 @@ namespace InciTrack_Pro.Forms
         //    }
 
 
-            
+
         //    int row = tbl.RowCount;
         //    tbl.RowCount++;
 
@@ -660,87 +760,87 @@ namespace InciTrack_Pro.Forms
         //    popup.ShowDialog();
         //}
 
-//        private void SaveCorrectiveAction(int caIdx, TableLayoutPanel tbl)
-//        {
-//            string action = 
-//            ((RichTextBox)tbl.Controls.Find("Action", true)[0]).Text;
+        //        private void SaveCorrectiveAction(int caIdx, TableLayoutPanel tbl)
+        //        {
+        //            string action = 
+        //            ((RichTextBox)tbl.Controls.Find("Action", true)[0]).Text;
 
-//            string actionOwner =
-//            ((TextBox)tbl.Controls.Find("ActionOwner", true)[0]).Text;
+        //            string actionOwner =
+        //            ((TextBox)tbl.Controls.Find("ActionOwner", true)[0]).Text;
 
-//            string dueDate =
-//            ((TextBox)tbl.Controls.Find("DueDate", true)[0]).Text;
+        //            string dueDate =
+        //            ((TextBox)tbl.Controls.Find("DueDate", true)[0]).Text;
 
-//            string completionDate =
-//            ((TextBox)tbl.Controls.Find("CompletionDate", true)[0]).Text;
+        //            string completionDate =
+        //            ((TextBox)tbl.Controls.Find("CompletionDate", true)[0]).Text;
 
-//            string notes =
-//            ((RichTextBox)tbl.Controls.Find("Notes", true)[0]).Text;
+        //            string notes =
+        //            ((RichTextBox)tbl.Controls.Find("Notes", true)[0]).Text;
 
-//            string status =
-//            ((TextBox)tbl.Controls.Find("Status", true)[0]).Text;
-
-
-//            //SQLITE Function
-//            using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
-//            {
-//                conn.Open();
-//                using (SqliteTransaction transaction = conn.BeginTransaction())
-//                {
-//                    try
-//                    {
-//                        string sql = $@"
-//                            UPDATE HAZARDS SET
-                            
-//                                Action = @Action,
-//Action_Owner = @Action_Owner,
-//Due_Date
-                            
-//                            WHERE Idx  = @caIdx
-//                           ";
-
-//                        using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
-//                        {
-
-//                            cmd.Parameters.AddWithValue("@hazardIdx", MD.Instance.hazardIdx);
-//                            cmd.Parameters.AddWithValue("@title", MD.Instance.hazTitle);
-//                            cmd.Parameters.AddWithValue("@incidentType", MD.Instance.hazIncidentType);
-//                            cmd.Parameters.AddWithValue("@riskLevel", MD.Instance.hazRiskMatrix);
-//                            cmd.Parameters.AddWithValue("@apReport", MD.Instance.hazApReport);
-//                            cmd.Parameters.AddWithValue("@injuryCat", MD.Instance.hazInjury);
-//                            cmd.Parameters.AddWithValue("@envCat", MD.Instance.hazEnv);
-//                            cmd.Parameters.AddWithValue("@damageCat", MD.Instance.hazDamage);
-//                            cmd.Parameters.AddWithValue("@descr", MD.Instance.hazDescr);
-//                            cmd.Parameters.AddWithValue("@notes", MD.Instance.hazNotes);
-//                            cmd.Parameters.AddWithValue("@status", MD.Instance.hazStatus);
+        //            string status =
+        //            ((TextBox)tbl.Controls.Find("Status", true)[0]).Text;
 
 
-//                            cmd.ExecuteNonQuery();
-//                        }
+        //            //SQLITE Function
+        //            using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
+        //            {
+        //                conn.Open();
+        //                using (SqliteTransaction transaction = conn.BeginTransaction())
+        //                {
+        //                    try
+        //                    {
+        //                        string sql = $@"
+        //                            UPDATE HAZARDS SET
 
-//                        transaction.Commit();
+        //                                Action = @Action,
+        //Action_Owner = @Action_Owner,
+        //Due_Date
 
-//                        Frm_Hazards? frm = Application.OpenForms["Frm_Hazards"] as Frm_Hazards;
+        //                            WHERE Idx  = @caIdx
+        //                           ";
 
-//                        if (frm != null)
-//                        {
-//                            frm.LoadDgvHazardsList();
-//                            frm.ApplySearchFilter();
-//                            frm.Show();
-//                            frm.BringToFront();
-//                            this.Close();
-//                        }
+        //                        using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
+        //                        {
 
-//                    }
-//                    catch (Exception ex)
-//                    {
-//                        transaction.Rollback();
-//                        MessageBox.Show(ex.Message);
-//                    }
-//                }
+        //                            cmd.Parameters.AddWithValue("@hazardIdx", MD.Instance.hazardIdx);
+        //                            cmd.Parameters.AddWithValue("@title", MD.Instance.hazTitle);
+        //                            cmd.Parameters.AddWithValue("@incidentType", MD.Instance.hazIncidentType);
+        //                            cmd.Parameters.AddWithValue("@riskLevel", MD.Instance.hazRiskMatrix);
+        //                            cmd.Parameters.AddWithValue("@apReport", MD.Instance.hazApReport);
+        //                            cmd.Parameters.AddWithValue("@injuryCat", MD.Instance.hazInjury);
+        //                            cmd.Parameters.AddWithValue("@envCat", MD.Instance.hazEnv);
+        //                            cmd.Parameters.AddWithValue("@damageCat", MD.Instance.hazDamage);
+        //                            cmd.Parameters.AddWithValue("@descr", MD.Instance.hazDescr);
+        //                            cmd.Parameters.AddWithValue("@notes", MD.Instance.hazNotes);
+        //                            cmd.Parameters.AddWithValue("@status", MD.Instance.hazStatus);
 
-//            }
-//        }
+
+        //                            cmd.ExecuteNonQuery();
+        //                        }
+
+        //                        transaction.Commit();
+
+        //                        Frm_Hazards? frm = Application.OpenForms["Frm_Hazards"] as Frm_Hazards;
+
+        //                        if (frm != null)
+        //                        {
+        //                            frm.LoadDgvHazardsList();
+        //                            frm.ApplySearchFilter();
+        //                            frm.Show();
+        //                            frm.BringToFront();
+        //                            this.Close();
+        //                        }
+
+        //                    }
+        //                    catch (Exception ex)
+        //                    {
+        //                        transaction.Rollback();
+        //                        MessageBox.Show(ex.Message);
+        //                    }
+        //                }
+
+        //            }
+        //        }
 
         //private void AddEditDetailRow(TableLayoutPanel tbl, string label, string value)
         //{
@@ -805,8 +905,8 @@ namespace InciTrack_Pro.Forms
         //        };
         //    }
 
-          
-           
+
+
         //    tbl.Controls.Add(lblField, 0, row);
         //    tbl.Controls.Add(valueControl, 1, row);
 
@@ -823,7 +923,7 @@ namespace InciTrack_Pro.Forms
 
         //}
 
-      
+
 
     }
 }

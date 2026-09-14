@@ -55,7 +55,7 @@ namespace InciTrack_Pro.Base_Classes
         public DateTime caDueDate { get; set; }
         public DateTime?  caCompDate { get; set; }
         public string? caStatus { get; set; }
-        public string? Notes { get; set; }
+        public string? caNotes { get; set; }
 
         #endregion
 

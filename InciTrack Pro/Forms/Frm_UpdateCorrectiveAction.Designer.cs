@@ -36,7 +36,6 @@
             pnl_header = new Panel();
             lbl_header = new Label();
             tbl_main = new TableLayoutPanel();
-            label7 = new Label();
             label6 = new Label();
             label5 = new Label();
             label4 = new Label();
@@ -50,7 +49,6 @@
             panel1 = new Panel();
             btn_save = new Sunny.UI.UIButton();
             btn_cancel = new Sunny.UI.UIButton();
-            combo_status = new Sunny.UI.UIComboBox();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
@@ -142,27 +140,25 @@
             tbl_main.ColumnCount = 2;
             tbl_main.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 168F));
             tbl_main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tbl_main.Controls.Add(combo_status, 1, 4);
-            tbl_main.Controls.Add(label7, 0, 4);
             tbl_main.Controls.Add(label6, 0, 3);
             tbl_main.Controls.Add(label5, 0, 2);
             tbl_main.Controls.Add(label4, 0, 0);
             tbl_main.Controls.Add(dtp_compDate, 1, 1);
             tbl_main.Controls.Add(lbl_compDateLbl, 0, 1);
             tbl_main.Controls.Add(rtxt_action, 1, 3);
-            tbl_main.Controls.Add(rtxt_notes, 1, 5);
             tbl_main.Controls.Add(dtp_dueDate, 1, 0);
             tbl_main.Controls.Add(combo_actionOwner, 1, 2);
-            tbl_main.Controls.Add(label10, 0, 5);
+            tbl_main.Controls.Add(label10, 0, 4);
+            tbl_main.Controls.Add(rtxt_notes, 1, 4);
             tbl_main.Dock = DockStyle.Fill;
             tbl_main.Location = new Point(0, 77);
             tbl_main.Name = "tbl_main";
-            tbl_main.RowCount = 6;
+            tbl_main.RowCount = 5;
             tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 126F));
-            tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
+            tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 156F));
+            tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
             tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 8F));
             tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
@@ -171,16 +167,6 @@
             tbl_main.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tbl_main.Size = new Size(914, 493);
             tbl_main.TabIndex = 3;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.ForeColor = Color.White;
-            label7.Location = new Point(3, 231);
-            label7.Name = "label7";
-            label7.Size = new Size(53, 19);
-            label7.TabIndex = 24;
-            label7.Text = "Status:";
             // 
             // label6
             // 
@@ -224,6 +210,7 @@
             dtp_compDate.MinimumSize = new Size(63, 0);
             dtp_compDate.Name = "dtp_compDate";
             dtp_compDate.Padding = new Padding(0, 0, 30, 2);
+            dtp_compDate.ShowToday = true;
             dtp_compDate.Size = new Size(204, 25);
             dtp_compDate.SymbolDropDown = 61555;
             dtp_compDate.SymbolNormal = 61555;
@@ -254,7 +241,7 @@
             rtxt_action.Name = "rtxt_action";
             rtxt_action.Padding = new Padding(2);
             rtxt_action.ShowText = false;
-            rtxt_action.Size = new Size(738, 114);
+            rtxt_action.Size = new Size(738, 146);
             rtxt_action.TabIndex = 16;
             rtxt_action.TextAlignment = ContentAlignment.MiddleCenter;
             // 
@@ -262,13 +249,13 @@
             // 
             rtxt_notes.FillColor = Color.White;
             rtxt_notes.Font = new Font("Microsoft Sans Serif", 12F);
-            rtxt_notes.Location = new Point(172, 273);
+            rtxt_notes.Location = new Point(172, 266);
             rtxt_notes.Margin = new Padding(4, 5, 4, 5);
             rtxt_notes.MinimumSize = new Size(1, 1);
             rtxt_notes.Name = "rtxt_notes";
             rtxt_notes.Padding = new Padding(2);
             rtxt_notes.ShowText = false;
-            rtxt_notes.Size = new Size(738, 112);
+            rtxt_notes.Size = new Size(738, 165);
             rtxt_notes.TabIndex = 17;
             rtxt_notes.TextAlignment = ContentAlignment.MiddleCenter;
             // 
@@ -309,7 +296,6 @@
             combo_actionOwner.Size = new Size(204, 25);
             combo_actionOwner.SymbolSize = 24;
             combo_actionOwner.TabIndex = 20;
-            combo_actionOwner.Text = "uiComboBox1";
             combo_actionOwner.TextAlignment = ContentAlignment.MiddleLeft;
             combo_actionOwner.Watermark = "";
             // 
@@ -317,7 +303,7 @@
             // 
             label10.AutoSize = true;
             label10.ForeColor = Color.White;
-            label10.Location = new Point(3, 268);
+            label10.Location = new Point(3, 261);
             label10.Name = "label10";
             label10.Size = new Size(51, 19);
             label10.TabIndex = 25;
@@ -378,26 +364,6 @@
             btn_cancel.Text = "Cancel";
             btn_cancel.TipsFont = new Font("Microsoft Sans Serif", 9F);
             // 
-            // combo_status
-            // 
-            combo_status.DataSource = null;
-            combo_status.DropDownStyle = Sunny.UI.UIDropDownStyle.DropDownList;
-            combo_status.FillColor = Color.White;
-            combo_status.Font = new Font("Microsoft Sans Serif", 12F);
-            combo_status.ItemHoverColor = Color.FromArgb(155, 200, 255);
-            combo_status.Items.AddRange(new object[] { "Open", "Closed" });
-            combo_status.ItemSelectForeColor = Color.FromArgb(235, 243, 255);
-            combo_status.Location = new Point(172, 236);
-            combo_status.Margin = new Padding(4, 5, 4, 5);
-            combo_status.MinimumSize = new Size(63, 0);
-            combo_status.Name = "combo_status";
-            combo_status.Padding = new Padding(0, 0, 30, 2);
-            combo_status.Size = new Size(204, 25);
-            combo_status.SymbolSize = 24;
-            combo_status.TabIndex = 26;
-            combo_status.TextAlignment = ContentAlignment.MiddleLeft;
-            combo_status.Watermark = "";
-            // 
             // Frm_UpdateCorrectiveAction
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -416,6 +382,7 @@
             MinimumSize = new Size(914, 570);
             Name = "Frm_UpdateCorrectiveAction";
             ShowIcon = false;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Frm_UpdateCorrectiveAction";
             pnl_controlBox.ResumeLayout(false);
             pnl_controlBox.PerformLayout();
@@ -440,28 +407,27 @@
         private Panel pnl_header;
         private Label lbl_header;
         private TableLayoutPanel tbl_main;
-        private RichTextBox rtxt_notes;
-        private RichTextBox rtxt_cause;
-        private ComboBox combo_apReport;
-        private Label lbl_area;
-        private Label lbl_empName;
-        private Label lbl_time;
-        private Label lbl_date;
-        private Label lbl_datelbl;
+        //private RichTextBox rtxt_cause;
+        //private ComboBox combo_apReport;
+       // private Label lbl_area;
+        //private Label lbl_empName;
+       // private Label lbl_time;
+        //private Label lbl_date;
+        //private Label lbl_datelbl;
         private Label label2;
-        private Label lbl_title;
-        private Label lbl_areaLbl;
-        private Label lbl_employeeLbl;
+       // private Label lbl_title;
+        //private Label lbl_areaLbl;
+       // private Label lbl_employeeLbl;
         private Label lbl_compDateLbl;
         private Label label3;
-        private TextBox txt_Title;
-        private Label lbl_description;
+       // private TextBox txt_Title;
+       // private Label lbl_description;
         private Label label8;
         private Label label9;
-        private ComboBox combo_investigation;
-        private RichTextBox rtxt_descr;
+        //private ComboBox combo_investigation;
+       // private RichTextBox rtxt_descr;
         private Panel panel1;
-        private Sunny.UI.UIButton btn_createHazard;
+       // private Sunny.UI.UIButton btn_createHazard;
         private Sunny.UI.UIButton btn_save;
         private Sunny.UI.UIButton btn_cancel;
         private Sunny.UI.UIRichTextBox rtxt_action;
@@ -469,11 +435,9 @@
         private Sunny.UI.UIRichTextBox rtxt_notes;
         private Sunny.UI.UIDatePicker dtp_dueDate;
         private Sunny.UI.UIComboBox combo_actionOwner;
-        private Label label7;
         private Label label6;
         private Label label5;
         private Label label4;
         private Label label10;
-        private Sunny.UI.UIComboBox combo_status;
     }
 }

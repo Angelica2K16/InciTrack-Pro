@@ -46,12 +46,16 @@
             flowLayoutPanel1 = new FlowLayoutPanel();
             btn_ViewAllActions = new Sunny.UI.UIButton();
             btn_viewHazards = new Sunny.UI.UIButton();
+            btn_addCa = new Sunny.UI.UIButton();
             tableLayoutPanel1 = new TableLayoutPanel();
             dgv_caList = new Sunny.UI.UIDataGridView();
             tableLayoutPanel2 = new TableLayoutPanel();
             dgv_hazardList = new Sunny.UI.UIDataGridView();
             cb_includeAll = new Sunny.UI.UICheckBox();
-            btn_addCa = new Sunny.UI.UIButton();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            label2 = new Label();
+            txt_search = new TextBox();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
@@ -61,6 +65,8 @@
             ((System.ComponentModel.ISupportInitialize)dgv_caList).BeginInit();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_hazardList).BeginInit();
+            tableLayoutPanel3.SuspendLayout();
+            flowLayoutPanel2.SuspendLayout();
             SuspendLayout();
             // 
             // pnl_controlBox
@@ -174,6 +180,28 @@
             btn_viewHazards.Text = "View Hazards";
             btn_viewHazards.TipsFont = new Font("Microsoft Sans Serif", 9F);
             // 
+            // btn_addCa
+            // 
+            btn_addCa.FillColor = Color.Firebrick;
+            btn_addCa.FillColor2 = Color.Firebrick;
+            btn_addCa.FillHoverColor = Color.IndianRed;
+            btn_addCa.FillPressColor = Color.DarkRed;
+            btn_addCa.FillSelectedColor = Color.DarkRed;
+            btn_addCa.Font = new Font("Microsoft Sans Serif", 12F);
+            btn_addCa.Location = new Point(40, 142);
+            btn_addCa.Margin = new Padding(40, 20, 3, 20);
+            btn_addCa.MinimumSize = new Size(1, 1);
+            btn_addCa.Name = "btn_addCa";
+            btn_addCa.Radius = 15;
+            btn_addCa.RectColor = Color.Black;
+            btn_addCa.RectHoverColor = Color.Black;
+            btn_addCa.RectPressColor = Color.Black;
+            btn_addCa.RectSelectedColor = Color.Black;
+            btn_addCa.Size = new Size(127, 41);
+            btn_addCa.TabIndex = 3;
+            btn_addCa.Text = "Add Action";
+            btn_addCa.TipsFont = new Font("Microsoft Sans Serif", 9F);
+            // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.BackColor = Color.Transparent;
@@ -243,7 +271,7 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Controls.Add(dgv_hazardList, 0, 1);
-            tableLayoutPanel2.Controls.Add(cb_includeAll, 0, 0);
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(3, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -306,31 +334,54 @@
             cb_includeAll.Location = new Point(3, 3);
             cb_includeAll.MinimumSize = new Size(1, 1);
             cb_includeAll.Name = "cb_includeAll";
-            cb_includeAll.Size = new Size(220, 38);
+            cb_includeAll.Size = new Size(220, 32);
             cb_includeAll.TabIndex = 0;
             cb_includeAll.Text = "Include All Hazards";
             // 
-            // btn_addCa
+            // tableLayoutPanel3
             // 
-            btn_addCa.FillColor = Color.Firebrick;
-            btn_addCa.FillColor2 = Color.Firebrick;
-            btn_addCa.FillHoverColor = Color.IndianRed;
-            btn_addCa.FillPressColor = Color.DarkRed;
-            btn_addCa.FillSelectedColor = Color.DarkRed;
-            btn_addCa.Font = new Font("Microsoft Sans Serif", 12F);
-            btn_addCa.Location = new Point(40, 142);
-            btn_addCa.Margin = new Padding(40, 20, 3, 20);
-            btn_addCa.MinimumSize = new Size(1, 1);
-            btn_addCa.Name = "btn_addCa";
-            btn_addCa.Radius = 15;
-            btn_addCa.RectColor = Color.Black;
-            btn_addCa.RectHoverColor = Color.Black;
-            btn_addCa.RectPressColor = Color.Black;
-            btn_addCa.RectSelectedColor = Color.Black;
-            btn_addCa.Size = new Size(127, 41);
-            btn_addCa.TabIndex = 3;
-            btn_addCa.Text = "Add Action";
-            btn_addCa.TipsFont = new Font("Microsoft Sans Serif", 9F);
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.6179771F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.38202F));
+            tableLayoutPanel3.Controls.Add(cb_includeAll, 0, 0);
+            tableLayoutPanel3.Controls.Add(flowLayoutPanel2, 1, 0);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(3, 3);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Size = new Size(1068, 38);
+            tableLayoutPanel3.TabIndex = 2;
+            // 
+            // flowLayoutPanel2
+            // 
+            flowLayoutPanel2.Controls.Add(label2);
+            flowLayoutPanel2.Controls.Add(txt_search);
+            flowLayoutPanel2.Dock = DockStyle.Fill;
+            flowLayoutPanel2.Location = new Point(330, 3);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(735, 32);
+            flowLayoutPanel2.TabIndex = 1;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.White;
+            label2.Location = new Point(3, 7);
+            label2.Margin = new Padding(3, 7, 3, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(120, 19);
+            label2.TabIndex = 0;
+            label2.Text = "Search Hazards: ";
+            // 
+            // txt_search
+            // 
+            txt_search.Location = new Point(129, 3);
+            txt_search.Name = "txt_search";
+            txt_search.Size = new Size(392, 27);
+            txt_search.TabIndex = 1;
             // 
             // Frm_ViewCorrectiveActions
             // 
@@ -360,6 +411,9 @@
             ((System.ComponentModel.ISupportInitialize)dgv_caList).EndInit();
             tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgv_hazardList).EndInit();
+            tableLayoutPanel3.ResumeLayout(false);
+            flowLayoutPanel2.ResumeLayout(false);
+            flowLayoutPanel2.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -379,5 +433,9 @@
         private Sunny.UI.UIDataGridView dgv_hazardList;
         private Sunny.UI.UICheckBox cb_includeAll;
         private Sunny.UI.UIButton btn_addCa;
+        private TableLayoutPanel tableLayoutPanel3;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private Label label2;
+        private TextBox txt_search;
     }
 }
