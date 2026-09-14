@@ -186,10 +186,11 @@ namespace InciTrack_Pro.Forms
         {
             SetModelDataClass();
 
-            Frm_AddCorrectiveAction frm = new Frm_AddCorrectiveAction();
+            Frm_AddCorrectiveAction frm = new Frm_AddCorrectiveAction(this);
 
             this.Hide();
             frm.ShowDialog();
+            this.Show();
         }
 
         #endregion

@@ -21,10 +21,11 @@ namespace InciTrack_Pro.Forms
     public partial class Frm_AddCorrectiveAction : Form
     {
         private List<string> activeEmpList = new List<string>();
-
-        public Frm_AddCorrectiveAction()
+        private Form _parentForm;
+        public Frm_AddCorrectiveAction(Form parentForm)
         {
             InitializeComponent();
+            _parentForm = parentForm;
             UIStyles.CultureInfo = CultureInfo.GetCultureInfo("en-US");
             InitializeEvents();
         }
@@ -41,17 +42,7 @@ namespace InciTrack_Pro.Forms
 
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
-            Form? frm = Application.OpenForms["Frm_HazardUpdate"];
-            if (frm != null)
-            {
-                frm.Show();
-                frm.BringToFront();
-                this.Close();
-            }
-            else
-            {
-
-            }
+            this.Close();
         }
 
         private void Pb_minimize_Click(object? sender, EventArgs e)
@@ -240,13 +231,24 @@ namespace InciTrack_Pro.Forms
 
                         transaction.Commit();
 
-                        Frm_HazardUpdate? frm = Application.OpenForms["Frm_HazardUpdate"] as Frm_HazardUpdate;
+                        Form? frm = Application.OpenForms["Frm_HazardUpdate"];
 
                         if (frm != null)
                         {
                             frm.Show();
                             frm.BringToFront();
                             this.Close();
+                            return;
+                        }
+
+                        frm = Application.OpenForms["Frm_ViewCorrectiveActions"];
+
+                        if (frm != null)
+                        {
+                            frm.Show();
+                            frm.BringToFront();
+                            this.Close();
+                            return;
                         }
 
                     }
