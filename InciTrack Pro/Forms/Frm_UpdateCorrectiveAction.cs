@@ -15,6 +15,17 @@ namespace InciTrack_Pro.Forms
         public Frm_UpdateCorrectiveAction()
         {
             InitializeComponent();
+            InitializeEvents();
+        }
+
+        private void InitializeEvents()
+        {
+            this.Load += Frm_UpdateCorrectiveAction_Load;
+        }
+
+        private void Frm_UpdateCorrectiveAction_Load(object? sender, EventArgs e)
+        {
+            
         }
     }
 }

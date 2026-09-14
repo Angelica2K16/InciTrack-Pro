@@ -48,5 +48,16 @@ namespace InciTrack_Pro.Base_Classes
 
         #endregion
 
+        #region Corrective Action Update Variables
+        public int caIdx { get; set; }
+        public string? caAction { get; set; }
+        public string? caActionOwner { get; set; }
+        public DateTime caDueDate { get; set; }
+        public DateTime?  caCompDate { get; set; }
+        public string? caStatus { get; set; }
+        public string? Notes { get; set; }
+
+        #endregion
+
     }
 }

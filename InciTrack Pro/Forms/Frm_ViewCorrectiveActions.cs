@@ -135,7 +135,7 @@ namespace InciTrack_Pro.Forms
 
         private void Dgv_caList_CellClick(object? sender, DataGridViewCellEventArgs e)
         {
-            int caIdx = Convert.ToInt32(
+            MD.Instance.caIdx = Convert.ToInt32(
                 dgv_caList.Rows[e.RowIndex]
                 .Cells["Idx"].Value);
 
@@ -143,11 +143,12 @@ namespace InciTrack_Pro.Forms
              dgv_caList.Columns["Edit"].Index)
             {
 
-                EditCaDetails(caIdx);
-                //Frm_HazardUpdate frm = new Frm_HazardUpdate();
+                
+                Frm_UpdateCorrectiveAction frm = new Frm_UpdateCorrectiveAction();
 
-                //this.Hide();
-                //frm.ShowDialog();
+                this.Hide();
+                frm.ShowDialog();
+                this.Show();
             }
 
            
@@ -379,26 +380,29 @@ namespace InciTrack_Pro.Forms
             {
                 if(string.IsNullOrEmpty(hazIdx))
                 {
-                    dgv.Columns["Hazard Title"].Width = 200;
-                    dgv.Columns["Action"].Width = 255;
+                    dgv.Columns["Hazard Title"].Width = 150;
+                    dgv.Columns["Action"].Width = 215;
+                    dgv.Columns["Edit"].Width = 90;
                 }
                 else
                 {
                     dgv.Columns["Hazard Title"].Visible = false;
                     dgv.Columns["Action"].Width = 355;
+                    dgv.Columns["Edit"].Width = 105;
                 }
 
                 dgv.Columns["Idx"].Visible = false;
                 dgv.Columns["Hazard_Idx"].Visible = false;
+              
 
-                
-                
+
+
                 dgv.Columns["Action Owner"].Width = 115;
                 dgv.Columns["Due Date"].Width = 90;
                 dgv.Columns["Completion Date"].Width = 90;
                 dgv.Columns["Notes"].Width = 200;
                 dgv.Columns["Status"].Width = 90;
-                dgv.Columns["Edit"].Width = 105;
+                
                 foreach (DataGridViewRow row in dgv.Rows)
                 {
                     if (DateTime.TryParse(row.Cells["Due Date"].Value?.ToString(), out DateTime dt))
@@ -571,253 +575,255 @@ namespace InciTrack_Pro.Forms
 
         }
 
-        private void EditCaDetails(int caIdx)
-        {
-            using SqliteConnection conn = new SqliteConnection(GV.shesDB);
+        //private void EditCaDetails(int caIdx)
+        //{
+        //    using SqliteConnection conn = new SqliteConnection(GV.shesDB);
 
-            conn.Open();
+        //    conn.Open();
 
-            string sql = @"
-                        SELECT Action, Action_Owner AS 'Action Owner', Due_Date AS 'Due Date', Completion_Date AS 'Completion Date', Notes, Status
-                        FROM Corrective_Actions
-                        WHERE Idx = @Idx";
+        //    string sql = @"
+        //                SELECT Action, Action_Owner AS 'Action Owner', Due_Date AS 'Due Date', Completion_Date AS 'Completion Date', Notes, Status
+        //                FROM Corrective_Actions
+        //                WHERE Idx = @Idx";
 
-            using SqliteCommand cmd = new SqliteCommand(sql, conn);
+        //    using SqliteCommand cmd = new SqliteCommand(sql, conn);
 
-            cmd.Parameters.AddWithValue("@Idx", caIdx);
+        //    cmd.Parameters.AddWithValue("@Idx", caIdx);
 
-            using SqliteDataReader dr = cmd.ExecuteReader();
+        //    using SqliteDataReader dr = cmd.ExecuteReader();
 
-            if (!dr.Read())
-                return;
+        //    if (!dr.Read())
+        //        return;
 
-            //create Popup form
-            Form popup = new Form();
-            popup.BackColor = Color.FromArgb(45, 45, 48);
-            popup.Text = "Corrective Action Info";
-            popup.Size = new Size(900, 400);
-            popup.ShowIcon = false;
-            popup.StartPosition = FormStartPosition.CenterParent;
+        //    //create Popup form
+        //    Form popup = new Form();
+        //    popup.BackColor = Color.FromArgb(45, 45, 48);
+        //    popup.Text = "Corrective Action Info";
+        //    popup.Size = new Size(900, 400);
+        //    popup.ShowIcon = false;
+        //    popup.StartPosition = FormStartPosition.CenterParent;
 
 
-            TableLayoutPanel tbl = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                BackColor = Color.Transparent,
-                ColumnCount = 2
-            };
+        //    TableLayoutPanel tbl = new TableLayoutPanel
+        //    {
+        //        Dock = DockStyle.Fill,
+        //        AutoScroll = true,
+        //        BackColor = Color.Transparent,
+        //        ColumnCount = 2
+        //    };
 
-            tbl.ColumnStyles.Add(
-            new ColumnStyle(SizeType.Absolute, 180));
+        //    tbl.ColumnStyles.Add(
+        //    new ColumnStyle(SizeType.Absolute, 180));
 
-            tbl.ColumnStyles.Add(
-            new ColumnStyle(SizeType.Percent, 100));
+        //    tbl.ColumnStyles.Add(
+        //    new ColumnStyle(SizeType.Percent, 100));
 
-            popup.Controls.Add(tbl);
+        //    popup.Controls.Add(tbl);
 
-            for (int i = 0; i < dr.FieldCount; i++)
-            {
-                string columnName = dr.GetName(i);
-                string value = dr[i]?.ToString() ?? "";
+        //    for (int i = 0; i < dr.FieldCount; i++)
+        //    {
+        //        string columnName = dr.GetName(i);
+        //        string value = dr[i]?.ToString() ?? "";
 
-                AddEditDetailRow(tbl, columnName, value);
-            }
+        //        AddEditDetailRow(tbl, columnName, value);
+        //    }
 
 
             
-            int row = tbl.RowCount;
-            tbl.RowCount++;
+        //    int row = tbl.RowCount;
+        //    tbl.RowCount++;
 
-            UIButton btnSave = new UIButton
-            {
-                Text = "Save",
-                Width = 190,
-                Height = 45,
-                FillColor = Color.Firebrick,
-                FillHoverColor = Color.IndianRed,
-                FillPressColor = Color.DarkRed,
-                ForeColor = Color.White,
-                Font = new Font("Calibri", 12, FontStyle.Bold),
-                Radius = 8,
-                Cursor = Cursors.Hand,
-                Margin = new Padding(5)
-            };
+        //    UIButton btnSave = new UIButton
+        //    {
+        //        Text = "Save",
+        //        Width = 190,
+        //        Height = 45,
+        //        FillColor = Color.Firebrick,
+        //        FillHoverColor = Color.IndianRed,
+        //        FillPressColor = Color.DarkRed,
+        //        ForeColor = Color.White,
+        //        Font = new Font("Calibri", 12, FontStyle.Bold),
+        //        Radius = 8,
+        //        Cursor = Cursors.Hand,
+        //        Margin = new Padding(5)
+        //    };
 
-            btnSave.Click += (s, e) =>
-            {
-                SaveCorrectiveAction(caIdx, tbl);
-            };
+        //    btnSave.Click += (s, e) =>
+        //    {
+        //        SaveCorrectiveAction(caIdx, tbl);
+        //    };
 
-            tbl.Controls.Add(btnSave, 0, row);
-            tbl.SetColumnSpan(btnSave, 2);
-            btnSave.Anchor = AnchorStyles.None;
+        //    tbl.Controls.Add(btnSave, 0, row);
+        //    tbl.SetColumnSpan(btnSave, 2);
+        //    btnSave.Anchor = AnchorStyles.None;
 
-            popup.ShowDialog();
-        }
+        //    popup.ShowDialog();
+        //}
 
-        private void SaveCorrectiveAction(int caIdx, TableLayoutPanel tbl)
-        {
-            string action = 
-            ((RichTextBox)tbl.Controls.Find("Action", true)[0]).Text;
+//        private void SaveCorrectiveAction(int caIdx, TableLayoutPanel tbl)
+//        {
+//            string action = 
+//            ((RichTextBox)tbl.Controls.Find("Action", true)[0]).Text;
 
-            string actionOwner =
-            ((TextBox)tbl.Controls.Find("ActionOwner", true)[0]).Text;
+//            string actionOwner =
+//            ((TextBox)tbl.Controls.Find("ActionOwner", true)[0]).Text;
 
-            string dueDate =
-            ((TextBox)tbl.Controls.Find("DueDate", true)[0]).Text;
+//            string dueDate =
+//            ((TextBox)tbl.Controls.Find("DueDate", true)[0]).Text;
 
-            string completionDate =
-            ((TextBox)tbl.Controls.Find("CompletionDate", true)[0]).Text;
+//            string completionDate =
+//            ((TextBox)tbl.Controls.Find("CompletionDate", true)[0]).Text;
 
-            string notes =
-            ((RichTextBox)tbl.Controls.Find("Notes", true)[0]).Text;
+//            string notes =
+//            ((RichTextBox)tbl.Controls.Find("Notes", true)[0]).Text;
 
-            string status =
-            ((TextBox)tbl.Controls.Find("Status", true)[0]).Text;
+//            string status =
+//            ((TextBox)tbl.Controls.Find("Status", true)[0]).Text;
 
 
-            //SQLITE Function
-            using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
-            {
-                conn.Open();
-                using (SqliteTransaction transaction = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        string sql = $@"
-                            UPDATE HAZARDS SET
+//            //SQLITE Function
+//            using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
+//            {
+//                conn.Open();
+//                using (SqliteTransaction transaction = conn.BeginTransaction())
+//                {
+//                    try
+//                    {
+//                        string sql = $@"
+//                            UPDATE HAZARDS SET
                             
-                                Action = @Action,
-Action_Owner = @Action_Owner,
-Due_Date
+//                                Action = @Action,
+//Action_Owner = @Action_Owner,
+//Due_Date
                             
-                            WHERE Idx  = @caIdx
-                           ";
+//                            WHERE Idx  = @caIdx
+//                           ";
 
-                        using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
-                        {
+//                        using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
+//                        {
 
-                            cmd.Parameters.AddWithValue("@hazardIdx", MD.Instance.hazardIdx);
-                            cmd.Parameters.AddWithValue("@title", MD.Instance.hazTitle);
-                            cmd.Parameters.AddWithValue("@incidentType", MD.Instance.hazIncidentType);
-                            cmd.Parameters.AddWithValue("@riskLevel", MD.Instance.hazRiskMatrix);
-                            cmd.Parameters.AddWithValue("@apReport", MD.Instance.hazApReport);
-                            cmd.Parameters.AddWithValue("@injuryCat", MD.Instance.hazInjury);
-                            cmd.Parameters.AddWithValue("@envCat", MD.Instance.hazEnv);
-                            cmd.Parameters.AddWithValue("@damageCat", MD.Instance.hazDamage);
-                            cmd.Parameters.AddWithValue("@descr", MD.Instance.hazDescr);
-                            cmd.Parameters.AddWithValue("@notes", MD.Instance.hazNotes);
-                            cmd.Parameters.AddWithValue("@status", MD.Instance.hazStatus);
-
-
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        transaction.Commit();
-
-                        Frm_Hazards? frm = Application.OpenForms["Frm_Hazards"] as Frm_Hazards;
-
-                        if (frm != null)
-                        {
-                            frm.LoadDgvHazardsList();
-                            frm.ApplySearchFilter();
-                            frm.Show();
-                            frm.BringToFront();
-                            this.Close();
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-
-            }
-        }
-
-        private void AddEditDetailRow(TableLayoutPanel tbl, string label, string value)
-        {
-            int row = tbl.RowCount;
-
-            tbl.RowCount++;
-
-            tbl.RowStyles.Add(
-            new RowStyle(SizeType.AutoSize));
-
-            Label lblField = new Label
-            {
-                Text = label + ":",
-                ForeColor = Color.White,
-                AutoSize = true,
-                Padding = new Padding(5),
-                Font = new Font("Calibri", 12, FontStyle.Bold)
-            };
-
-            Control valueControl;
-
-            if (label == "Action" || label == "Notes")
-            {
+//                            cmd.Parameters.AddWithValue("@hazardIdx", MD.Instance.hazardIdx);
+//                            cmd.Parameters.AddWithValue("@title", MD.Instance.hazTitle);
+//                            cmd.Parameters.AddWithValue("@incidentType", MD.Instance.hazIncidentType);
+//                            cmd.Parameters.AddWithValue("@riskLevel", MD.Instance.hazRiskMatrix);
+//                            cmd.Parameters.AddWithValue("@apReport", MD.Instance.hazApReport);
+//                            cmd.Parameters.AddWithValue("@injuryCat", MD.Instance.hazInjury);
+//                            cmd.Parameters.AddWithValue("@envCat", MD.Instance.hazEnv);
+//                            cmd.Parameters.AddWithValue("@damageCat", MD.Instance.hazDamage);
+//                            cmd.Parameters.AddWithValue("@descr", MD.Instance.hazDescr);
+//                            cmd.Parameters.AddWithValue("@notes", MD.Instance.hazNotes);
+//                            cmd.Parameters.AddWithValue("@status", MD.Instance.hazStatus);
 
 
-                RichTextBox rtb = new RichTextBox
-                {
-                    Name = label.Replace(" ", ""),
-                    Text = value,
-                    ReadOnly = false,
-                    BorderStyle = BorderStyle.None,
-                    BackColor = Color.FromArgb(45, 45, 48),
-                    ForeColor = Color.White,
-                    Multiline = value.Length > 20,
-                    // Dock = DockStyle.Fill,
-                    Margin = new Padding(5),
-                    ScrollBars = RichTextBoxScrollBars.None,
-                    WordWrap = true,
-                    Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top
+//                            cmd.ExecuteNonQuery();
+//                        }
 
-                };
+//                        transaction.Commit();
+
+//                        Frm_Hazards? frm = Application.OpenForms["Frm_Hazards"] as Frm_Hazards;
+
+//                        if (frm != null)
+//                        {
+//                            frm.LoadDgvHazardsList();
+//                            frm.ApplySearchFilter();
+//                            frm.Show();
+//                            frm.BringToFront();
+//                            this.Close();
+//                        }
+
+//                    }
+//                    catch (Exception ex)
+//                    {
+//                        transaction.Rollback();
+//                        MessageBox.Show(ex.Message);
+//                    }
+//                }
+
+//            }
+//        }
+
+        //private void AddEditDetailRow(TableLayoutPanel tbl, string label, string value)
+        //{
+        //    int row = tbl.RowCount;
+
+        //    tbl.RowCount++;
+
+        //    tbl.RowStyles.Add(
+        //    new RowStyle(SizeType.AutoSize));
+
+        //    Label lblField = new Label
+        //    {
+        //        Text = label + ":",
+        //        ForeColor = Color.White,
+        //        AutoSize = true,
+        //        Padding = new Padding(5),
+        //        Font = new Font("Calibri", 12, FontStyle.Bold)
+        //    };
+
+        //    Control valueControl;
+
+        //    if (label == "Action" || label == "Notes")
+        //    {
+
+
+        //        RichTextBox rtb = new RichTextBox
+        //        {
+        //            Name = label.Replace(" ", ""),
+        //            Text = value,
+        //            ReadOnly = false,
+        //            BorderStyle = BorderStyle.None,
+        //            BackColor = Color.FromArgb(45, 45, 48),
+        //            ForeColor = Color.White,
+        //            Multiline = value.Length > 20,
+        //            // Dock = DockStyle.Fill,
+        //            Margin = new Padding(5),
+        //            ScrollBars = RichTextBoxScrollBars.None,
+        //            WordWrap = true,
+        //            Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top
+
+        //        };
 
 
 
-                valueControl = rtb;
+        //        valueControl = rtb;
 
 
-            }
-            else
-            {
-                valueControl = new TextBox
-                {
-                    Name = label.Replace(" ", ""),
-                    Text = value,
-                    ReadOnly = false,
-                    BorderStyle = BorderStyle.None,
-                    BackColor = Color.FromArgb(45, 45, 48),
-                    ForeColor = Color.White,
-                    Multiline = value.Length > 20,
-                    Dock = DockStyle.Fill,
-                    Margin = new Padding(5)
-                };
-            }
+        //    }
+        //    else
+        //    {
+        //        valueControl = new TextBox
+        //        {
+        //            Name = label.Replace(" ", ""),
+        //            Text = value,
+        //            ReadOnly = false,
+        //            BorderStyle = BorderStyle.None,
+        //            BackColor = Color.FromArgb(45, 45, 48),
+        //            ForeColor = Color.White,
+        //            Multiline = value.Length > 20,
+        //            Dock = DockStyle.Fill,
+        //            Margin = new Padding(5)
+        //        };
+        //    }
 
           
            
-            tbl.Controls.Add(lblField, 0, row);
-            tbl.Controls.Add(valueControl, 1, row);
+        //    tbl.Controls.Add(lblField, 0, row);
+        //    tbl.Controls.Add(valueControl, 1, row);
 
-            if (valueControl is RichTextBox rtbx)
-            {
-                rtbx.Width = tbl.GetColumnWidths()[1] - 10;
+        //    if (valueControl is RichTextBox rtbx)
+        //    {
+        //        rtbx.Width = tbl.GetColumnWidths()[1] - 10;
 
-                int height =
-                rtbx.GetPositionFromCharIndex(Math.Max(0, rtbx.TextLength - 1)).Y +
-                rtbx.Font.Height + 10;
+        //        int height =
+        //        rtbx.GetPositionFromCharIndex(Math.Max(0, rtbx.TextLength - 1)).Y +
+        //        rtbx.Font.Height + 10;
 
-                rtbx.Height = Math.Max(height, 25);
-            }
+        //        rtbx.Height = Math.Max(height, 25);
+        //    }
 
-        }
+        //}
+
+      
 
     }
 }
