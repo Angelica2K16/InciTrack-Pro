@@ -293,7 +293,17 @@ namespace InciTrack_Pro
         private void LoadButtons()
         {
             AddMenuButton("Summary",
-            (s, e) => new Frm_Hazards().ShowDialog());
+              (s, e) =>
+              {
+                  this.Hide();
+
+                  using (Frm_Summary frm = new Frm_Summary())
+                  {
+                      frm.ShowDialog();
+                  }
+
+                  this.Show();
+              });
 
             AddMenuButton("Hazards",
              (s, e) =>

@@ -1,0 +1,189 @@
+﻿using InciTrack_Pro.UserControls;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace InciTrack_Pro.Forms
+{
+    public partial class Frm_Summary : Form
+    {
+        private bool _loading = true;
+
+        private KpiCard cardAPHpnm;
+        private KpiCard cardAPFirstAid;
+        private KpiCard cardAPUnsafeAct;
+        private KpiCard cardAPUnsafeCondition;
+
+        private KpiCard cardSHESHpnm;
+        private KpiCard cardSHESFirstAid;
+        private KpiCard cardSHESUnsafeAct;
+        private KpiCard cardSHESUnsafeCondition;
+        private KpiCard cardClosedActions;
+        private KpiCard cardAudits;
+        private KpiCard cardMinimalHazards;
+
+        public Frm_Summary()
+        {
+            InitializeComponent();
+            InitializeEvents();
+        }
+
+        private void InitializeEvents()
+        {
+            this.Load += Frm_Summary_Load;
+            combo_Year.SelectedIndexChanged += FiltersChanged;
+            combo_Quarter.SelectedIndexChanged += FiltersChanged;
+            combo_month.SelectedIndexChanged += FiltersChanged;
+        }
+
+        private void Frm_Summary_Load(object? sender, EventArgs e)
+        {
+            LoadFilterCombos();
+
+            CreateCards();
+
+            SetDefaultFilters();
+
+            _loading = false;
+
+            LoadDashboard();
+        }
+
+        private void FiltersChanged(object? sender, EventArgs e)
+        {
+            if (combo_Year.SelectedItem == null)
+                return;
+
+            LoadDashboard();
+        }
+
+        private void LoadFilterCombos()
+        {
+            //Populate the year combobox
+            for(int year = DateTime.Now.Year - 3; year <= DateTime.Now.Year; year++)
+            {
+                combo_Year.Items.Add(year.ToString());
+            }
+
+            //Populate the Quarter comboBox
+            List<string> qList = new List<string>();
+            qList.AddRange(new List<string> { "All Quarters", "Q1", "Q2", "Q3", "Q4" });
+            foreach(string quarter in qList)
+            {
+                combo_Quarter.Items.Add(quarter.ToString());
+            }
+
+            //Populate the Month comboBox
+            combo_month.Items.Add("All Months");
+
+            for (int month = 1; month <= 12; month++)
+            {
+                combo_month.Items.Add(
+                new DateTime(2000, month, 1).ToString("MMMM"));
+            }
+        }
+
+        private void SetDefaultFilters()
+        {
+            combo_Year.SelectedItem = DateTime.Now.Year.ToString();
+
+            int quarter = ((DateTime.Now.Month - 1) / 3) + 1;
+            combo_Quarter.SelectedItem = $"Q{quarter}";
+
+            combo_month.SelectedIndex = DateTime.Now.Month;
+        }
+
+        private void CreateCards()
+        {
+            // AP Section
+            cardAPHpnm = new KpiCard("HPNM");
+            cardAPFirstAid = new KpiCard("First Aids");
+            cardAPUnsafeAct = new KpiCard("Unsafe Acts");
+            cardAPUnsafeCondition = new KpiCard("Unsafe Conditions");
+
+            flow_AP.Controls.Add(cardAPHpnm);
+            flow_AP.Controls.Add(cardAPFirstAid);
+            flow_AP.Controls.Add(cardAPUnsafeAct);
+            flow_AP.Controls.Add(cardAPUnsafeCondition);
+
+            // SHES Section
+            cardSHESHpnm = new KpiCard("HPNM");
+            cardSHESFirstAid = new KpiCard("First Aids");
+            cardSHESUnsafeAct = new KpiCard("Unsafe Acts");
+            cardSHESUnsafeCondition = new KpiCard("Unsafe Conditions");
+            cardClosedActions = new KpiCard("Closed Actions");
+            cardAudits = new KpiCard("SHES Team Audits");
+            cardMinimalHazards = new KpiCard("Minimal Hazards");
+
+            flow_SHES.Controls.Add(cardSHESHpnm);
+            flow_SHES.Controls.Add(cardSHESFirstAid);
+            flow_SHES.Controls.Add(cardSHESUnsafeAct);
+            flow_SHES.Controls.Add(cardSHESUnsafeCondition);
+            flow_SHES.Controls.Add(cardClosedActions);
+            flow_SHES.Controls.Add(cardAudits);
+            flow_SHES.Controls.Add(cardMinimalHazards);
+        }
+
+        private void LoadDashboard()
+        {
+            var range = GetDateRange();
+
+            cardAPHpnm.SetValue(12);
+            cardAPFirstAid.SetValue(5);
+            cardAPUnsafeAct.SetValue(18);
+            cardAPUnsafeCondition.SetValue(9);
+
+            cardSHESHpnm.SetValue(20);
+            cardSHESFirstAid.SetValue(8);
+            cardSHESUnsafeAct.SetValue(27);
+            cardSHESUnsafeCondition.SetValue(14);
+            cardClosedActions.SetValue(62);
+            cardAudits.SetValue(11);
+            cardMinimalHazards.SetValue(7);
+        }
+
+        private (DateTime Start, DateTime End) GetDateRange()
+        {
+            int year = int.Parse(combo_Year.SelectedItem.ToString());
+
+            // Month selected
+            if (combo_month.SelectedIndex >= 0)
+            {
+                int month = combo_month.SelectedIndex + 1;
+
+                DateTime start = new DateTime(year, month, 1);
+                DateTime end = start.AddMonths(1);
+
+                return (start, end);
+            }
+
+            // Quarter selected
+            string quarter = combo_Quarter.SelectedItem?.ToString() ?? "";
+
+            if (quarter.StartsWith("Q"))
+            {
+                int q = int.Parse(quarter.Substring(1));
+
+                int startMonth = ((q - 1) * 3) + 1;
+
+                DateTime start = new DateTime(year, startMonth, 1);
+                DateTime end = start.AddMonths(3);
+
+                return (start, end);
+            }
+
+            // Entire year
+            return
+            (
+            new DateTime(year, 1, 1),
+            new DateTime(year + 1, 1, 1)
+            );
+        }
+    }
+}
