@@ -44,7 +44,31 @@ namespace InciTrack_Pro.Forms
 
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
-            this.Close();
+            Form? frm = Application.OpenForms["Frm_HazardUpdate"];
+
+            if (frm != null)
+            {
+                frm.Show();
+                frm.BringToFront();
+                this.Close();
+                FormManager.SetFormLocation(frm, this);
+                return;
+            }
+
+            frm = Application.OpenForms["Frm_ViewCorrectiveActions"];
+
+            if (frm != null)
+            {
+                frm.Show();
+                frm.BringToFront();
+                this.Close();
+                FormManager.SetFormLocation(frm, this);
+                return;
+            }
+
+            //this.Close();
+           
+            //FormManager.SetFormLocation(frm, this);
         }
 
         private void Pb_minimize_Click(object? sender, EventArgs e)
@@ -248,6 +272,7 @@ namespace InciTrack_Pro.Forms
                             frm.Show();
                             frm.BringToFront();
                             this.Close();
+                            FormManager.SetFormLocation(frm, this);
                             return;
                         }
 
@@ -258,6 +283,7 @@ namespace InciTrack_Pro.Forms
                             frm.Show();
                             frm.BringToFront();
                             this.Close();
+                            FormManager.SetFormLocation(frm, this);
                             return;
                         }
 

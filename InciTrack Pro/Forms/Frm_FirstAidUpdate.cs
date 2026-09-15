@@ -67,6 +67,7 @@ namespace InciTrack_Pro.Forms
                 frm.Show();
                 frm.BringToFront();
                 this.Close();
+                FormManager.SetFormLocation(frm, this);
             }
             else
             {
@@ -124,6 +125,7 @@ namespace InciTrack_Pro.Forms
                 frm.Show();
                 frm.BringToFront();
                 this.Close();
+                FormManager.SetFormLocation(frm, this);
             }
             else
             {
