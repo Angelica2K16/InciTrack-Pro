@@ -46,6 +46,7 @@
             cb_apReports = new CheckBox();
             flp_Kpi = new FlowLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
+            label3 = new Label();
             dgv_firstAidsList = new Sunny.UI.UIDataGridView();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
@@ -198,18 +199,32 @@
             // 
             // tableLayoutPanel2
             // 
+            tableLayoutPanel2.BackColor = Color.Transparent;
             tableLayoutPanel2.ColumnCount = 1;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(dgv_firstAidsList, 0, 0);
+            tableLayoutPanel2.Controls.Add(label3, 0, 0);
+            tableLayoutPanel2.Controls.Add(dgv_firstAidsList, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(0, 296);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 9.471366F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 90.52863F));
             tableLayoutPanel2.Size = new Size(1280, 454);
             tableLayoutPanel2.TabIndex = 3;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Calibri", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(3, 20);
+            label3.Margin = new Padding(3, 20, 3, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(228, 15);
+            label3.TabIndex = 1;
+            label3.Text = "**Double click row to view full details**";
             // 
             // dgv_firstAidsList
             // 
@@ -238,7 +253,7 @@
             dgv_firstAidsList.EnableHeadersVisualStyles = false;
             dgv_firstAidsList.Font = new Font("Microsoft Sans Serif", 12F);
             dgv_firstAidsList.GridColor = Color.FromArgb(80, 160, 255);
-            dgv_firstAidsList.Location = new Point(3, 3);
+            dgv_firstAidsList.Location = new Point(3, 46);
             dgv_firstAidsList.Name = "dgv_firstAidsList";
             dgv_firstAidsList.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -253,9 +268,9 @@
             dataGridViewCellStyle5.Font = new Font("Microsoft Sans Serif", 12F);
             dgv_firstAidsList.RowsDefaultCellStyle = dataGridViewCellStyle5;
             dgv_firstAidsList.SelectedIndex = -1;
-            dgv_firstAidsList.Size = new Size(1274, 448);
+            dgv_firstAidsList.Size = new Size(1274, 405);
             dgv_firstAidsList.StripeOddColor = Color.FromArgb(235, 243, 255);
-            dgv_firstAidsList.TabIndex = 0;
+            dgv_firstAidsList.TabIndex = 2;
             // 
             // Frm_FirstAids
             // 
@@ -284,6 +299,7 @@
             flp_search.ResumeLayout(false);
             flp_search.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_firstAidsList).EndInit();
             ResumeLayout(false);
         }
@@ -303,6 +319,7 @@
         private Label label2;
         private TextBox txt_search;
         private CheckBox cb_apReports;
+        private Label label3;
         private Sunny.UI.UIDataGridView dgv_firstAidsList;
     }
 }

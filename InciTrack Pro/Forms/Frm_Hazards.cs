@@ -1,4 +1,5 @@
-﻿using LiveChartsCore;
+﻿using InciTrack_Pro.Helper_Classes;
+using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.WinForms;
 using Microsoft.Data.Sqlite;
@@ -36,6 +37,15 @@ namespace InciTrack_Pro.Forms
             txt_search.TextChanged += Txt_search_TextChanged;
             dgv_hazardsList.CellDoubleClick += Dgv_hazardsList_CellDoubleClick;
             dgv_hazardsList.CellClick += Dgv_hazardsList_CellClick;
+            pnl_controlBox.MouseDown += HandleMouseDown;
+        }
+
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                FormDragger.DragForm(this);
+            }
         }
 
         private void Cb_includeAll_CheckedChanged(object? sender, EventArgs e)

@@ -46,6 +46,15 @@ namespace InciTrack_Pro.Forms
             combo_Year.SelectedIndexChanged += FiltersChanged;
             combo_Quarter.SelectedIndexChanged += FiltersChanged;
             combo_month.SelectedIndexChanged += FiltersChanged;
+            pnl_controlBox.MouseDown += HandleMouseDown;
+        }
+
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                FormDragger.DragForm(this);
+            }
         }
 
         private void Pb_exit_Click(object? sender, EventArgs e)

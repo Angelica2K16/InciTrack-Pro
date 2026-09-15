@@ -1,4 +1,5 @@
 ﻿using FontAwesome.Sharp;
+using InciTrack_Pro.Helper_Classes;
 using Microsoft.Data.Sqlite;
 using Sunny.UI;
 using System;
@@ -44,9 +45,17 @@ namespace InciTrack_Pro.Forms
             btn_createCa.Click += Btn_createCa_Click;
             pb_riskMatrix.MouseEnter += Pb_riskMatrix_MouseEnter;
             pb_riskMatrix.MouseLeave += Pb_riskMatrix_MouseLeave;
-
+            pnl_controlBox.MouseDown += HandleMouseDown;
         }
         #endregion
+
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                FormDragger.DragForm(this);
+            }
+        }
 
         #region Load Form Event
         private void Frm_HazardUpdate_Load(object? sender, EventArgs e)

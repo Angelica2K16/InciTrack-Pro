@@ -1,14 +1,18 @@
+using DanMarDev.DuplicateInstanceCheck;
 using DanMarDev.Identification;
 using FontAwesome.Sharp;
-//using Guna.UI2.WinForms;
-using Sunny.UI;
 using InciTrack_Pro.Forms;
+using InciTrack_Pro.Helper_Classes;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.SkiaSharpView.WinForms;
 using LiveChartsCore.Themes;
+using LiveChartsCore.VisualElements;
 using Microsoft.Data.Sqlite;
+//using Guna.UI2.WinForms;
+using Sunny.UI;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
@@ -18,9 +22,6 @@ using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using WD = DanMarDev.WakeDrives;
-using DanMarDev.DuplicateInstanceCheck;
-using LiveChartsCore.VisualElements;
-using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 
 namespace InciTrack_Pro
 {
@@ -56,10 +57,18 @@ namespace InciTrack_Pro
             this.Load += Frm_Main_Load;
             pb_exit.Click += Pb_exit_Click;
             pb_minimize.Click += Pb_minimize_Click;
-            
+            pnl_controlBox.MouseDown += HandleMouseDown;
         }
 
         #endregion
+
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                FormDragger.DragForm(this);
+            }
+        }
 
         #region Anti-Flickering
         protected override void WndProc(ref Message m)

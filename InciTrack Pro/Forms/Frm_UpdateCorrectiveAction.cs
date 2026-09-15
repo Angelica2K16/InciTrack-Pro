@@ -1,4 +1,6 @@
 ﻿using DanMarDev.Identification;
+using InciTrack_Pro.Helper_Classes;
+using Microsoft.Data.Sqlite;
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
-using Microsoft.Data.Sqlite;
 
 namespace InciTrack_Pro.Forms
 {
@@ -23,6 +24,7 @@ namespace InciTrack_Pro.Forms
         {
             InitializeComponent();
             InitializeEvents();
+            
         }
 
         private void InitializeEvents()
@@ -32,7 +34,15 @@ namespace InciTrack_Pro.Forms
             pb_minimize.Click += Pb_minimize_Click;
             btn_cancel.Click += Btn_cancel_Click;
             btn_save.Click += Btn_save_Click;
-            
+            pnl_controlBox.MouseDown += HandleMouseDown;
+        }
+
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                FormDragger.DragForm(this);
+            }
         }
 
         private void Btn_save_Click(object? sender, EventArgs e)
@@ -105,7 +115,6 @@ namespace InciTrack_Pro.Forms
         #endregion
         private void Frm_UpdateCorrectiveAction_Load(object? sender, EventArgs e)
         {
-            lbl_header.Text = "Hazard Title: " + MD.Instance.hazTitle;
             GetEmpList();
             LoadControls();
         }

@@ -46,8 +46,10 @@
             label2 = new Label();
             txt_search = new TextBox();
             cb_apReports = new CheckBox();
-            dgv_hazardsList = new Sunny.UI.UIDataGridView();
             cb_includeAll = new CheckBox();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            label3 = new Label();
+            dgv_hazardsList = new Sunny.UI.UIDataGridView();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
@@ -56,6 +58,7 @@
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_hazardsList).BeginInit();
             SuspendLayout();
             // 
@@ -121,7 +124,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 0);
-            tableLayoutPanel1.Controls.Add(dgv_hazardsList, 0, 1);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel4, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 39);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -212,6 +215,46 @@
             cb_apReports.Text = "View AP Reports";
             cb_apReports.UseVisualStyleBackColor = true;
             // 
+            // cb_includeAll
+            // 
+            cb_includeAll.AutoSize = true;
+            cb_includeAll.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            cb_includeAll.ForeColor = Color.White;
+            cb_includeAll.Location = new Point(150, 59);
+            cb_includeAll.Name = "cb_includeAll";
+            cb_includeAll.Size = new Size(100, 23);
+            cb_includeAll.TabIndex = 6;
+            cb_includeAll.Text = "Include All";
+            cb_includeAll.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel4.Controls.Add(label3, 0, 0);
+            tableLayoutPanel4.Controls.Add(dgv_hazardsList, 0, 1);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(3, 266);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 2;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 9.276018F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 90.72398F));
+            tableLayoutPanel4.Size = new Size(1274, 442);
+            tableLayoutPanel4.TabIndex = 1;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Calibri", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(3, 20);
+            label3.Margin = new Padding(3, 20, 3, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(228, 15);
+            label3.TabIndex = 0;
+            label3.Text = "**Double click row to view full details**";
+            // 
             // dgv_hazardsList
             // 
             dataGridViewCellStyle1.BackColor = Color.FromArgb(235, 243, 255);
@@ -239,7 +282,7 @@
             dgv_hazardsList.EnableHeadersVisualStyles = false;
             dgv_hazardsList.Font = new Font("Microsoft Sans Serif", 12F);
             dgv_hazardsList.GridColor = Color.FromArgb(80, 160, 255);
-            dgv_hazardsList.Location = new Point(3, 266);
+            dgv_hazardsList.Location = new Point(3, 44);
             dgv_hazardsList.Name = "dgv_hazardsList";
             dgv_hazardsList.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -254,21 +297,9 @@
             dataGridViewCellStyle5.Font = new Font("Microsoft Sans Serif", 12F);
             dgv_hazardsList.RowsDefaultCellStyle = dataGridViewCellStyle5;
             dgv_hazardsList.SelectedIndex = -1;
-            dgv_hazardsList.Size = new Size(1274, 442);
+            dgv_hazardsList.Size = new Size(1268, 395);
             dgv_hazardsList.StripeOddColor = Color.FromArgb(235, 243, 255);
             dgv_hazardsList.TabIndex = 1;
-            // 
-            // cb_includeAll
-            // 
-            cb_includeAll.AutoSize = true;
-            cb_includeAll.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            cb_includeAll.ForeColor = Color.White;
-            cb_includeAll.Location = new Point(150, 59);
-            cb_includeAll.Name = "cb_includeAll";
-            cb_includeAll.Size = new Size(100, 23);
-            cb_includeAll.TabIndex = 6;
-            cb_includeAll.Text = "Include All";
-            cb_includeAll.UseVisualStyleBackColor = true;
             // 
             // Frm_Hazards
             // 
@@ -297,6 +328,8 @@
             tableLayoutPanel3.ResumeLayout(false);
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
+            tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_hazardsList).EndInit();
             ResumeLayout(false);
         }
@@ -311,13 +344,15 @@
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
         private TableLayoutPanel tableLayoutPanel3;
-        private Sunny.UI.UIDataGridView dgv_hazardsList;
         private FlowLayoutPanel flp_Kpi;
         private FlowLayoutPanel flowLayoutPanel2;
         private Label label2;
         private TextBox txt_search;
         private CheckBox cb_apReports;
         private CheckBox cb_includeAll;
+        private TableLayoutPanel tableLayoutPanel4;
+        private Label label3;
+        private Sunny.UI.UIDataGridView dgv_hazardsList;
         //private FontAwesome.Sharp.IconMenuItem iconMenuItem1;
     }
 }

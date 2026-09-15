@@ -1,4 +1,5 @@
 ﻿using FontAwesome.Sharp;
+using InciTrack_Pro.Helper_Classes;
 using Microsoft.Data.Sqlite;
 using Sunny.UI;
 using System;
@@ -40,6 +41,7 @@ namespace InciTrack_Pro.Forms
             btn_save.Click += Btn_save_Click;
             btn_cancel.Click += Btn_cancel_Click;
             btn_createHazard.Click += Btn_createHazard_Click;
+            pnl_controlBox.MouseDown += HandleMouseDown;
         }
         #endregion
 
@@ -78,6 +80,14 @@ namespace InciTrack_Pro.Forms
         }
 
         #endregion
+
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                FormDragger.DragForm(this);
+            }
+        }
 
         #region Button Events - Save and Cancel First Aid Update
         private void Btn_save_Click(object? sender, EventArgs e)

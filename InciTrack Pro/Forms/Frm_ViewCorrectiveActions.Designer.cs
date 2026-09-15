@@ -28,16 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             pnl_controlBox = new Panel();
             label1 = new Label();
             pb_dmLogo = new PictureBox();
@@ -48,25 +48,35 @@
             btn_viewHazards = new Sunny.UI.UIButton();
             btn_addCa = new Sunny.UI.UIButton();
             tableLayoutPanel1 = new TableLayoutPanel();
-            dgv_caList = new Sunny.UI.UIDataGridView();
             tableLayoutPanel2 = new TableLayoutPanel();
-            dgv_hazardList = new Sunny.UI.UIDataGridView();
-            cb_includeAll = new Sunny.UI.UICheckBox();
             tableLayoutPanel3 = new TableLayoutPanel();
+            cb_includeAll = new Sunny.UI.UICheckBox();
             flowLayoutPanel2 = new FlowLayoutPanel();
             label2 = new Label();
             txt_search = new TextBox();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            dgv_caList = new Sunny.UI.UIDataGridView();
+            flowLayoutPanel3 = new FlowLayoutPanel();
+            label3 = new Label();
+            tableLayoutPanel5 = new TableLayoutPanel();
+            flowLayoutPanel4 = new FlowLayoutPanel();
+            label4 = new Label();
+            dgv_hazardList = new Sunny.UI.UIDataGridView();
             pnl_controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_dmLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_minimize).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_exit).BeginInit();
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgv_caList).BeginInit();
             tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgv_hazardList).BeginInit();
             tableLayoutPanel3.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_caList).BeginInit();
+            flowLayoutPanel3.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
+            flowLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_hazardList).BeginInit();
             SuspendLayout();
             // 
             // pnl_controlBox
@@ -208,8 +218,8 @@
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(dgv_caList, 0, 1);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 0);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel4, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(200, 39);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -219,59 +229,13 @@
             tableLayoutPanel1.Size = new Size(1080, 711);
             tableLayoutPanel1.TabIndex = 4;
             // 
-            // dgv_caList
-            // 
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(235, 243, 255);
-            dgv_caList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dgv_caList.BackgroundColor = Color.White;
-            dgv_caList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(80, 160, 255);
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgv_caList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            dgv_caList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dgv_caList.DefaultCellStyle = dataGridViewCellStyle3;
-            dgv_caList.Dock = DockStyle.Fill;
-            dgv_caList.EnableHeadersVisualStyles = false;
-            dgv_caList.Font = new Font("Microsoft Sans Serif", 12F);
-            dgv_caList.GridColor = Color.FromArgb(80, 160, 255);
-            dgv_caList.Location = new Point(3, 362);
-            dgv_caList.Name = "dgv_caList";
-            dgv_caList.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = Color.FromArgb(235, 243, 255);
-            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle4.ForeColor = Color.FromArgb(48, 48, 48);
-            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(80, 160, 255);
-            dataGridViewCellStyle4.SelectionForeColor = Color.White;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgv_caList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            dataGridViewCellStyle5.BackColor = Color.White;
-            dataGridViewCellStyle5.Font = new Font("Microsoft Sans Serif", 12F);
-            dgv_caList.RowsDefaultCellStyle = dataGridViewCellStyle5;
-            dgv_caList.SelectedIndex = -1;
-            dgv_caList.Size = new Size(1074, 346);
-            dgv_caList.StripeOddColor = Color.FromArgb(235, 243, 255);
-            dgv_caList.TabIndex = 0;
-            // 
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 1;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(dgv_hazardList, 0, 1);
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 0, 0);
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel5, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(3, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -280,63 +244,6 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 87.53541F));
             tableLayoutPanel2.Size = new Size(1074, 353);
             tableLayoutPanel2.TabIndex = 1;
-            // 
-            // dgv_hazardList
-            // 
-            dataGridViewCellStyle6.BackColor = Color.FromArgb(235, 243, 255);
-            dgv_hazardList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
-            dgv_hazardList.BackgroundColor = Color.White;
-            dgv_hazardList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = Color.FromArgb(80, 160, 255);
-            dataGridViewCellStyle7.Font = new Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle7.ForeColor = Color.White;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
-            dgv_hazardList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            dgv_hazardList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = SystemColors.Window;
-            dataGridViewCellStyle8.Font = new Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
-            dgv_hazardList.DefaultCellStyle = dataGridViewCellStyle8;
-            dgv_hazardList.Dock = DockStyle.Fill;
-            dgv_hazardList.EnableHeadersVisualStyles = false;
-            dgv_hazardList.Font = new Font("Microsoft Sans Serif", 12F);
-            dgv_hazardList.GridColor = Color.FromArgb(80, 160, 255);
-            dgv_hazardList.Location = new Point(3, 47);
-            dgv_hazardList.Name = "dgv_hazardList";
-            dgv_hazardList.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = Color.FromArgb(235, 243, 255);
-            dataGridViewCellStyle9.Font = new Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle9.ForeColor = Color.FromArgb(48, 48, 48);
-            dataGridViewCellStyle9.SelectionBackColor = Color.FromArgb(80, 160, 255);
-            dataGridViewCellStyle9.SelectionForeColor = Color.White;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
-            dgv_hazardList.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
-            dataGridViewCellStyle10.BackColor = Color.White;
-            dataGridViewCellStyle10.Font = new Font("Microsoft Sans Serif", 12F);
-            dgv_hazardList.RowsDefaultCellStyle = dataGridViewCellStyle10;
-            dgv_hazardList.SelectedIndex = -1;
-            dgv_hazardList.Size = new Size(1068, 303);
-            dgv_hazardList.StripeOddColor = Color.FromArgb(235, 243, 255);
-            dgv_hazardList.TabIndex = 1;
-            // 
-            // cb_includeAll
-            // 
-            cb_includeAll.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            cb_includeAll.ForeColor = Color.White;
-            cb_includeAll.Location = new Point(3, 3);
-            cb_includeAll.MinimumSize = new Size(1, 1);
-            cb_includeAll.Name = "cb_includeAll";
-            cb_includeAll.Size = new Size(220, 32);
-            cb_includeAll.TabIndex = 0;
-            cb_includeAll.Text = "Include All Hazards";
             // 
             // tableLayoutPanel3
             // 
@@ -353,6 +260,17 @@
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.Size = new Size(1068, 38);
             tableLayoutPanel3.TabIndex = 2;
+            // 
+            // cb_includeAll
+            // 
+            cb_includeAll.Font = new Font("Calibri", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            cb_includeAll.ForeColor = Color.White;
+            cb_includeAll.Location = new Point(3, 3);
+            cb_includeAll.MinimumSize = new Size(1, 1);
+            cb_includeAll.Name = "cb_includeAll";
+            cb_includeAll.Size = new Size(220, 32);
+            cb_includeAll.TabIndex = 0;
+            cb_includeAll.Text = "Include All Hazards";
             // 
             // flowLayoutPanel2
             // 
@@ -383,6 +301,176 @@
             txt_search.Size = new Size(392, 27);
             txt_search.TabIndex = 1;
             // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel4.Controls.Add(dgv_caList, 0, 1);
+            tableLayoutPanel4.Controls.Add(flowLayoutPanel3, 0, 0);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(3, 362);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 2;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 15.8959541F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 84.10405F));
+            tableLayoutPanel4.Size = new Size(1074, 346);
+            tableLayoutPanel4.TabIndex = 2;
+            // 
+            // dgv_caList
+            // 
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(235, 243, 255);
+            dgv_caList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            dgv_caList.BackgroundColor = Color.White;
+            dgv_caList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = Color.FromArgb(80, 160, 255);
+            dataGridViewCellStyle7.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle7.ForeColor = Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dgv_caList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dgv_caList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = SystemColors.Window;
+            dataGridViewCellStyle8.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
+            dgv_caList.DefaultCellStyle = dataGridViewCellStyle8;
+            dgv_caList.Dock = DockStyle.Fill;
+            dgv_caList.EnableHeadersVisualStyles = false;
+            dgv_caList.Font = new Font("Microsoft Sans Serif", 12F);
+            dgv_caList.GridColor = Color.FromArgb(80, 160, 255);
+            dgv_caList.Location = new Point(3, 58);
+            dgv_caList.Name = "dgv_caList";
+            dgv_caList.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = Color.FromArgb(235, 243, 255);
+            dataGridViewCellStyle9.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle9.ForeColor = Color.FromArgb(48, 48, 48);
+            dataGridViewCellStyle9.SelectionBackColor = Color.FromArgb(80, 160, 255);
+            dataGridViewCellStyle9.SelectionForeColor = Color.White;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            dgv_caList.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle10.BackColor = Color.White;
+            dataGridViewCellStyle10.Font = new Font("Microsoft Sans Serif", 12F);
+            dgv_caList.RowsDefaultCellStyle = dataGridViewCellStyle10;
+            dgv_caList.SelectedIndex = -1;
+            dgv_caList.Size = new Size(1068, 285);
+            dgv_caList.StripeOddColor = Color.FromArgb(235, 243, 255);
+            dgv_caList.TabIndex = 0;
+            // 
+            // flowLayoutPanel3
+            // 
+            flowLayoutPanel3.BackColor = Color.DarkRed;
+            flowLayoutPanel3.Controls.Add(label3);
+            flowLayoutPanel3.Dock = DockStyle.Fill;
+            flowLayoutPanel3.FlowDirection = FlowDirection.BottomUp;
+            flowLayoutPanel3.Location = new Point(3, 3);
+            flowLayoutPanel3.Name = "flowLayoutPanel3";
+            flowLayoutPanel3.Size = new Size(1068, 49);
+            flowLayoutPanel3.TabIndex = 1;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Calibri", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(3, 13);
+            label3.Margin = new Padding(3, 0, 3, 10);
+            label3.Name = "label3";
+            label3.Size = new Size(166, 26);
+            label3.TabIndex = 0;
+            label3.Text = "Corrective Actions";
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 1;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Controls.Add(flowLayoutPanel4, 0, 0);
+            tableLayoutPanel5.Controls.Add(dgv_hazardList, 0, 1);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(3, 47);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 2;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 15.8415842F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 84.15842F));
+            tableLayoutPanel5.Size = new Size(1068, 303);
+            tableLayoutPanel5.TabIndex = 3;
+            // 
+            // flowLayoutPanel4
+            // 
+            flowLayoutPanel4.BackColor = Color.DarkRed;
+            flowLayoutPanel4.Controls.Add(label4);
+            flowLayoutPanel4.Dock = DockStyle.Fill;
+            flowLayoutPanel4.FlowDirection = FlowDirection.BottomUp;
+            flowLayoutPanel4.Location = new Point(3, 3);
+            flowLayoutPanel4.Name = "flowLayoutPanel4";
+            flowLayoutPanel4.Size = new Size(1062, 42);
+            flowLayoutPanel4.TabIndex = 2;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Calibri", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label4.ForeColor = Color.White;
+            label4.Location = new Point(3, 6);
+            label4.Margin = new Padding(3, 0, 3, 10);
+            label4.Name = "label4";
+            label4.Size = new Size(79, 26);
+            label4.TabIndex = 0;
+            label4.Text = "Hazards";
+            // 
+            // dgv_hazardList
+            // 
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(235, 243, 255);
+            dgv_hazardList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dgv_hazardList.BackgroundColor = Color.White;
+            dgv_hazardList.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(80, 160, 255);
+            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgv_hazardList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgv_hazardList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dgv_hazardList.DefaultCellStyle = dataGridViewCellStyle3;
+            dgv_hazardList.Dock = DockStyle.Fill;
+            dgv_hazardList.EnableHeadersVisualStyles = false;
+            dgv_hazardList.Font = new Font("Microsoft Sans Serif", 12F);
+            dgv_hazardList.GridColor = Color.FromArgb(80, 160, 255);
+            dgv_hazardList.Location = new Point(3, 51);
+            dgv_hazardList.Name = "dgv_hazardList";
+            dgv_hazardList.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(235, 243, 255);
+            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle4.ForeColor = Color.FromArgb(48, 48, 48);
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(80, 160, 255);
+            dataGridViewCellStyle4.SelectionForeColor = Color.White;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgv_hazardList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.BackColor = Color.White;
+            dataGridViewCellStyle5.Font = new Font("Microsoft Sans Serif", 12F);
+            dgv_hazardList.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            dgv_hazardList.SelectedIndex = -1;
+            dgv_hazardList.Size = new Size(1062, 249);
+            dgv_hazardList.StripeOddColor = Color.FromArgb(235, 243, 255);
+            dgv_hazardList.TabIndex = 3;
+            // 
             // Frm_ViewCorrectiveActions
             // 
             AutoScaleDimensions = new SizeF(8F, 19F);
@@ -408,12 +496,18 @@
             ((System.ComponentModel.ISupportInitialize)pb_exit).EndInit();
             flowLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgv_caList).EndInit();
             tableLayoutPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgv_hazardList).EndInit();
             tableLayoutPanel3.ResumeLayout(false);
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
+            tableLayoutPanel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgv_caList).EndInit();
+            flowLayoutPanel3.ResumeLayout(false);
+            flowLayoutPanel3.PerformLayout();
+            tableLayoutPanel5.ResumeLayout(false);
+            flowLayoutPanel4.ResumeLayout(false);
+            flowLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_hazardList).EndInit();
             ResumeLayout(false);
         }
 
@@ -427,15 +521,21 @@
         private FlowLayoutPanel flowLayoutPanel1;
         private Sunny.UI.UIButton btn_ViewAllActions;
         private TableLayoutPanel tableLayoutPanel1;
-        private Sunny.UI.UIDataGridView dgv_caList;
         private Sunny.UI.UIButton btn_viewHazards;
         private TableLayoutPanel tableLayoutPanel2;
-        private Sunny.UI.UIDataGridView dgv_hazardList;
         private Sunny.UI.UICheckBox cb_includeAll;
         private Sunny.UI.UIButton btn_addCa;
         private TableLayoutPanel tableLayoutPanel3;
         private FlowLayoutPanel flowLayoutPanel2;
         private Label label2;
         private TextBox txt_search;
+        private TableLayoutPanel tableLayoutPanel5;
+        private FlowLayoutPanel flowLayoutPanel4;
+        private Label label4;
+        private Sunny.UI.UIDataGridView dgv_hazardList;
+        private TableLayoutPanel tableLayoutPanel4;
+        private Sunny.UI.UIDataGridView dgv_caList;
+        private FlowLayoutPanel flowLayoutPanel3;
+        private Label label3;
     }
 }

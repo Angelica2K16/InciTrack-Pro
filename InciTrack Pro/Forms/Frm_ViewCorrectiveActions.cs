@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using InciTrack_Pro.Helper_Classes;
+using Microsoft.Data.Sqlite;
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,15 @@ namespace InciTrack_Pro.Forms
             dgv_caList.CellDoubleClick += Dgv_caList_CellDoubleClick;
             dgv_caList.CellClick += Dgv_caList_CellClick;
             txt_search.TextChanged += Txt_search_TextChanged;
+            pnl_controlBox.MouseDown += HandleMouseDown;
+        }
+
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                FormDragger.DragForm(this);
+            }
         }
 
         private void Btn_addCa_Click(object? sender, EventArgs e)
@@ -120,6 +130,10 @@ namespace InciTrack_Pro.Forms
         private void Cb_includeAll_CheckedChanged(object? sender, EventArgs e)
         {
             LoadHazardList();
+            dgv_hazardList.ClearSelection();
+            dgv_hazardList.CurrentCell = null;
+            dgv_caList.DataSource = null;
+            dgv_caList.Columns.Clear();
         }
 
         private void Frm_ViewCorrectiveActions_Load(object? sender, EventArgs e)
@@ -144,6 +158,13 @@ namespace InciTrack_Pro.Forms
 
         private void Dgv_caList_CellClick(object? sender, DataGridViewCellEventArgs e)
         {
+            string? hazTitle = "";
+            if(dgv_hazardList.CurrentCell != null)
+            {
+                hazTitle = dgv_hazardList.CurrentRow.Cells["Title"].Value.ToString();
+            }
+
+
             MD.Instance.caIdx = Convert.ToInt32(
                 dgv_caList.Rows[e.RowIndex]
                 .Cells["Idx"].Value);

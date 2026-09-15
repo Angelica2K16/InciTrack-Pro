@@ -1,4 +1,5 @@
 ﻿using DanMarDev.Identification;
+using InciTrack_Pro.Helper_Classes;
 using LiveChartsCore.Kernel.Sketches;
 using Microsoft.Data.Sqlite;
 using Sunny.UI;
@@ -13,8 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MD = InciTrack_Pro.Base_Classes.ModelData;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
+using MD = InciTrack_Pro.Base_Classes.ModelData;
 
 namespace InciTrack_Pro.Forms
 {
@@ -36,6 +37,7 @@ namespace InciTrack_Pro.Forms
             pb_exit.Click += Pb_exit_Click;
             pb_minimize.Click += Pb_minimize_Click;
             btn_saveCa.Click += Btn_saveCa_Click;
+            pnl_controlBox.MouseDown += HandleMouseDown;
         }
 
        
@@ -48,6 +50,14 @@ namespace InciTrack_Pro.Forms
         private void Pb_minimize_Click(object? sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                FormDragger.DragForm(this);
+            }
         }
 
         private void Frm_AddCorrectiveAction_Load(object? sender, EventArgs e)

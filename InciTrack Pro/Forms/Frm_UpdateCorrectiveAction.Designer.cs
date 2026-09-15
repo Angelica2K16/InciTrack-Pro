@@ -42,10 +42,10 @@
             dtp_compDate = new Sunny.UI.UIDatePicker();
             lbl_compDateLbl = new Label();
             rtxt_action = new Sunny.UI.UIRichTextBox();
-            rtxt_notes = new Sunny.UI.UIRichTextBox();
             dtp_dueDate = new Sunny.UI.UIDatePicker();
             combo_actionOwner = new Sunny.UI.UIComboBox();
             label10 = new Label();
+            rtxt_notes = new Sunny.UI.UIRichTextBox();
             panel1 = new Panel();
             btn_save = new Sunny.UI.UIButton();
             btn_cancel = new Sunny.UI.UIButton();
@@ -130,9 +130,9 @@
             lbl_header.ForeColor = Color.White;
             lbl_header.Location = new Point(12, 12);
             lbl_header.Name = "lbl_header";
-            lbl_header.Size = new Size(50, 19);
+            lbl_header.Size = new Size(180, 19);
             lbl_header.TabIndex = 0;
-            lbl_header.Text = "label2";
+            lbl_header.Text = "Corrective Action Update";
             // 
             // tbl_main
             // 
@@ -245,20 +245,6 @@
             rtxt_action.TabIndex = 16;
             rtxt_action.TextAlignment = ContentAlignment.MiddleCenter;
             // 
-            // rtxt_notes
-            // 
-            rtxt_notes.FillColor = Color.White;
-            rtxt_notes.Font = new Font("Microsoft Sans Serif", 12F);
-            rtxt_notes.Location = new Point(172, 266);
-            rtxt_notes.Margin = new Padding(4, 5, 4, 5);
-            rtxt_notes.MinimumSize = new Size(1, 1);
-            rtxt_notes.Name = "rtxt_notes";
-            rtxt_notes.Padding = new Padding(2);
-            rtxt_notes.ShowText = false;
-            rtxt_notes.Size = new Size(738, 165);
-            rtxt_notes.TabIndex = 17;
-            rtxt_notes.TextAlignment = ContentAlignment.MiddleCenter;
-            // 
             // dtp_dueDate
             // 
             dtp_dueDate.DateCultureInfo = new System.Globalization.CultureInfo("");
@@ -308,6 +294,20 @@
             label10.Size = new Size(51, 19);
             label10.TabIndex = 25;
             label10.Text = "Notes:";
+            // 
+            // rtxt_notes
+            // 
+            rtxt_notes.FillColor = Color.White;
+            rtxt_notes.Font = new Font("Microsoft Sans Serif", 12F);
+            rtxt_notes.Location = new Point(172, 266);
+            rtxt_notes.Margin = new Padding(4, 5, 4, 5);
+            rtxt_notes.MinimumSize = new Size(1, 1);
+            rtxt_notes.Name = "rtxt_notes";
+            rtxt_notes.Padding = new Padding(2);
+            rtxt_notes.ShowText = false;
+            rtxt_notes.Size = new Size(738, 165);
+            rtxt_notes.TabIndex = 17;
+            rtxt_notes.TextAlignment = ContentAlignment.MiddleCenter;
             // 
             // panel1
             // 
