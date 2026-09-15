@@ -62,33 +62,39 @@ namespace InciTrack_Pro.Forms
 
         private void Btn_cancel_Click(object? sender, EventArgs e)
         {
-            Form? frm = Application.OpenForms["Frm_ViewCorrectiveActions"];
-            if (frm != null)
-            {
-                frm.Show();
-                frm.BringToFront();
-                this.Close();
-            }
-            else
-            {
+            //Form? frm = Application.OpenForms["Frm_ViewCorrectiveActions"];
+            //if (frm != null)
+            //{
+            //    frm.Show();
+            //    frm.BringToFront();
+            //    this.Close();
+            //}
+            //else
+            //{
 
-            }
+            //}
+
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
 
         #region Custom Control Box Events
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
-            Form? frm = Application.OpenForms["Frm_ViewCorrectiveActions"];
-            if (frm != null)
-            {
-                frm.Show();
-                frm.BringToFront();
-                this.Close();
-            }
-            else
-            {
+            //Form? frm = Application.OpenForms["Frm_ViewCorrectiveActions"];
+            //if (frm != null)
+            //{
+            //    frm.Show();
+            //    frm.BringToFront();
+            //    this.Close();
+            //}
+            //else
+            //{
 
-            }
+            //}
+
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
 
         private void Pb_minimize_Click(object? sender, EventArgs e)
@@ -99,6 +105,7 @@ namespace InciTrack_Pro.Forms
         #endregion
         private void Frm_UpdateCorrectiveAction_Load(object? sender, EventArgs e)
         {
+            lbl_header.Text = "Hazard Title: " + MD.Instance.hazTitle;
             GetEmpList();
             LoadControls();
         }
@@ -273,16 +280,19 @@ namespace InciTrack_Pro.Forms
 
                         transaction.Commit();
 
-                        Frm_ViewCorrectiveActions? frm = Application.OpenForms["Frm_ViewCorrectiveActions"] as Frm_ViewCorrectiveActions;
+                        //Frm_ViewCorrectiveActions? frm = Application.OpenForms["Frm_ViewCorrectiveActions"] as Frm_ViewCorrectiveActions;
 
-                        if (frm != null)
-                        {
-                            frm.Btn_ViewAllActions_Click(null, EventArgs.Empty);
-                            
-                            frm.Show();
-                            frm.BringToFront();
-                            this.Close();
-                        }
+                        //if (frm != null)
+                        //{
+                        //    frm.RefreshData();
+
+                        //    frm.Show();
+                        //    frm.BringToFront();
+                        //    this.Close();
+                        //}
+
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
 
                     }
                     catch (Exception ex)

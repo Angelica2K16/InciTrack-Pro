@@ -17,6 +17,8 @@ namespace InciTrack_Pro.Forms
 {
     public partial class Frm_ViewCorrectiveActions : Form
     {
+        private bool _openingEditForm = false;
+
         public Frm_ViewCorrectiveActions()
         {
             InitializeComponent();
@@ -61,6 +63,8 @@ namespace InciTrack_Pro.Forms
 
             this.Show();
 
+            LoadHazardList();
+
         }
 
         private void Pb_exit_Click(object? sender, EventArgs e)
@@ -99,6 +103,9 @@ namespace InciTrack_Pro.Forms
 
         private void Dgv_hazardList_SelectionChanged(object? sender, EventArgs e)
         {
+            if (_openingEditForm)
+                return;
+
             if (dgv_hazardList.CurrentRow == null)
                 return;
 
@@ -151,10 +158,17 @@ namespace InciTrack_Pro.Forms
 
                 this.Hide();
                 frm.ShowDialog();
+
                 this.Show();
+
+                btn_ViewAllActions.PerformClick();
+
+                _openingEditForm = false;
             }
 
-           
+
+
+
         }
 
         private void Txt_search_TextChanged(object? sender, EventArgs e)
@@ -186,17 +200,7 @@ namespace InciTrack_Pro.Forms
             {
                 conn.Open();
 
-                //string query = cb_apReports.Checked ? @"SELECT
-                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action As 'Corrective Action', Status, AP_Report AS 'AP Report'
-                //                  FROM Hazards
-                //                  WHERE AP_Report = 'Yes'
-                //                  ORDER BY Date Desc"
-                //                  :
-                //                  @"SELECT
-                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action, Status, AP_Report AS 'AP Report'
-                //                  FROM Hazards
-                //                  ORDER BY Date Desc"
-                //                  ;
+                          
 
                 string query = @"
                                 SELECT
@@ -262,18 +266,6 @@ namespace InciTrack_Pro.Forms
             using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
             {
                 conn.Open();
-
-                //string query = @"
-                //                SELECT
-                //                Idx,
-                //                Hazard_Idx,
-                //                Action,
-                //                Action_Owner AS 'Action Owner',
-                //                Due_Date AS 'Due Date',
-                //                Completion_Date AS 'Completion Date', 
-                //                Notes,
-                //                Status
-                //               FROM CORRECTIVE_ACTIONS";
 
                 string query = @"
                             SELECT
@@ -594,18 +586,7 @@ namespace InciTrack_Pro.Forms
             {
                 conn.Open();
 
-                //string query = cb_apReports.Checked ? @"SELECT
-                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action As 'Corrective Action', Status, AP_Report AS 'AP Report'
-                //                  FROM Hazards
-                //                  WHERE AP_Report = 'Yes'
-                //                  ORDER BY Date Desc"
-                //                  :
-                //                  @"SELECT
-                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action, Status, AP_Report AS 'AP Report'
-                //                  FROM Hazards
-                //                  ORDER BY Date Desc"
-                //                  ;
-
+               
                 string query = @"
                                 SELECT Hazard_Idx, Action, Action_Owner, Due_Date, Completion_Date, Notes, Status From Corrective_Actions Where Idx = @Idx";
 
@@ -675,254 +656,18 @@ namespace InciTrack_Pro.Forms
 
             FormatDgv(dgv_hazardList, null);
         }
-        //private void EditCaDetails(int caIdx)
-        //{
-        //    using SqliteConnection conn = new SqliteConnection(GV.shesDB);
 
-        //    conn.Open();
+        public void RefreshData()
+        {
+            LoadHazardList();
 
-        //    string sql = @"
-        //                SELECT Action, Action_Owner AS 'Action Owner', Due_Date AS 'Due Date', Completion_Date AS 'Completion Date', Notes, Status
-        //                FROM Corrective_Actions
-        //                WHERE Idx = @Idx";
-
-        //    using SqliteCommand cmd = new SqliteCommand(sql, conn);
-
-        //    cmd.Parameters.AddWithValue("@Idx", caIdx);
-
-        //    using SqliteDataReader dr = cmd.ExecuteReader();
-
-        //    if (!dr.Read())
-        //        return;
-
-        //    //create Popup form
-        //    Form popup = new Form();
-        //    popup.BackColor = Color.FromArgb(45, 45, 48);
-        //    popup.Text = "Corrective Action Info";
-        //    popup.Size = new Size(900, 400);
-        //    popup.ShowIcon = false;
-        //    popup.StartPosition = FormStartPosition.CenterParent;
-
-
-        //    TableLayoutPanel tbl = new TableLayoutPanel
-        //    {
-        //        Dock = DockStyle.Fill,
-        //        AutoScroll = true,
-        //        BackColor = Color.Transparent,
-        //        ColumnCount = 2
-        //    };
-
-        //    tbl.ColumnStyles.Add(
-        //    new ColumnStyle(SizeType.Absolute, 180));
-
-        //    tbl.ColumnStyles.Add(
-        //    new ColumnStyle(SizeType.Percent, 100));
-
-        //    popup.Controls.Add(tbl);
-
-        //    for (int i = 0; i < dr.FieldCount; i++)
-        //    {
-        //        string columnName = dr.GetName(i);
-        //        string value = dr[i]?.ToString() ?? "";
-
-        //        AddEditDetailRow(tbl, columnName, value);
-        //    }
-
-
-
-        //    int row = tbl.RowCount;
-        //    tbl.RowCount++;
-
-        //    UIButton btnSave = new UIButton
-        //    {
-        //        Text = "Save",
-        //        Width = 190,
-        //        Height = 45,
-        //        FillColor = Color.Firebrick,
-        //        FillHoverColor = Color.IndianRed,
-        //        FillPressColor = Color.DarkRed,
-        //        ForeColor = Color.White,
-        //        Font = new Font("Calibri", 12, FontStyle.Bold),
-        //        Radius = 8,
-        //        Cursor = Cursors.Hand,
-        //        Margin = new Padding(5)
-        //    };
-
-        //    btnSave.Click += (s, e) =>
-        //    {
-        //        SaveCorrectiveAction(caIdx, tbl);
-        //    };
-
-        //    tbl.Controls.Add(btnSave, 0, row);
-        //    tbl.SetColumnSpan(btnSave, 2);
-        //    btnSave.Anchor = AnchorStyles.None;
-
-        //    popup.ShowDialog();
-        //}
-
-        //        private void SaveCorrectiveAction(int caIdx, TableLayoutPanel tbl)
-        //        {
-        //            string action = 
-        //            ((RichTextBox)tbl.Controls.Find("Action", true)[0]).Text;
-
-        //            string actionOwner =
-        //            ((TextBox)tbl.Controls.Find("ActionOwner", true)[0]).Text;
-
-        //            string dueDate =
-        //            ((TextBox)tbl.Controls.Find("DueDate", true)[0]).Text;
-
-        //            string completionDate =
-        //            ((TextBox)tbl.Controls.Find("CompletionDate", true)[0]).Text;
-
-        //            string notes =
-        //            ((RichTextBox)tbl.Controls.Find("Notes", true)[0]).Text;
-
-        //            string status =
-        //            ((TextBox)tbl.Controls.Find("Status", true)[0]).Text;
-
-
-        //            //SQLITE Function
-        //            using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
-        //            {
-        //                conn.Open();
-        //                using (SqliteTransaction transaction = conn.BeginTransaction())
-        //                {
-        //                    try
-        //                    {
-        //                        string sql = $@"
-        //                            UPDATE HAZARDS SET
-
-        //                                Action = @Action,
-        //Action_Owner = @Action_Owner,
-        //Due_Date
-
-        //                            WHERE Idx  = @caIdx
-        //                           ";
-
-        //                        using (SqliteCommand cmd = new SqliteCommand(sql, conn, transaction))
-        //                        {
-
-        //                            cmd.Parameters.AddWithValue("@hazardIdx", MD.Instance.hazardIdx);
-        //                            cmd.Parameters.AddWithValue("@title", MD.Instance.hazTitle);
-        //                            cmd.Parameters.AddWithValue("@incidentType", MD.Instance.hazIncidentType);
-        //                            cmd.Parameters.AddWithValue("@riskLevel", MD.Instance.hazRiskMatrix);
-        //                            cmd.Parameters.AddWithValue("@apReport", MD.Instance.hazApReport);
-        //                            cmd.Parameters.AddWithValue("@injuryCat", MD.Instance.hazInjury);
-        //                            cmd.Parameters.AddWithValue("@envCat", MD.Instance.hazEnv);
-        //                            cmd.Parameters.AddWithValue("@damageCat", MD.Instance.hazDamage);
-        //                            cmd.Parameters.AddWithValue("@descr", MD.Instance.hazDescr);
-        //                            cmd.Parameters.AddWithValue("@notes", MD.Instance.hazNotes);
-        //                            cmd.Parameters.AddWithValue("@status", MD.Instance.hazStatus);
-
-
-        //                            cmd.ExecuteNonQuery();
-        //                        }
-
-        //                        transaction.Commit();
-
-        //                        Frm_Hazards? frm = Application.OpenForms["Frm_Hazards"] as Frm_Hazards;
-
-        //                        if (frm != null)
-        //                        {
-        //                            frm.LoadDgvHazardsList();
-        //                            frm.ApplySearchFilter();
-        //                            frm.Show();
-        //                            frm.BringToFront();
-        //                            this.Close();
-        //                        }
-
-        //                    }
-        //                    catch (Exception ex)
-        //                    {
-        //                        transaction.Rollback();
-        //                        MessageBox.Show(ex.Message);
-        //                    }
-        //                }
-
-        //            }
-        //        }
-
-        //private void AddEditDetailRow(TableLayoutPanel tbl, string label, string value)
-        //{
-        //    int row = tbl.RowCount;
-
-        //    tbl.RowCount++;
-
-        //    tbl.RowStyles.Add(
-        //    new RowStyle(SizeType.AutoSize));
-
-        //    Label lblField = new Label
-        //    {
-        //        Text = label + ":",
-        //        ForeColor = Color.White,
-        //        AutoSize = true,
-        //        Padding = new Padding(5),
-        //        Font = new Font("Calibri", 12, FontStyle.Bold)
-        //    };
-
-        //    Control valueControl;
-
-        //    if (label == "Action" || label == "Notes")
-        //    {
-
-
-        //        RichTextBox rtb = new RichTextBox
-        //        {
-        //            Name = label.Replace(" ", ""),
-        //            Text = value,
-        //            ReadOnly = false,
-        //            BorderStyle = BorderStyle.None,
-        //            BackColor = Color.FromArgb(45, 45, 48),
-        //            ForeColor = Color.White,
-        //            Multiline = value.Length > 20,
-        //            // Dock = DockStyle.Fill,
-        //            Margin = new Padding(5),
-        //            ScrollBars = RichTextBoxScrollBars.None,
-        //            WordWrap = true,
-        //            Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top
-
-        //        };
-
-
-
-        //        valueControl = rtb;
-
-
-        //    }
-        //    else
-        //    {
-        //        valueControl = new TextBox
-        //        {
-        //            Name = label.Replace(" ", ""),
-        //            Text = value,
-        //            ReadOnly = false,
-        //            BorderStyle = BorderStyle.None,
-        //            BackColor = Color.FromArgb(45, 45, 48),
-        //            ForeColor = Color.White,
-        //            Multiline = value.Length > 20,
-        //            Dock = DockStyle.Fill,
-        //            Margin = new Padding(5)
-        //        };
-        //    }
-
-
-
-        //    tbl.Controls.Add(lblField, 0, row);
-        //    tbl.Controls.Add(valueControl, 1, row);
-
-        //    if (valueControl is RichTextBox rtbx)
-        //    {
-        //        rtbx.Width = tbl.GetColumnWidths()[1] - 10;
-
-        //        int height =
-        //        rtbx.GetPositionFromCharIndex(Math.Max(0, rtbx.TextLength - 1)).Y +
-        //        rtbx.Font.Height + 10;
-
-        //        rtbx.Height = Math.Max(height, 25);
-        //    }
-
-        //}
-
+            if (dgv_hazardList.Rows.Count > 0)
+            {
+                dgv_hazardList.Rows[0].Selected = true;
+                dgv_hazardList.CurrentCell =
+                dgv_hazardList.Rows[0].Cells["Title"];
+            }
+        }
 
 
     }
