@@ -11,7 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
-
+using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
@@ -36,6 +37,7 @@ namespace InciTrack_Pro.Forms
         {
             InitializeComponent();
             InitializeEvents();
+            FormDragger.EnableDrag(this, pnl_controlBox);
         }
 
         private void InitializeEvents()
@@ -46,17 +48,10 @@ namespace InciTrack_Pro.Forms
             combo_Year.SelectedIndexChanged += FiltersChanged;
             combo_Quarter.SelectedIndexChanged += FiltersChanged;
             combo_month.SelectedIndexChanged += FiltersChanged;
-            pnl_controlBox.MouseDown += HandleMouseDown;
+           
         }
 
-        private void HandleMouseDown(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                FormDragger.DragForm(this);
-            }
-        }
-
+      
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
             Form? frm = Application.OpenForms["Frm_Main"];

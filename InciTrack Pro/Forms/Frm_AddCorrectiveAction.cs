@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
+using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
@@ -29,6 +31,8 @@ namespace InciTrack_Pro.Forms
             _parentForm = parentForm;
             UIStyles.CultureInfo = CultureInfo.GetCultureInfo("en-US");
             InitializeEvents();
+
+            FormDragger.EnableDrag(this, pnl_controlBox);
         }
 
         private void InitializeEvents()
@@ -37,7 +41,7 @@ namespace InciTrack_Pro.Forms
             pb_exit.Click += Pb_exit_Click;
             pb_minimize.Click += Pb_minimize_Click;
             btn_saveCa.Click += Btn_saveCa_Click;
-            pnl_controlBox.MouseDown += HandleMouseDown;
+            
         }
 
        
@@ -76,13 +80,7 @@ namespace InciTrack_Pro.Forms
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void HandleMouseDown(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                FormDragger.DragForm(this);
-            }
-        }
+       
 
         private void Frm_AddCorrectiveAction_Load(object? sender, EventArgs e)
         {

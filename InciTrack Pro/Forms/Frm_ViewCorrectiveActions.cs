@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
-
+using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
@@ -24,6 +25,7 @@ namespace InciTrack_Pro.Forms
         {
             InitializeComponent();
             InitializeEvents();
+            FormDragger.EnableDrag(this, pnl_controlBox);
         }
 
         private void InitializeEvents()
@@ -39,15 +41,7 @@ namespace InciTrack_Pro.Forms
             dgv_caList.CellDoubleClick += Dgv_caList_CellDoubleClick;
             dgv_caList.CellClick += Dgv_caList_CellClick;
             txt_search.TextChanged += Txt_search_TextChanged;
-            pnl_controlBox.MouseDown += HandleMouseDown;
-        }
-
-        private void HandleMouseDown(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                FormDragger.DragForm(this);
-            }
+            
         }
 
         private void Btn_addCa_Click(object? sender, EventArgs e)

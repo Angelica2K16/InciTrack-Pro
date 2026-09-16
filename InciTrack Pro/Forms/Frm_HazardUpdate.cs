@@ -17,6 +17,8 @@ using System.Windows.Forms;
 using static OfficeOpenXml.ExcelErrorValue;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
+using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
@@ -32,7 +34,7 @@ namespace InciTrack_Pro.Forms
         {
             InitializeComponent();
             InitializeEvents();
-            
+            FormDragger.EnableDrag(this, pnl_controlBox);
         }
 
         private void InitializeEvents()
@@ -45,17 +47,11 @@ namespace InciTrack_Pro.Forms
             btn_createCa.Click += Btn_createCa_Click;
             pb_riskMatrix.MouseEnter += Pb_riskMatrix_MouseEnter;
             pb_riskMatrix.MouseLeave += Pb_riskMatrix_MouseLeave;
-            pnl_controlBox.MouseDown += HandleMouseDown;
+            
         }
         #endregion
 
-        private void HandleMouseDown(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                FormDragger.DragForm(this);
-            }
-        }
+       
 
         #region Load Form Event
         private void Frm_HazardUpdate_Load(object? sender, EventArgs e)

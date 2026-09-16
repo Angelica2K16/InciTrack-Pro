@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="DanMarDev.DuplicateInstanceCheck" Version="1.0.0" />
+    <PackageReference Include="DanMarDev.FormDragger" Version="1.0.0" />
+    <PackageReference Include="DanMarDev.FormManager" Version="1.0.0" />
     <PackageReference Include="DanMarDev.Identification" Version="2.0.0" />
     <PackageReference Include="DanMarDev.WakeDrives" Version="1.0.0" />
     <PackageReference Include="EPPlus" Version="8.7.0" />

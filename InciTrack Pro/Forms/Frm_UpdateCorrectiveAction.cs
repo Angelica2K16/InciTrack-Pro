@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
+using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
+
 
 namespace InciTrack_Pro.Forms
 {
@@ -24,7 +27,8 @@ namespace InciTrack_Pro.Forms
         {
             InitializeComponent();
             InitializeEvents();
-            
+            FormDragger.EnableDrag(this, pnl_controlBox);
+
         }
 
         private void InitializeEvents()
@@ -34,16 +38,9 @@ namespace InciTrack_Pro.Forms
             pb_minimize.Click += Pb_minimize_Click;
             btn_cancel.Click += Btn_cancel_Click;
             btn_save.Click += Btn_save_Click;
-            pnl_controlBox.MouseDown += HandleMouseDown;
-        }
+        }    
 
-        private void HandleMouseDown(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                FormDragger.DragForm(this);
-            }
-        }
+       
 
         private void Btn_save_Click(object? sender, EventArgs e)
         {

@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using WD = DanMarDev.WakeDrives;
+using DanMarDev.FormDragger;
 
 namespace InciTrack_Pro
 {
@@ -41,6 +42,8 @@ namespace InciTrack_Pro
             EnableDoubleBuffer(flp_menu);
             EnableDoubleBuffer(flp_Kpi);
             InitializeEvents();
+
+            FormDragger.EnableDrag(this, pnl_controlBox);
         }
 
         public static void EnableDoubleBuffer(Control control)
@@ -57,18 +60,10 @@ namespace InciTrack_Pro
             this.Load += Frm_Main_Load;
             pb_exit.Click += Pb_exit_Click;
             pb_minimize.Click += Pb_minimize_Click;
-            pnl_controlBox.MouseDown += HandleMouseDown;
+
         }
 
         #endregion
-
-        private void HandleMouseDown(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                FormDragger.DragForm(this);
-            }
-        }
 
         #region Anti-Flickering
         protected override void WndProc(ref Message m)

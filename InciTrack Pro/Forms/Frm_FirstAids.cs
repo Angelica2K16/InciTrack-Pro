@@ -18,6 +18,8 @@ using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
+using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
@@ -28,6 +30,7 @@ namespace InciTrack_Pro.Forms
         {
             InitializeComponent();
             InitializeEvents();
+            FormDragger.EnableDrag(this, pnl_controlBox);
         }
 
         private void InitializeEvents()
@@ -39,7 +42,7 @@ namespace InciTrack_Pro.Forms
             cb_apReports.CheckedChanged += Cb_apReports_CheckedChanged;
             dgv_firstAidsList.CellDoubleClick += Dgv_firstAidsList_CellDoubleClick;
             dgv_firstAidsList.CellClick += dgvFirstAids_CellClick;
-            pnl_controlBox.MouseDown += HandleMouseDown;
+            
         }
 
         #endregion
@@ -77,13 +80,7 @@ namespace InciTrack_Pro.Forms
         }
         #endregion
 
-        private void HandleMouseDown(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                FormDragger.DragForm(this);
-            }
-        }
+    
         #region CheckBox Event - AP Reports Filter - When Checked, Filter DGV to Show Only First Aids Reported to AP
         private void Cb_apReports_CheckedChanged(object? sender, EventArgs e)
         {
