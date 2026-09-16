@@ -1,28 +1,18 @@
 using DanMarDev.DuplicateInstanceCheck;
+using DanMarDev.FormDragger;
 using DanMarDev.Identification;
-using FontAwesome.Sharp;
 using InciTrack_Pro.Forms;
-using InciTrack_Pro.Helper_Classes;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
-using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.SkiaSharpView.WinForms;
-using LiveChartsCore.Themes;
-using LiveChartsCore.VisualElements;
 using Microsoft.Data.Sqlite;
 //using Guna.UI2.WinForms;
 using Sunny.UI;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
-using System.Drawing;
-using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using WD = DanMarDev.WakeDrives;
-using DanMarDev.FormDragger;
 
 namespace InciTrack_Pro
 {

@@ -1,12 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
+using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 
 namespace InciTrack_Pro.Helper_Classes
 {

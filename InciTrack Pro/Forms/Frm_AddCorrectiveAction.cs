@@ -1,30 +1,23 @@
-﻿using DanMarDev.Identification;
-using InciTrack_Pro.Helper_Classes;
-using LiveChartsCore.Kernel.Sketches;
+﻿using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
+using DanMarDev.Identification;
 using Microsoft.Data.Sqlite;
 using Sunny.UI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
-using DanMarDev.FormDragger;
-using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
     public partial class Frm_AddCorrectiveAction : Form
     {
+        #region Class Level Variables
         private List<string> activeEmpList = new List<string>();
         private Form _parentForm;
+        #endregion
+
+        #region Constructors
         public Frm_AddCorrectiveAction(Form parentForm)
         {
             InitializeComponent();
@@ -43,9 +36,9 @@ namespace InciTrack_Pro.Forms
             btn_saveCa.Click += Btn_saveCa_Click;
             
         }
+        #endregion
 
-       
-
+        #region Custom Controlbox Events
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
             Form? frm = Application.OpenForms["Frm_HazardUpdate"];
@@ -70,29 +63,27 @@ namespace InciTrack_Pro.Forms
                 return;
             }
 
-            //this.Close();
-           
-            //FormManager.SetFormLocation(frm, this);
+            
         }
 
         private void Pb_minimize_Click(object? sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
+        #endregion
 
-       
-
+        #region Form Load Event
         private void Frm_AddCorrectiveAction_Load(object? sender, EventArgs e)
         {
-            
-
             GetEmpList();
 
             lbl_title.Text = "Title: " + MD.Instance.hazTitle;
             lbl_date.Text = "Date: " + MD.Instance.hazDate.ToString("yyyy-MM-dd");
             lbl_type.Text = "Hazard Type: " + MD.Instance.hazIncidentType;
         }
+        #endregion
 
+        #region Save Corrective Action
         private void Btn_saveCa_Click(object? sender, EventArgs e)
         {
             Debug.WriteLine(this.Font.Name);
@@ -124,11 +115,11 @@ namespace InciTrack_Pro.Forms
                 WriteToSql();
             }
         }
+        #endregion
 
+        #region Helper Methods
 
-
-
-
+        #region Method - Get Employee List
         private void GetEmpList()
         {
             
@@ -150,7 +141,9 @@ namespace InciTrack_Pro.Forms
 
             combo_empName.Sorted = true;
         }
+        #endregion
 
+        #region Method - Validate Controls
         private bool ValidateControls(out List<string> errors, out Control? firstInvalid)
         {
             
@@ -213,9 +206,9 @@ namespace InciTrack_Pro.Forms
 
             return filled;
         }
+        #endregion
 
-   
-
+        #region Method - SQLite Write to Tables
         private void WriteToSql()
         {
             using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
@@ -295,6 +288,8 @@ namespace InciTrack_Pro.Forms
 
             }
         }
+        #endregion
 
+        #endregion
     }
 }

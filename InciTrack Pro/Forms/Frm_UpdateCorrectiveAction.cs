@@ -1,32 +1,29 @@
-﻿using DanMarDev.Identification;
-using InciTrack_Pro.Helper_Classes;
+﻿using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
+using DanMarDev.Identification;
 using Microsoft.Data.Sqlite;
 using Sunny.UI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Globalization;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
-using DanMarDev.FormDragger;
-using DanMarDev.FormManager;
 
 
 namespace InciTrack_Pro.Forms
 {
     public partial class Frm_UpdateCorrectiveAction : Form
     {
+        #region Class Level Variables
+
         private List<string> activeEmpList = new List<string>();
 
+        #endregion
+
+        #region Constructors
         public Frm_UpdateCorrectiveAction()
         {
             InitializeComponent();
             InitializeEvents();
+            UIStyles.CultureInfo = CultureInfo.GetCultureInfo("en-US");
             FormDragger.EnableDrag(this, pnl_controlBox);
 
         }
@@ -38,10 +35,11 @@ namespace InciTrack_Pro.Forms
             pb_minimize.Click += Pb_minimize_Click;
             btn_cancel.Click += Btn_cancel_Click;
             btn_save.Click += Btn_save_Click;
-        }    
+        }
 
-       
+        #endregion
 
+        #region Save and Cancel Corrective Action
         private void Btn_save_Click(object? sender, EventArgs e)
         {
             if (!ValidateControls(out var errs, out var controlFocus))
@@ -84,6 +82,7 @@ namespace InciTrack_Pro.Forms
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+        #endregion
 
         #region Custom Control Box Events
         private void Pb_exit_Click(object? sender, EventArgs e)
@@ -111,13 +110,18 @@ namespace InciTrack_Pro.Forms
         }
 
         #endregion
+
+        #region Load Form Event
         private void Frm_UpdateCorrectiveAction_Load(object? sender, EventArgs e)
         {
             GetEmpList();
             LoadControls();
         }
+        #endregion
 
-       
+        #region Helper Methods
+
+        #region Method - Get Employee List
         private void GetEmpList()
         {
 
@@ -139,7 +143,9 @@ namespace InciTrack_Pro.Forms
 
             combo_actionOwner.Sorted = true;
         }
+        #endregion
 
+        #region Method - Load Controls from Model Data Class
         private void LoadControls()
         {
             dtp_dueDate.Value = MD.Instance.caDueDate;
@@ -157,7 +163,9 @@ namespace InciTrack_Pro.Forms
             rtxt_action.Text = MD.Instance.caAction;
             rtxt_notes.Text = MD.Instance.caNotes;
         }
+        #endregion
 
+        #region Method - Validate COntrols
         private bool ValidateControls(out List<string> errors, out Control? firstInvalid)
         {
 
@@ -232,7 +240,9 @@ namespace InciTrack_Pro.Forms
             if (!filled) errors.Add($"{label} is required.");
             return filled;
         }
+        #endregion
 
+        #region Method - Set Model Data Class From Controls
         private void SetModelDataClass()
         {
             MD.Instance.caDueDate = dtp_dueDate.Value;
@@ -250,7 +260,9 @@ namespace InciTrack_Pro.Forms
             }
             MD.Instance.caNotes = rtxt_notes.Text;
         }
+        #endregion
 
+        #region Method - SQLite Function - Update Tables
         private void UpdateSqlData()
         {
             //SQLITE Function
@@ -311,6 +323,9 @@ namespace InciTrack_Pro.Forms
 
             }
         }
+        #endregion
+
+        #endregion
     }
 
 }

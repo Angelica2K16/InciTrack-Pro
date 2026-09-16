@@ -1,26 +1,19 @@
-﻿using InciTrack_Pro.Helper_Classes;
+﻿using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 using Microsoft.Data.Sqlite;
-using Sunny.UI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
-using DanMarDev.FormDragger;
-using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
     public partial class Frm_ViewCorrectiveActions : Form
     {
+        #region Class Level Variables
         private bool _openingEditForm = false;
+        #endregion
 
+        #region Constructors
         public Frm_ViewCorrectiveActions()
         {
             InitializeComponent();
@@ -43,7 +36,20 @@ namespace InciTrack_Pro.Forms
             txt_search.TextChanged += Txt_search_TextChanged;
             
         }
+        #endregion
 
+        #region Form Load Event
+        private void Frm_ViewCorrectiveActions_Load(object? sender, EventArgs e)
+        {
+            LoadHazardList();
+
+            dgv_caList.Columns.Clear();
+            dgv_caList.DataSource = null;
+
+        }
+        #endregion
+
+        #region Add Corrective Action
         private void Btn_addCa_Click(object? sender, EventArgs e)
         {
             if (dgv_hazardList.RowCount == 0) { return; }
@@ -70,7 +76,9 @@ namespace InciTrack_Pro.Forms
             LoadHazardList();
 
         }
+        #endregion
 
+        #region Custom Controlbox Events
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
             Form? frm = Application.OpenForms["Frm_Main"];
@@ -91,13 +99,17 @@ namespace InciTrack_Pro.Forms
         {
             this.WindowState = FormWindowState.Minimized;
         }
+        #endregion
 
+        #region View Hazards
         private void Btn_viewHazards_Click(object? sender, EventArgs e)
         {
             cb_includeAll.Enabled = true;
             LoadHazardList();
         }
+        #endregion
 
+        #region View all Open Actions
         internal void Btn_ViewAllActions_Click(object? sender, EventArgs e)
         {
             txt_search.Text = string.Empty;
@@ -105,7 +117,22 @@ namespace InciTrack_Pro.Forms
             dgv_hazardList.DataSource = null;
             LoadCaList(null);
         }
+        #endregion
 
+        #region Checkbox Changed Event
+        private void Cb_includeAll_CheckedChanged(object? sender, EventArgs e)
+        {
+            LoadHazardList();
+            dgv_hazardList.ClearSelection();
+            dgv_hazardList.CurrentCell = null;
+            dgv_caList.DataSource = null;
+            dgv_caList.Columns.Clear();
+        }
+        #endregion
+
+        #region DGV Events
+
+        #region Hazard DGV Selection Change
         private void Dgv_hazardList_SelectionChanged(object? sender, EventArgs e)
         {
             if (_openingEditForm)
@@ -121,25 +148,9 @@ namespace InciTrack_Pro.Forms
 
             LoadCaList(hazIdx);
         }
+        #endregion
 
-        private void Cb_includeAll_CheckedChanged(object? sender, EventArgs e)
-        {
-            LoadHazardList();
-            dgv_hazardList.ClearSelection();
-            dgv_hazardList.CurrentCell = null;
-            dgv_caList.DataSource = null;
-            dgv_caList.Columns.Clear();
-        }
-
-        private void Frm_ViewCorrectiveActions_Load(object? sender, EventArgs e)
-        {
-            LoadHazardList();
-
-            dgv_caList.Columns.Clear();
-            dgv_caList.DataSource = null;
-
-        }
-
+        #region Corrective Action DGV Events
         private void Dgv_caList_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -181,19 +192,23 @@ namespace InciTrack_Pro.Forms
 
                 _openingEditForm = false;
             }
-
-
-
-
         }
+        #endregion
 
+        #endregion
+
+        #region Search / Filter  Hazards Event
         private void Txt_search_TextChanged(object? sender, EventArgs e)
         {
             dgv_hazardList.ClearSelection();
             dgv_hazardList.CurrentCell = null;
             ApplySearchFilter();
         }
+        #endregion
 
+        #region Helper Methods 
+
+        #region Method - Load hazards into DGV
         private void LoadHazardList()
         {
             List<string> conditions = new();
@@ -260,7 +275,9 @@ namespace InciTrack_Pro.Forms
             
             FormatDgv(dgv_hazardList, null);
         }
+        #endregion
 
+        #region Method - Load Corrective Actions into DGV
         private void LoadCaList(string? hazIdx)
         {
             dgv_caList.Columns.Clear();
@@ -347,7 +364,9 @@ namespace InciTrack_Pro.Forms
 
             
         }
+        #endregion
 
+        #region Method - Format DGVs
         private void FormatDgv(DataGridView dgv, string? hazIdx)
         {
             dgv.ScrollBars = ScrollBars.Vertical;
@@ -435,7 +454,9 @@ namespace InciTrack_Pro.Forms
             }
 
         }
+        #endregion
 
+        #region Method - Clearing and Setting Model Data Class
         private void ClearMD()
         {
             MD.Instance.hazIncidentType = null;
@@ -458,7 +479,9 @@ namespace InciTrack_Pro.Forms
             MD.Instance.hazIncidentType = dgv_hazardList.CurrentRow.Cells["Incident Type"].Value.ToString();
             MD.Instance.hazDate = Convert.ToDateTime(dgv_hazardList.CurrentRow.Cells["Date"].Value);
         }
+        #endregion
 
+        #region Method - Get Corrective Action Details
         private void GetCaDetails(int caIdx)
         {
             using SqliteConnection conn = new SqliteConnection(GV.shesDB);
@@ -636,7 +659,9 @@ namespace InciTrack_Pro.Forms
                 }
             }
         }
+        #endregion
 
+        #region Method - Search Filter 
         internal void ApplySearchFilter()
         {
 
@@ -672,19 +697,23 @@ namespace InciTrack_Pro.Forms
 
             FormatDgv(dgv_hazardList, null);
         }
+        #endregion
 
-        public void RefreshData()
-        {
-            LoadHazardList();
+        #region Method - Refresh Data (Currently not using)
+        //public void RefreshData()
+        //{
+        //    LoadHazardList();
 
-            if (dgv_hazardList.Rows.Count > 0)
-            {
-                dgv_hazardList.Rows[0].Selected = true;
-                dgv_hazardList.CurrentCell =
-                dgv_hazardList.Rows[0].Cells["Title"];
-            }
-        }
+        //    if (dgv_hazardList.Rows.Count > 0)
+        //    {
+        //        dgv_hazardList.Rows[0].Selected = true;
+        //        dgv_hazardList.CurrentCell =
+        //        dgv_hazardList.Rows[0].Cells["Title"];
+        //    }
+        //}
+        #endregion
 
+        #endregion
 
     }
 }

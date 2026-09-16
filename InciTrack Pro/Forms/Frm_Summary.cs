@@ -1,23 +1,14 @@
-﻿using InciTrack_Pro.Helper_Classes;
+﻿using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 using InciTrack_Pro.UserControls;
 using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
-using DanMarDev.FormDragger;
-using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
     public partial class Frm_Summary : Form
     {
+        #region Class Level Variables
         private bool _loading = true;
 
         private KpiCard? cardAPHpnm;
@@ -32,7 +23,9 @@ namespace InciTrack_Pro.Forms
         private KpiCard? cardClosedActions;
         private KpiCard? cardAudits;
         private KpiCard? cardMinimalHazards;
+        #endregion
 
+        #region Constructors
         public Frm_Summary()
         {
             InitializeComponent();
@@ -50,8 +43,9 @@ namespace InciTrack_Pro.Forms
             combo_month.SelectedIndexChanged += FiltersChanged;
            
         }
+        #endregion
 
-      
+        #region Custome Controlbox Events
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
             Form? frm = Application.OpenForms["Frm_Main"];
@@ -72,7 +66,9 @@ namespace InciTrack_Pro.Forms
         {
             this.WindowState = FormWindowState.Minimized;
         }
+        #endregion
 
+        #region Form Load Event
         private void Frm_Summary_Load(object? sender, EventArgs e)
         {
             LoadFilterCombos();
@@ -86,6 +82,11 @@ namespace InciTrack_Pro.Forms
             LoadDashboard();
         }
 
+        #endregion
+
+        #region Helper Methods 
+
+        #region Method - Filters Changed
         private void FiltersChanged(object? sender, EventArgs e)
         {
             if (_loading)
@@ -96,7 +97,9 @@ namespace InciTrack_Pro.Forms
 
             LoadDashboard();
         }
+        #endregion
 
+        #region Method - Load Filter Comboboxes
         private void LoadFilterCombos()
         {
             //Populate the year combobox
@@ -122,7 +125,9 @@ namespace InciTrack_Pro.Forms
                 new DateTime(2000, month, 1).ToString("MMMM"));
             }
         }
+        #endregion
 
+        #region Method - Set Filter Defaults
         private void SetDefaultFilters()
         {
             combo_Year.SelectedItem = DateTime.Now.Year.ToString();
@@ -132,7 +137,9 @@ namespace InciTrack_Pro.Forms
 
             combo_month.SelectedIndex = DateTime.Now.Month;
         }
+        #endregion
 
+        #region Method - KPI Cards
         private void CreateCards()
         {
             // AP Section
@@ -163,10 +170,9 @@ namespace InciTrack_Pro.Forms
             flow_SHES.Controls.Add(cardAudits);
             flow_SHES.Controls.Add(cardMinimalHazards);
         }
+        #endregion
 
-      
-
-        
+        #region Method - Load Dashboard
         private void LoadDashboard()
         {
             var range = GetDateRange();
@@ -175,43 +181,43 @@ namespace InciTrack_Pro.Forms
             cardAPHpnm?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM HAZARDS
-WHERE Incident_type='HPNM'
-AND AP_Report='Yes'
-AND Date >= @Start
-AND Date < @End",
+                FROM HAZARDS
+                WHERE Incident_type='HPNM'
+                AND AP_Report='Yes'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
             cardAPUnsafeAct?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM HAZARDS
-WHERE Incident_type='Hazard Share (Unsafe Act)'
-AND AP_Report='Yes'
-AND Date >= @Start
-AND Date < @End",
+                FROM HAZARDS
+                WHERE Incident_type='Hazard Share (Unsafe Act)'
+                AND AP_Report='Yes'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
             cardAPUnsafeCondition?.SetValue(
             ExecuteCount(
-            @"SELECT COUNT(*)
-FROM HAZARDS
-WHERE Incident_type='Hazard Share (Unsafe Condition)'
-AND AP_Report='Yes'
-AND Date >= @Start
-AND Date < @End",
+                            @"SELECT COUNT(*)
+                FROM HAZARDS
+                WHERE Incident_type='Hazard Share (Unsafe Condition)'
+                AND AP_Report='Yes'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
             cardAPFirstAid?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM FIRST_AIDS
-WHERE AP_Report='Yes'
-AND Date >= @Start
-AND Date < @End",
+                FROM FIRST_AIDS
+                WHERE AP_Report='Yes'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
@@ -219,69 +225,69 @@ AND Date < @End",
             cardSHESHpnm?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM HAZARDS
-WHERE Incident_type='HPNM'
-AND Date >= @Start
-AND Date < @End",
+                FROM HAZARDS
+                WHERE Incident_type='HPNM'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
             cardSHESUnsafeAct?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM HAZARDS
-WHERE Incident_type='Hazard Share (Unsafe Act)'
-AND Date >= @Start
-AND Date < @End",
+                FROM HAZARDS
+                WHERE Incident_type='Hazard Share (Unsafe Act)'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
             cardSHESUnsafeCondition?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM HAZARDS
-WHERE Incident_type='Hazard Share (Unsafe Condition)'
-AND Date >= @Start
-AND Date < @End",
+                FROM HAZARDS
+                WHERE Incident_type='Hazard Share (Unsafe Condition)'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
             cardSHESFirstAid?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM FIRST_AIDS
-WHERE Date >= @Start
-AND Date < @End",
+                FROM FIRST_AIDS
+                WHERE Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
             cardClosedActions?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM CORRECTIVE_ACTIONS
-WHERE Status='Closed'
-AND Completion_Date >= @Start
-AND Completion_Date < @End",
+                FROM CORRECTIVE_ACTIONS
+                WHERE Status='Closed'
+                AND Completion_Date >= @Start
+                AND Completion_Date < @End",
             range.Start,
             range.End));
 
             cardAudits?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM HAZARDS
-WHERE Incident_type='SHES Team Audit'
-AND Date >= @Start
-AND Date < @End",
+                FROM HAZARDS
+                WHERE Incident_type='SHES Team Audit'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
 
             cardMinimalHazards?.SetValue(
             ExecuteCount(
             @"SELECT COUNT(*)
-FROM HAZARDS
-WHERE Incident_type='Minimal Hazard'
-AND Date >= @Start
-AND Date < @End",
+                FROM HAZARDS
+                WHERE Incident_type='Minimal Hazard'
+                AND Date >= @Start
+                AND Date < @End",
             range.Start,
             range.End));
         }
@@ -355,5 +361,8 @@ AND Date < @End",
             ? 0
             : Convert.ToInt32(result);
         }
+        #endregion
+
+        #endregion
     }
 }

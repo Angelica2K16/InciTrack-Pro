@@ -1,28 +1,19 @@
-﻿using InciTrack_Pro.Helper_Classes;
+﻿using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.WinForms;
 using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
-using DanMarDev.FormDragger;
-using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
     public partial class Frm_Hazards : Form
     {
+        #region Constructors
         public Frm_Hazards()
         {
             InitializeComponent();
@@ -42,15 +33,12 @@ namespace InciTrack_Pro.Forms
             dgv_hazardsList.CellClick += Dgv_hazardsList_CellClick;
            
         }
+        #endregion
+
 
        
 
-        private void Cb_includeAll_CheckedChanged(object? sender, EventArgs e)
-        {
-            txt_search.Text = string.Empty;
-            LoadDgvHazardsList();
-        }
-
+        #region Form Load Event
         private void Frm_Hazards_Load(object? sender, EventArgs e)
         {
             flpKpiControls();
@@ -60,6 +48,9 @@ namespace InciTrack_Pro.Forms
             LoadDgvHazardsList();
         }
 
+        #endregion
+
+        #region Custom Controlbox Events
         private void Pb_exit_Click(object? sender, EventArgs e)
         {
             Form? frm = Application.OpenForms["Frm_Main"];
@@ -81,20 +72,32 @@ namespace InciTrack_Pro.Forms
         {
             this.WindowState = FormWindowState.Minimized;
         }
+        #endregion
+
+        #region Checkbox Changed Events
+        private void Cb_includeAll_CheckedChanged(object? sender, EventArgs e)
+        {
+            txt_search.Text = string.Empty;
+            LoadDgvHazardsList();
+        }
 
         private void Cb_apReports_CheckedChanged(object? sender, EventArgs e)
         {
             txt_search.Text = string.Empty;
             LoadDgvHazardsList();
         }
+        #endregion
 
+        #region Search Events
         private void Txt_search_TextChanged(object? sender, EventArgs e)
         {
             dgv_hazardsList.ClearSelection();
             dgv_hazardsList.CurrentCell = null;
             ApplySearchFilter();
         }
+        #endregion
 
+        #region DGV Events
         private void Dgv_hazardsList_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -121,6 +124,12 @@ namespace InciTrack_Pro.Forms
                 frm.ShowDialog();
             }
         }
+
+        #endregion
+
+        #region Helper Methods
+
+        #region Method - Get Hazard Details
         private void GetHazardDetails(int hazardIdx)
         {
             using SqliteConnection conn = new SqliteConnection(GV.shesDB);
@@ -265,7 +274,9 @@ namespace InciTrack_Pro.Forms
 
             return value.Trim();
         }
+        #endregion
 
+        #region Method - Search Filter
         internal void ApplySearchFilter()
         {
             
@@ -303,7 +314,9 @@ namespace InciTrack_Pro.Forms
 
     
         }
+        #endregion
 
+        #region Method - KPI Controls 
         private void flpKpiControls()
         {
             flp_Kpi.Controls.Clear();
@@ -414,6 +427,8 @@ namespace InciTrack_Pro.Forms
 
         }
 
+        #region Method - Create Chart
+
         private void CreateTop3AreasChart()
         {
             var data = GetTop3Areas();
@@ -497,7 +512,11 @@ namespace InciTrack_Pro.Forms
 
             return areas;
         }
+        #endregion
 
+        #endregion
+
+        #region Method - Load DGV with Hazard Info
         internal void LoadDgvHazardsList()
         {
             List<string> conditions = new();
@@ -522,18 +541,6 @@ namespace InciTrack_Pro.Forms
             using (SqliteConnection conn = new SqliteConnection(GV.shesDB))
             {
                 conn.Open();
-
-                //string query = cb_apReports.Checked ? @"SELECT
-                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action As 'Corrective Action', Status, AP_Report AS 'AP Report'
-                //                  FROM Hazards
-                //                  WHERE AP_Report = 'Yes'
-                //                  ORDER BY Date Desc"
-                //                  :
-                //                  @"SELECT
-                //                  Idx, Date, Title, Incident_type AS 'Incident Type', Corrective_Action, Status, AP_Report AS 'AP Report'
-                //                  FROM Hazards
-                //                  ORDER BY Date Desc"
-                //                  ;
 
                 string query = @"
                                 SELECT
@@ -591,10 +598,9 @@ namespace InciTrack_Pro.Forms
 
             FormatDgv();
 
-
-            
         }
 
+        #region Format DGV
         private void FormatDgv()
         {
             dgv_hazardsList.ScrollBars = ScrollBars.Vertical;
@@ -641,5 +647,10 @@ namespace InciTrack_Pro.Forms
             }
 
         }
+        #endregion
+
+        #endregion
+
+        #endregion
     }
 }

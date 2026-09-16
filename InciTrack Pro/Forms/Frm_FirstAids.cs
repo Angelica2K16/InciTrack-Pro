@@ -1,25 +1,13 @@
-﻿using InciTrack_Pro.Helper_Classes;
+﻿using DanMarDev.FormDragger;
+using DanMarDev.FormManager;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.SkiaSharpView.WinForms;
-using LiveChartsCore.Themes;
 using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
-using DanMarDev.FormDragger;
-using DanMarDev.FormManager;
 
 namespace InciTrack_Pro.Forms
 {
@@ -80,7 +68,6 @@ namespace InciTrack_Pro.Forms
         }
         #endregion
 
-    
         #region CheckBox Event - AP Reports Filter - When Checked, Filter DGV to Show Only First Aids Reported to AP
         private void Cb_apReports_CheckedChanged(object? sender, EventArgs e)
         {
