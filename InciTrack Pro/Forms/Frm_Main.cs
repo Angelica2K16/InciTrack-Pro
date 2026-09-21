@@ -94,26 +94,18 @@ namespace InciTrack_Pro
 
             #region Checking Authorized User
             //Getting Current User => is is Authroized?
-            string currentUser = UserPrincipal.Current.DisplayName;
-            EmployeeSearch.ListResult officeStaff = EmployeeSearch.GetOfficeStaffList();
-            if (!officeStaff.IsSuccess)
+            string currentUser = Environment.UserName;
+            EmployeeSearch.SearchResult employeeSearch = EmployeeSearch.Search(currentUser);
+            if (!employeeSearch.IsSuccess)
             {
-                Console.WriteLine(officeStaff.ErrorMessage);
-                return;
-            }
-
-            bool isOfficeStaff = officeStaff.FullNames.Contains(currentUser);
-
-            if (!isOfficeStaff)
-            {
-                MessageBox.Show("Error: You are not an authorized user for this application.", "Authorized User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: You are not an authorized user for this application.", "Authorized User Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 Environment.Exit(1);
             }
             #endregion
 
             #region Checking for any new Incidents
             //Look for any new incidents reported
-            if (currentUser == "Angel Lively" || currentUser == "Vincent Jackson")
+            if (currentUser == "Angel Lively" || currentUser == "Vince Jackson")
             {
                 string updateIncidents = "";
                 updateIncidents = Helper_Classes.HazardRetrieval.GetHazards();
