@@ -4,6 +4,8 @@ using Microsoft.Data.Sqlite;
 using System.Data;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
+using static DanMarDev.WinForms_CustomTools.MsgBoxType;
+using DanMarDev.WinForms_CustomTools;
 
 namespace InciTrack_Pro.Forms
 {
@@ -56,7 +58,7 @@ namespace InciTrack_Pro.Forms
 
             if (dgv_hazardList.SelectedRows.Count == 0) 
             { 
-                MessageBox.Show("You must select a hazard from the list first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                MsgBox.Show(ErrorNoExit, "You must select a hazard from the list first.");
                 return; 
             }
 

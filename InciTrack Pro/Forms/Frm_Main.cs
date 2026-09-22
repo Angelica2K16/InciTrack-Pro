@@ -13,6 +13,8 @@ using System.DirectoryServices.AccountManagement;
 using System.Reflection;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using WD = DanMarDev.WakeDrives;
+using static DanMarDev.WinForms_CustomTools.MsgBoxType;
+using DanMarDev.WinForms_CustomTools;
 
 namespace InciTrack_Pro
 {
@@ -75,8 +77,9 @@ namespace InciTrack_Pro
             //Making sure only one instance of an applicaton is running 
             if (DuplicateInstanceCheck.IsDuplicateAppInstance(Process.GetCurrentProcess().ProcessName))
             {
-                MessageBox.Show($"There is already a running instance of this application. You cannot run more than 1 instance at a time.", "Duplicate App Instances", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    Environment.Exit(1);
+                
+                MsgBox.Show(ErrorExit, "There is already a running instance of this application. You cannot run more than 1 instance at a time.", "Duplicate App Instances");
+                
             }
             #endregion
 
@@ -87,8 +90,7 @@ namespace InciTrack_Pro
             var result = wakeG.Wake_Drives(drive).FirstOrDefault();
             if (result.DriveAwake == false)
             {
-                MessageBox.Show("G Drive is inaccessible, contact administrator if problem persists.", "Drive Failure", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                Environment.Exit(1);
+                MsgBox.Show(ErrorExit, "G Drive is inaccessible, contact administrator if problem persists.", "Drive Failure");
             }
             #endregion
 
@@ -98,8 +100,7 @@ namespace InciTrack_Pro
             EmployeeSearch.SearchResult employeeSearch = EmployeeSearch.Search(currentUser);
             if (!employeeSearch.IsSuccess)
             {
-                MessageBox.Show("Error: You are not an authorized user for this application.", "Authorized User Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                Environment.Exit(1);
+                MsgBox.Show(ErrorExit, "You are not an authorized user for this application.", "Authorized User Error");
             }
             #endregion
 
@@ -110,11 +111,11 @@ namespace InciTrack_Pro
                 string updateIncidents = "";
                 updateIncidents = Helper_Classes.HazardRetrieval.GetHazards();
                 updateIncidents += "\n\n" + Helper_Classes.FirstAidRetrieval.GetFirstAids();
-                MessageBox.Show(updateIncidents, "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MsgBox.Show(Information, updateIncidents, "New Incident Retrieval");
             }
             else
             {
-                MessageBox.Show("New incident records may be available that are not currently displayed. SHES Manager/Lead should run the application to check for and retrieve the latest submissions.", "New Incident Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MsgBox.Show(Information, "New incident records may be available that are not currently displayed. SHES Manager/Lead should run the application to check for and retrieve the latest submissions.", "New Incident Retrieval");
             }
 
             #endregion

@@ -4,6 +4,8 @@ using Microsoft.Data.Sqlite;
 using Sunny.UI;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
+using static DanMarDev.WinForms_CustomTools.MsgBoxType;
+using DanMarDev.WinForms_CustomTools;
 
 namespace InciTrack_Pro.Forms
 {
@@ -133,12 +135,7 @@ namespace InciTrack_Pro.Forms
                 string message = string.Join("\n• ", errs);
                 message = "Please correct the following:\n\n• " + message;
 
-                MessageBox.Show(
-                    message,
-                    "Validation Errors",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                MsgBox.Show(ErrorNoExit, message, "Validation Errors");
 
                 // Optionally set focus to the first invalid control
                 controlFocus?.Focus();
@@ -491,7 +488,7 @@ namespace InciTrack_Pro.Forms
                     catch(Exception ex)
                     {
                         transaction.Rollback();
-                        MessageBox.Show(ex.Message);
+                        MsgBox.Show(Warning, ex.Message);
                     }
                 }
 

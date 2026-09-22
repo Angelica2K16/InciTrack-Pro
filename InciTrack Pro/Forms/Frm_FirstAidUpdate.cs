@@ -5,6 +5,8 @@ using Sunny.UI;
 using System.DirectoryServices.AccountManagement;
 using GV = InciTrack_Pro.Base_Classes.GlobalVariables;
 using MD = InciTrack_Pro.Base_Classes.ModelData;
+using static DanMarDev.WinForms_CustomTools.MsgBoxType;
+using DanMarDev.WinForms_CustomTools;
 
 namespace InciTrack_Pro.Forms
 {
@@ -81,12 +83,7 @@ namespace InciTrack_Pro.Forms
                 string message = string.Join("\n• ", errs);
                 message = "Please correct the following:\n\n• " + message;
 
-                MessageBox.Show(
-                    message,
-                    "Validation Errors",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                MsgBox.Show(ErrorNoExit, message, "Validation Errors");
 
                 // Optionally set focus to the first invalid control
                 controlFocus?.Focus();
@@ -240,12 +237,7 @@ namespace InciTrack_Pro.Forms
                 string message = string.Join("\n• ", errors);
                 message = "Please correct the following:\n\n• " + message;
 
-                MessageBox.Show(
-                    message,
-                    "Validation Errors",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                MsgBox.Show(ErrorNoExit, message, "Validation Errors");
 
                 // Optionally set focus to the first invalid control
                 controlFocus?.Focus();
@@ -291,7 +283,7 @@ namespace InciTrack_Pro.Forms
 
                 if(pnl1 == null)
                 {
-                    MessageBox.Show("Error: Injury Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MsgBox.Show(ErrorNoExit, "Injury Category Panel not found", "Panel Error");
                     return;
                 }
 
@@ -314,7 +306,7 @@ namespace InciTrack_Pro.Forms
                 
                 if(pnl2 == null)
                 {
-                    MessageBox.Show("Error: Environment Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MsgBox.Show(ErrorNoExit, "Environment Category Panel not found", "Panel Error");
                     return;
                 }
 
@@ -337,7 +329,7 @@ namespace InciTrack_Pro.Forms
                 
                 if(pnl3 == null)
                 {
-                    MessageBox.Show("Error: Damage Category Panel not found", "Panel Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MsgBox.Show(ErrorNoExit, "Damage Category Panel not found", "Panel Error");
                     return;
                 }
 
@@ -445,7 +437,7 @@ namespace InciTrack_Pro.Forms
                         catch (Exception ex)
                         {
                             transaction.Rollback();
-                            MessageBox.Show(ex.Message);
+                            MsgBox.Show(Warning, ex.Message);
                         }
                     }
 
@@ -1121,7 +1113,7 @@ namespace InciTrack_Pro.Forms
                     catch(Exception ex)
                     {
                         transaction.Rollback();
-                        MessageBox.Show(ex.Message);
+                        MsgBox.Show(Warning, ex.Message);
                     }
                 }
 

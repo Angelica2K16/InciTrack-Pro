@@ -35,9 +35,6 @@ namespace InciTrack_Pro.Forms
         }
         #endregion
 
-
-       
-
         #region Form Load Event
         private void Frm_Hazards_Load(object? sender, EventArgs e)
         {
