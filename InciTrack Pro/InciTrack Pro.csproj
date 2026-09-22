@@ -7,7 +7,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Safety_Box_v2_22829.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Safety_Box_v2_22829.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DanMarDev.DuplicateInstanceCheck" Version="1.0.0" />
